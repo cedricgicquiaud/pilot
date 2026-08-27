@@ -220,6 +220,14 @@ revue). Notre essai a réussi en parallèle parce qu'un humain avait découpé d
 disjointes à l'étape précédente. Les deux sont vrais : le parallélisme est un gain quand la
 disjonction est garantie par le découpage, jamais quand on laisse un système découper seul.
 
+**Des PR empilées se mergent dans leur base, pas dans `main`.** Premier `run` réel (Facturation,
+27/08, 1 agent à la fois) : chaque worktree avait été créé depuis la branche de la livraison
+précédente. Les PR #26 à #29 ont donc été mergées dans la branche d'avant, pas dans `main`, qui
+n'a reçu que la livraison 1 ; il a fallu une PR d'intégration (#31). Règle depuis : tout worktree
+part de `origin/main`, même en série ; les PR sont indépendantes et se mergent dans n'importe
+quel ordre. Si des PR empilées existent quand même : supprimer chaque branche au merge (GitHub
+re-cible alors la suivante) ou re-cibler vers `main` avant de merger.
+
 **Un agent = un rôle + un contexte + une durée de vie.** Les producteurs et correcteurs
 n'étaient pas des agents installés : des instances jetables de Claude Code, définies par leur
 `MISSION.md`. Seul `verifier` est une fiche de poste permanente. Créer une fiche `producteur`
