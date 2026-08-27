@@ -29,3 +29,10 @@
    la suivante ; une commande ou instruction qui lance la boucle.
 4. Test de bout en bout sur pilotage-sandbox avec la feature Facturation.
 5. Backlog BOUCLE-AGENTS.md §5, en commençant par le disjoncteur de budget.
+
+## Complément (fin de session)
+
+- Projet et skill renommés `pilot` (dépôt AlanZien/pilot, `/pilot`, `## Pilot`, `.pilot/`,
+  `~/.config/pilot/`). Quatre PR mergées (pilot #1, sandbox #22, VOLT_app #157, Nexus #424).
+- Décision : l'évolution de la skill `pilot` (étape 3 ci-dessus) se fait avec skill-creator.
+- Non renommés : dossier local `Desktop/Gestion_projet`, dépôt `pilotage-sandbox`.
