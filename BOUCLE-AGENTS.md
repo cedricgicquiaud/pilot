@@ -70,11 +70,12 @@ Une itération complète = 18 à 25 minutes par livraison, mesuré sur le bac à
 
 | Brique | Ce que c'est | Détail |
 |---|---|---|
-| **Tâches disjointes** | Deux livraisons qui ne touchent pas les mêmes fichiers. | Les points de contact voulus (navigation partagée, `UAT.md`) se règlent au merge, ~20 min. C'est une compétence de découpage, pas d'outil. |
+| **Tâches disjointes** | Deux livraisons qui ne touchent pas les mêmes fichiers, **fichiers de tests compris** (un fichier de tests par livraison). | Les points de contact voulus (navigation partagée, `UAT.md`) se règlent au merge, ~20 min. C'est une compétence de découpage, pas d'outil. |
 | **Un worktree par agent** | Un *worktree* est un second dossier de travail Git branché sur le même dépôt, sur sa propre branche. | `git worktree add ../<nom> -b feature/<CODE>-<n>-<slug>`. Si A casse tout dans son dossier, B ne le voit pas. |
 | **Un `MISSION.md` par worktree** | L'ordre de mission de l'agent : périmètre strict, examen obligatoire, STOP après la PR. | Gabarit en 2.3. Fichier exclu de git via `.git/info/exclude`. |
 | **Commandes pré-autorisées** | La liste des commandes sûres dans `.claude/settings.json`, versionnée. | Tests, git local, lectures, quelques outils Linear. Réseau, suppressions, merge restent en manuel. `settings.local.json` (hors git) pour `gh pr create`. Voir 2.4. |
-| **Relecteur indépendant** | Un agent qui n'a pas écrit le code audite le diff avant tout merge. | Agent `verifier` (`~/.claude/agents/verifier.md`), read-only. Jamais de merge sans lui. |
+| **Producteur TDD** | Le producteur est la fiche de poste `tdd-writer` : test rouge → code minimal → test vert → refactor, un commit par transition. Il refuse d'écrire du code avant un test. | `~/.claude/agents/tdd-writer.md`. Le `MISSION.md` est sa partie variable. Sur le sandbox du 26/08, les producteurs étaient génériques : tests présents, mais rien ne prouvait qu'ils précédaient le code. |
+| **Relecteur indépendant** | Un agent qui n'a pas écrit le code audite le diff avant tout merge. | Agent `verifier` (`~/.claude/agents/verifier.md`), read-only. Jamais de merge sans lui. Il vérifie aussi, dans l'historique, que chaque test précède le code qu'il couvre. |
 
 ### 2.3 Le gabarit `MISSION.md`
 
@@ -105,6 +106,8 @@ tout chevauchement sera un conflit au merge.
 3. Chaque « Terminé quand » : constaté (comment ?) ou refusé (pourquoi ?).
 
 ## Livraison
+Ordre imposé à chaque tâche : test rouge (commit `test:`), code minimal (commit `feat:`/`fix:`),
+refactor. Jamais de code de production sans test rouge préalable.
 Commits atomiques, tâche finie → « Terminée » dans Linear, push, PR titrée
 `<CODE>-<n> <titre>`, dernière ligne `Closes <CODE>-a, <CODE>-b`.
 STOP après la PR. Pas de merge, pas de tâche suivante, pas de « tant que j'y suis ».
@@ -159,7 +162,7 @@ autre que `git push`.
 
 ---
 
-## 3. Deux invariants non négociables
+## 3. Trois invariants non négociables
 
 1. **Le merge reste humain.** L'arbitrage ne se délègue pas. Ce n'est pas de la prudence
    décorative : c'est le cas d'échec mesuré (Cognition : déléguer le jugement = −27 points).
@@ -168,6 +171,11 @@ autre que `git push`.
    Bonne décision, mais c'était de l'architecture, pas une correction. Dans la boucle, ce
    choix doit s'arrêter et être posé à l'humain. D'où la ligne « tu ne tranches pas » du
    gabarit, puis la gravure de chaque décision validée dans la fiche Linear.
+3. **Pas de code sans test préalable, prouvé par les commits.** Des tests écrits après le code
+   confirment des décisions, ils n'attrapent pas de bugs (Factory). Le producteur est
+   `tdd-writer`, l'historique montre le test avant le code, le `verifier` le contrôle. Ça ne
+   change rien au parallélisme : le TDD se joue à l'intérieur d'une livraison, le parallélisme
+   entre livraisons. Le contrat de validation (backlog n° 8) fournira les premiers tests rouges.
 
 ---
 
@@ -248,7 +256,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | 3 | Effort déclaré par poste | Max pour arbitrage et revue, contenu pour l'exécution. Pousser partout coûte et fait dériver. | Champ `effort` dans les fiches. |
 | 4 | Banc d'essai maison | L'essai a évalué le dispositif, pas les modèles. Recruter un modèle sur un poste se fait sur épreuve comparative. | Deux livraisons identiques, deux modèles, même audit. |
 | 5 | Validation de bout en bout | Personne n'ouvre l'application. Factory : un validateur « testeur utilisateur » qui lance l'app, remplit, clique, vérifie les parcours ; c'est là que passe la majorité du temps réel, et c'est ce qui leur permet de ne pas relire chaque PR. Indispensable avant de déplacer le curseur du merge. | Agent qui ouvre l'app dans le navigateur, joue les parcours, audite l'écran comme `verifier` audite le diff. |
-| 6 | Fiche `producteur` permanente | Nécessaire au niveau 3 (boucle hors session). | Squelette du gabarit MISSION en fiche d'agent ; la chair reste générée. |
+| 6 | Fiche `producteur` permanente | Résolu par `tdd-writer` (§ 2.2). Reste à ajouter dans sa fiche les invariants de la boucle (périmètre strict, STOP après PR, décisions signalées non tranchées) pour le niveau 3. | Compléter `tdd-writer.md` ; `MISSION.md` reste la partie variable. |
 | 7 | Élaguer les consignes tous les six mois | Les modèles récents ont besoin de moins d'échafaudage (Cherny : « we cut 80 % of the prompt »). | Relire `CLAUDE.md` et skills : retirer ce qui tient debout tout seul. |
 | 8 | Contrat de validation à l'échelle de la feature | Nos « Terminé quand » sont par tâche, jamais consolidés. Factory écrit avant tout code la liste de « ce qui devra être vrai », chaque feature devant couvrir ses phrases ; des tests écrits après le code « confirment des décisions, ils n'attrapent pas de bugs ». Prévu à l'étape « Cadrer » du circuit. | Section de la fiche feature Linear ; le découpage affecte chaque phrase à une livraison ; `verifier` contrôle la couverture. |
 | 9 | Vue de contrôle | Sur plusieurs heures, un fil de discussion ne montre ni l'avancement ni la dépense. | Un tableau : livraisons finies / en cours, budget consommé, rapports de handoff. Lié au n° 1. |
