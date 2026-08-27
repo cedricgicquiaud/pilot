@@ -59,7 +59,7 @@
   (fonctionnel), Comment, Preuve (du constaté, jamais de cases), Hors périmètre,
   Closes. Jamais de copie des fiches (Linear les déplie sous la description).
 - Méthode : section « La description de PR : le gabarit » dans
-  PILOTAGE-LINEAR-GITHUB-CLAUDE.md (§7) + HTML + skill pilotage (globale).
+  PILOTAGE-LINEAR-GITHUB-CLAUDE.md (§7) + HTML + skill pilot (globale).
 - FORGE PR #4 (08-deliver étape 5 + templates/.github/PULL_REQUEST_TEMPLATE.md
   + install.sh copie .github) ; Nexus PR #420 (NEX-11) ; sandbox PR #9 (TST-18).
 - Gabarit des fiches : déjà couvert par les templates de team Linear (init).
@@ -78,7 +78,7 @@
 - Reporté par Cédric à plus tard : CONTRIBUTING.md, profile/README.md de
   weme-studio, SECURITY.md, workflow-templates.
 
-### Pilotage Volt (workspace volt-app, team VLT, dépôt maisonepigenetic-lgtm/ME_app)
+### Pilot Volt (workspace volt-app, team VLT, dépôt maisonepigenetic-lgtm/ME_app)
 - init joué : team VLT, PR #147 (CLAUDE.md, calibration, gabarits) et #148 (skill embarquée,
   .mcp.json linear-volt-app) mergées, VLT-1/2 fermées AUTO (circuit prouvé, y c. rattrapage
   rétroactif par édition de PR quand l'intégration est branchée après coup).
@@ -110,7 +110,7 @@
   l'alternative = réserve sans dates ; fiche de la tâche-décision décrit les 2 branches,
   avec dueDate) ; **sync recale et raconte** (contrainte des bloquantes, récit des
   décalages, alertes échéances dépassées, marge restante si ligne `Échéance :` dans la
-  section Pilotage — marge négative = parler périmètre). section-pilotage.md : ligne
+  section Pilot — marge négative = parler périmètre). section-pilot.md : ligne
   `Échéance :` optionnelle.
 - Acquis techniques : `projectRelationCreate` type `dependency` uniquement (ancres
   start/end) ; feature↔tâche impossible dans Linear ; Linear ignore `content: ""`

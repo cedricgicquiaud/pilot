@@ -9,8 +9,8 @@ Il est en deux parties :
 
 - **Partie A — Tronc commun.** La couche de gestion de projet, indépendante de
   toute méthode de développement.
-- **Partie B — Annexe FORGE.** Ce qui s'ajoute quand le projet utilise le
-  workflow FORGE. À ignorer sinon.
+- **Partie B — Ce que Claude fait entre vos validations.** Le circuit d'une
+  feature, vos commandes, et ce qui reste volontairement manuel.
 
 ---
 
@@ -322,8 +322,8 @@ crée de doublon par habitude.
 
 **Et hors pilotage ?** Un projet non piloté garde ses issues GitHub — au même
 moule que les fiches Linear : gabarits « Tâche » (Problème / Action / Terminé
-quand) et « Bug » (constaté / attendu / reproduire), installés par FORGE
-(`.github/ISSUE_TEMPLATE/`). Un projet ni piloté ni FORGE hérite du filet de
+quand) et « Bug » (constaté / attendu / reproduire), dans
+`.github/ISSUE_TEMPLATE/`. Un projet sans ces gabarits hérite du filet de
 compte : le dépôt spécial `.github` du compte (ou de l'organisation) fournit
 les gabarits de PR et d'issues par défaut à tous les dépôts qui n'ont pas les
 leurs.
@@ -379,8 +379,8 @@ existe déjà : les templates de team Linear (Feature / Tâche / Bug) posés par
 
 ## 8. Ce qui reste humain, par choix
 
-- **Le merge.** Claude ouvre la PR ; un humain décide de l'intégrer (ou
-  autorise explicitement le merge automatique sous condition de tests verts).
+- **Le merge.** Claude ouvre la PR, avec le rapport d'audit d'un agent qui n'a
+  pas écrit le code ; un humain décide de l'intégrer. Pas de merge automatique.
 - **L'ordre de la roadmap.** Le placement initial est automatique (Claude pose
   la feature en fin de roadmap avec une priorité par défaut selon son type) ;
   l'arbitrage entre deux features reste un choix, pas un calcul. L'humain
@@ -395,8 +395,8 @@ endroit où l'humain tranche.
 
 **Niveau 1 — l'humain lance, Claude trouve seul son travail.** Ouvrir Claude
 Code, dire « prochaine feature » ou « traite les tâches isolées ». Claude lit
-Linear, prend le premier élément, le livre en PR (ou le merge en mode autonome),
-passe au suivant. Zéro infrastructure. C'est le point de départ recommandé.
+Linear, prend le premier élément, le livre en PR, s'arrête. L'humain merge,
+puis relance. Zéro infrastructure. C'est le point de départ recommandé.
 
 **Niveau 2 — un événement déclenche.**
 - Depuis GitHub : la GitHub Action officielle d'Anthropic
@@ -421,7 +421,7 @@ Pour que Claude sache que le projet est piloté par Linear, le `CLAUDE.md` du
 dépôt contient une section :
 
 ```
-## Pilotage
+## Pilot
 - Workspace Linear : <nom> (connexion MCP : linear)
 - Team : <nom du projet> — clé <CODE> — id <id>
 - Feature = Project Linear ; tâche = issue. Toute fiche suit les templates
@@ -431,11 +431,11 @@ dépôt contient une section :
 - Merge : humain | automatique si tests verts
 - Cahier de recette : <emplacement>
 - Capacité : observée | N relectures / semaine
-- Barème : .pilotage/calibration.md
+- Barème : .pilot/calibration.md
 - Règle : aucun développement sans fiche Linear ; rien de créé sans liste validée.
 ```
 
-Cette section est écrite par `/pilotage init`, qui crée aussi la team, ses
+Cette section est écrite par `/pilot init`, qui crée aussi la team, ses
 statuts, ses labels, ses templates et son archivage automatique (par l'API
 Linear, car la connexion MCP ne sait pas créer ces éléments de structure).
 
@@ -458,8 +458,7 @@ et retombe sur ce que le dépôt prévoit (fichier de backlog, issues GitHub…)
    Claude peut alors lire et écrire features, tâches, statuts, commentaires.
 5. **Verser le backlog existant** dans Linear (features pour ce qui est
    cadré, tâches isolées pour le reste).
-6. **Déclarer le pilotage** dans le `CLAUDE.md` du dépôt (§ 10). Si le projet
-   utilise FORGE, appliquer la Partie B.
+6. **Déclarer le pilotage** dans le `CLAUDE.md` du dépôt (§ 10).
 7. **Lancer la première feature** au niveau 1. Évaluer après quelques
    semaines s'il faut un déclencheur (§ 9).
 
@@ -501,58 +500,74 @@ Largement suffisant pour un projet personnel ou une petite équipe.
 
 ---
 
-# Partie B — Annexe FORGE
+# Partie B — Ce que Claude fait entre vos validations
 
-À lire seulement si le projet utilise le workflow FORGE. Rien ici ne modifie la
-Partie A : FORGE est un moteur qui vient remplir les cases déjà définies.
+La Partie A dit *quoi* suivre et *où* (Linear, GitHub). Cette partie dit ce que
+Claude fait entre deux moments où vous dites oui. Rien ici ne modifie la
+Partie A : c'est le moteur qui remplit ses cases.
 
-## B.1 Correspondance
+## B.1 Le circuit d'une feature
 
-- **Une livraison = un cycle FORGE complet** (SPEC → REFINE → GENERATE →
-  EVALUATE → DELIVER → LEARN) ; une feature = plusieurs cycles. Le dossier `.workflow/phases/NN-<nom>/` est le
-  dossier de la feature.
-- **Une tâche de feature = une tâche du `PLAN.md`.**
-- **Une tâche isolée = niveau « Triviale » de FORGE** (GENERATE → DELIVER,
-  sans SPEC ni REFINE).
+Vous intervenez à quatre moments, toujours pour valider ou trancher. Entre
+deux, Claude travaille seul.
 
-## B.2 Statuts de feature, étape par étape
+| # | Étape | Qui | Ce qui se passe | Statut Linear |
+|---|---|---|---|---|
+| 1 | **Cadrer** | Vous + Claude | Décisions produit, et la liste « ce qui devra être vrai » à la fin (10 à 30 phrases, dont des refus). Gravé dans la fiche feature. **Vous validez.** | À cadrer |
+| 2 | **Découper** | Claude, puis vous | N livraisons qui ne touchent pas les mêmes fichiers ; chaque phrase de l'étape 1 affectée à une livraison ; une fiche Tâche par tâche, avec un « Terminé quand » dont au moins un refus. **Vous validez la liste** avant toute création dans Linear. | Planifiée |
+| 3 | **Produire** | Agents, sans vous | Un agent par livraison, chacun dans sa copie isolée du dépôt, plusieurs en parallèle. Puis un agent relecteur qui n'a pas écrit le code, un agent correcteur, et une PR par livraison avec le rapport d'audit. Détail : `BOUCLE-AGENTS.md`. | En développement → En revue |
+| 4 | **Merger** | Vous | Lire le rapport d'audit, merger. Trancher les décisions que les agents ont remontées sans les prendre. | Terminée |
+| 5 | **Apprendre** | Claude | Chaque défaut trouvé à l'audit devient une règle dans le `CLAUDE.md` du dépôt ; les décisions tranchées sont gravées dans Linear. | Rétro faite |
 
-Les statuts génériques du § 5 se lisent ainsi, avec un statut final ajouté :
+Au niveau du projet, deux moments de plus, une seule fois : le cadrage du
+projet (PRD) et la roadmap (§ 4 bis). Même règle : Claude propose, vous validez.
 
-| Statut | Étape FORGE |
-|---|---|
-| À cadrer | SPEC en cours |
-| Planifiée | REFINE terminé, PLAN validé |
-| En développement | GENERATE + EVALUATE |
-| En revue | DELIVER, PR ouverte |
-| Terminée | PR mergée |
-| Rétro faite *(ajouté)* | LEARN terminé |
+## B.2 Vos commandes
 
-## B.3 Adaptations des fichiers de phase
+Une commande par moment de validation. Vous n'en tapez jamais une pour « faire
+avancer » ce qui peut avancer seul.
 
-FORGE garde ses étapes ; seuls les endroits où il lit ou écrit le backlog
-changent de support.
-
-| Étape | Avant | Avec Linear |
+| Moment | Commande | Claude s'arrête quand |
 |---|---|---|
-| FIND | écrit `PRD.md` et `BACKLOG.md` | en plus : `roadmap` — toutes les features du PRD créées « À cadrer », avec leur taille |
-| SPEC | écrit `SPEC.md` | en plus : la feature (créée si absente) reste « À cadrer », description = résumé de la SPEC, lien vers le fichier |
-| REFINE | écrit `PLAN.md` | en plus : une tâche Linear par tâche du plan, avec son label ; feature → « Planifiée » |
-| GENERATE | branche `feature/<nom>` ; coche `PLAN.md` | branche `feature/<CODE>-<nom>` ; chaque tâche Linear → « Terminée » avec la case ; feature → « En développement » |
-| DELIVER | titre de PR libre ; lit `BACKLOG.md` | titre de PR préfixé du code ; prochaine feature lue dans Linear. Le cahier de recette reste là où FORGE le produit (base Notion ou `UAT.md`) |
-| LEARN | idées dans `BACKLOG.md` | tâches isolées dans le backlog Linear ; feature → « Rétro faite » |
+| Début du projet | `/pilot init` | Le PRD est à valider |
+| Après le PRD | `/pilot roadmap` | La liste des features est à valider |
+| Début d'une feature | `/pilot feature <nom>` | Le cadrage, puis le découpage, sont à valider |
+| Après le découpage | « livre <feature> » | Les PR sont ouvertes, auditées, sans bloquant |
+| Après les merges | `/pilot sync` | Linear et le `CLAUDE.md` sont à jour |
+| Tâche isolée | `/pilot fix` | La PR est ouverte |
+| N'importe quand | `/pilot next` | Voir B.3 |
 
-Inchangés : BOOTSTRAP, ORIENT, EVALUATE, les règles TDD, la gate verte,
-l'interdiction de pousser sur la branche principale.
+## B.3 `next` : l'étape logique, déduite de Linear
 
-## B.4 Où faire la retouche
+`/pilot next` lit le statut de la feature en cours et propose l'étape qui
+suit. Aucun fichier d'état à entretenir : Linear le tient.
 
-- Pour un seul projet : dans `.claude/rules/phases/` du dépôt.
-- Pour tous les projets : dans les templates FORGE copiés par `install.sh`,
-  avec Linear **optionnel** : « si le `CLAUDE.md` déclare un pilotage Linear
-  (§ 10), sinon `BACKLOG.md` ». C'est le même mécanisme que celui déjà prévu
-  pour la base Notion de recette.
+| Statut trouvé | Ce que `next` propose |
+|---|---|
+| Aucune feature | Cadrer le projet ou poser la roadmap |
+| À cadrer | Le cadrage |
+| Planifiée | Lancer la production |
+| En développement / En revue | Rien à lancer : la liste des PR à lire et à merger |
+| Terminée | Apprendre, puis la feature suivante |
 
-`BACKLOG.md` est versé une fois dans Linear puis réduit à « voir Linear ». Les
-SPEC, PLAN et cahiers de recette restent là où FORGE les produit ; chaque
-feature Linear pointe vers eux.
+Chaque commande finit en proposant la suivante (« Découpage ? », « Je lance ? »,
+« Feature suivante : X, cadrage ? »). Dans l'usage courant, `next` est la seule
+commande à connaître ; les autres servent à forcer une étape.
+
+## B.4 Ce qui n'est pas automatique, par choix
+
+- **Le merge**, à chaque livraison (§ 8). Le curseur pourra passer à « un merge
+  par feature » le jour où deux garde-fous existent : un plafond de dépense par
+  agent, et une vérification qui ouvre l'application et la fait fonctionner
+  de bout en bout. Pas avant.
+- **Les décisions de fond.** Un agent qui rencontre un choix produit ou
+  d'architecture non couvert par sa fiche prend l'option la plus réversible et
+  le signale ; il ne tranche pas.
+- **L'enchaînement de plusieurs features sans vous.** Non prévu.
+
+## B.5 Origine
+
+Ce circuit absorbe l'ancien workflow FORGE : ses étapes de tête (cadrage,
+découpage, pauses) sont B.1 étapes 1-2 ; ses étapes de production, vérification
+et livraison sont remplacées par `BOUCLE-AGENTS.md` ; sa rétro est l'étape 5.
+Le nom FORGE, ses fichiers de phase et son mode autonome disparaissent.

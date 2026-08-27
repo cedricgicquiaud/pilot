@@ -19,10 +19,10 @@ Pas de dépôt git initialisé.
 
 | Fichier | Rôle |
 |---|---|
-| `PILOTAGE-LINEAR-GITHUB-CLAUDE.md` | Document de référence complet. Partie A = tronc commun (tout projet) ; Partie B = annexe pour les projets utilisant le workflow FORGE. |
+| `PILOTAGE-LINEAR-GITHUB-CLAUDE.md` | Document de référence complet. Partie A = tronc commun (suivi Linear/GitHub) ; Partie B = le circuit d'une feature (cadrer → découper → produire → merger → apprendre), les commandes, `next`. |
 | `circuit-linear-github-claude.html` | Version visuelle résumée du même contenu, page HTML autonome (CSS inline, aucune dépendance externe). Sert de support de présentation. |
 | `BOUCLE-AGENTS.md` | La boucle agents : pourquoi, recette (worktrees, `MISSION.md`, allowlist, relecteur indépendant), invariants, leçons de l'essai, backlog des manques. |
-| `sources/analyse-videos-2026-08-26.md` | Annexe brute : analyse critique des deux vidéos à l'origine de la boucle agents. Ne pas réécrire, c'est une archive. |
+| `sources/*.md` | Archives : analyses critiques des vidéos à l'origine de la boucle agents. Ne pas réécrire. |
 
 `PILOTAGE-…md` et le HTML décrivent la même méthode : toute modification de
 fond dans le Markdown (statuts, règle de nommage, vocabulaire) doit être
@@ -41,10 +41,14 @@ exemple est le banc d'essai `pilotage-sandbox`.
   (`feature/<CODE>-<nom>`, `fix/<CODE>-<nom>`, `chore/<CODE>-<nom>`) et dans le
   titre de la PR. Tout le reste du document en découle.
 - **Statuts de feature** dans l'ordre : À cadrer → Planifiée → En développement
-  → En revue → Terminée (+ « Rétro faite » en annexe FORGE). Les deux derniers
+  → En revue → Terminée (+ « Rétro faite » en Partie B). Les deux derniers
   passages sont posés par l'intégration GitHub de Linear, pas par Claude.
-- **Partie B ne modifie jamais la Partie A** : FORGE vient remplir les cases
+- **Partie B ne modifie jamais la Partie A** : le circuit vient remplir les cases
   définies par le tronc commun. Garder cette séparation.
+- **FORGE n'existe plus** : absorbé par la Partie B (cadrage, découpage, rétro) et
+  par `BOUCLE-AGENTS.md` (production, vérification, livraison). Ne pas le réintroduire.
+- **Le merge est humain**, à chaque livraison. Pas de merge automatique dans les
+  documents tant que le backlog n° 1 et n° 5 de `BOUCLE-AGENTS.md` ne sont pas faits.
 - Ton rédactionnel : phrases courtes, tableaux, exemples concrets, pas de jargon
   non expliqué (voir les préférences globales de rédaction).
 
@@ -56,10 +60,10 @@ serveur.
 
 ## Mise en œuvre
 
-Le pilotage est implémenté par la skill globale `~/.claude/skills/pilotage/`
+Le pilotage est implémenté par la skill globale `~/.claude/skills/pilot/`
 (commandes init, roadmap, feature, next, fix, sync, benchmark). La boucle agents
 s'appuie sur les agents globaux `~/.claude/agents/verifier.md` et `tdd-writer.md`,
-et sur le gabarit `.pilotage/MISSION.template.md` du banc d'essai.
+et sur le gabarit `.pilot/MISSION.template.md` du banc d'essai.
 
 Le dépôt `AlanZien/pilotage-sandbox` est le banc d'essai des deux méthodes.
 Circuit d'évolution : on écrit ici, on teste sur le sandbox, on installe dans

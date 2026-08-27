@@ -10,7 +10,7 @@ dans ce dossier ; ouvrir en discussion, rien n'est encore validé pour exécutio
   parallèle dans des git worktrees, ordre de mission `MISSION.md`, allowlist
   `.claude/settings.json`, audit par l'agent `verifier` (qui n'a pas écrit le code),
   corrections, PR, merge humain. 10 PR mergées, 2 features Linear terminées, 126 tests verts.
-- 27/08 : PR #21 mergée sur pilotage-sandbox (TST-54) : gabarit `.pilotage/MISSION.template.md`
+- 27/08 : PR #21 mergée sur pilotage-sandbox (TST-54) : gabarit `.pilot/MISSION.template.md`
   versionné + ligne « Agents en parallèle » dans son CLAUDE.md.
 - Ce qui existe en mémoire globale Claude : `recette-deux-agents-paralleles` (la méthode),
   `videos-echelle-cherny-fiches-de-poste` (liens des vidéos + verdicts).
@@ -21,7 +21,7 @@ dans ce dossier ; ouvrir en discussion, rien n'est encore validé pour exécutio
 ## Décision prise le 27/08
 
 La méthode se travaille ici, dans `Gestion_projet` (dossier de documentation de la méthode
-de pilotage). `pilotage-sandbox` reste le banc d'essai. `~/.claude/` (skill `pilotage`,
+de pilotage). `pilotage-sandbox` reste le banc d'essai. `~/.claude/` (skill `pilot`,
 agents `verifier`, `tdd-writer`) est la cible d'installation, pas le lieu de travail.
 
 ## Proposé, non encore validé
