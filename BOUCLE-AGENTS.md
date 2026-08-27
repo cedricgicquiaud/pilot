@@ -43,7 +43,7 @@ des certitudes.
 La boucle commence quand le découpage est validé (feature « Planifiée » dans Linear) et se
 termine quand les PR sont ouvertes avec leur rapport d'audit. Avant : cadrage et découpage,
 avec l'humain. Après : merge humain, puis apprentissage. Le tout est décrit dans la Partie B
-du document pilotage ; l'humain ne lance la boucle que par une instruction (« livre X »).
+du document pilotage ; l'humain ne lance la boucle que par `/pilot run <feature>`.
 
 ### 2.1 Vue d'ensemble
 

@@ -532,7 +532,7 @@ avancer » ce qui peut avancer seul.
 | Début du projet | `/pilot init` | Le PRD est à valider |
 | Après le PRD | `/pilot roadmap` | La liste des features est à valider |
 | Début d'une feature | `/pilot feature <nom>` | Le cadrage, puis le découpage, sont à valider |
-| Après le découpage | « livre <feature> » | Les PR sont ouvertes, auditées, sans bloquant |
+| Après le découpage | `/pilot run <feature>` | Les PR sont ouvertes, auditées, sans bloquant |
 | Après les merges | `/pilot sync` | Linear et le `CLAUDE.md` sont à jour |
 | Tâche isolée | `/pilot fix` | La PR est ouverte |
 | N'importe quand | `/pilot next` | Voir B.3 |
@@ -546,7 +546,7 @@ suit. Aucun fichier d'état à entretenir : Linear le tient.
 |---|---|
 | Aucune feature | Cadrer le projet ou poser la roadmap |
 | À cadrer | Le cadrage |
-| Planifiée | Lancer la production |
+| Planifiée | Lancer la production (`run`) |
 | En développement / En revue | Rien à lancer : la liste des PR à lire et à merger |
 | Terminée | Apprendre, puis la feature suivante |
 
