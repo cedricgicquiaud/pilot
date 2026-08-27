@@ -355,8 +355,8 @@ c'est la liste `Closes` et ses cartes Linear.
   un paragraphe>
 
 ## Comment
-<les choix techniques faits, les alternatives écartées, par où commencer
- la relecture>
+- <pour le relecteur : fichiers et fonctions nommés, choix faits et écartés,
+  par où commencer la relecture — une idée par puce, courte>
 
 ## Preuve
 <du constaté, jamais des cases à cocher : CI verte, sortie réelle collée,
