@@ -261,6 +261,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | 8 | Contrat de validation à l'échelle de la feature | Nos « Terminé quand » sont par tâche, jamais consolidés. Factory écrit avant tout code la liste de « ce qui devra être vrai », chaque feature devant couvrir ses phrases ; des tests écrits après le code « confirment des décisions, ils n'attrapent pas de bugs ». Prévu à l'étape « Cadrer » du circuit. | Section de la fiche feature Linear ; le découpage affecte chaque phrase à une livraison ; `verifier` contrôle la couverture. |
 | 9 | Vue de contrôle | Sur plusieurs heures, un fil de discussion ne montre ni l'avancement ni la dépense. | Un tableau : livraisons finies / en cours, budget consommé, rapports de handoff. Lié au n° 1. |
 | 10 | Reprise automatique après audit | Chez nous : audit → corrections → PR, puis stop. Factory enchaîne des jalons regroupant plusieurs livraisons et crée des tâches de suivi sans humain. C'est ce qui autorise « un merge par feature » au lieu d'un par livraison. | Après 1 et 5 seulement. |
+| 11 | Support d'état local, sans Linear | Le circuit suppose Linear (statuts lus par `next`, fiches recopiées par `run`). Les projets non suivis dans Linear restent en régime « atelier » : agents et règles, mais pas de commandes. | Un `.pilot/roadmap.md` (features, livraisons, statuts, contrat, fichiers) lu et écrit par `feature`/`run`/`next`/`sync` à la place de Linear ; `sync` regarde les PR mergées. Après le test de bout en bout sur le sandbox. |
 
 ---
 
