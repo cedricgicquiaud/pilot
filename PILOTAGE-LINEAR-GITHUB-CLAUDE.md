@@ -532,7 +532,7 @@ avancer » ce qui peut avancer seul.
 | Début du projet | `/pilot init` | Le PRD est à valider |
 | Après le PRD | `/pilot roadmap` | La liste des features est à valider |
 | Début d'une feature | `/pilot feature <nom>` | Le cadrage, puis le découpage, sont à valider |
-| Après le découpage | `/pilot run <feature>` | Les PR sont ouvertes, auditées, sans bloquant |
+| Après le découpage | `/goal <critère proposé>` puis `/pilot run <feature>` | Les PR sont ouvertes, auditées, sans bloquant. Livraisons produites `n` à la fois (`Agents en parallèle` de la section Pilot, défaut 1) |
 | Après les merges | `/pilot sync` | Linear et le `CLAUDE.md` sont à jour |
 | Tâche isolée | `/pilot fix` | La PR est ouverte |
 | N'importe quand | `/pilot next` | Voir B.3 |

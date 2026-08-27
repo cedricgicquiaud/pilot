@@ -207,7 +207,13 @@ passées l'audit sans correction.
 qu'aucune fiche n'a commandé du beau. Preuve que les fiches pilotent vraiment. Et personne
 dans la boucle ne regarde l'écran : l'audit vérifie la sécurité et la justesse, pas l'œil.
 
-**Le nombre d'agents se déduit, il ne se vise pas.** « Commencer à deux » vient de Cherny ; le
+**Le nombre d'agents se déduit, il ne se vise pas — et il se déclare.** La section `## Pilot`
+du projet porte `Agents en parallèle : n` (défaut 1 : une livraison à la fois tant que la boucle
+n'a pas fait ses preuves sur ce projet ; l'humain monte la valeur). Le plafond reste le nombre de
+livraisons disjointes. Avant `run`, l'humain verrouille le critère d'arrêt avec `/goal` (phrase
+proposée par la skill).
+
+**Historique.** « Commencer à deux » vient de Cherny ; le
 bon nombre = chantiers réellement disjoints × capacité à relire ce qui remonte × budget. Le
 soir du 26/08, trois producteurs en parallèle sans incident, parce qu'il y avait trois
 livraisons disjointes.
