@@ -350,8 +350,9 @@ c'est la liste `Closes` et ses cartes Linear.
 **Feature « <nom> »** — livraison <n>/<total> « <nom de la livraison> »
 
 ## Ce qui change
-<la livraison en fonctionnel : ce qu'on peut faire après ce merge qu'on ne
- pouvait pas faire avant — 2-4 lignes, lisibles par un non-développeur>
+- <un changement par puce, une phrase : ce qu'on peut faire après ce merge
+  qu'on ne pouvait pas faire avant, lisible par un non-développeur — jamais
+  un paragraphe>
 
 ## Comment
 <les choix techniques faits, les alternatives écartées, par où commencer
