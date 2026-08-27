@@ -78,7 +78,7 @@ Une itération complète = 18 à 25 minutes par livraison, mesuré sur le bac à
 
 ### 2.3 Le gabarit `MISSION.md`
 
-Versionné dans le sandbox : `.pilotage/MISSION.template.md`. Six sections ; les crochets sont
+Versionné dans le sandbox : `.pilot/MISSION.template.md`. Six sections ; les crochets sont
 la partie variable, remplie depuis Linear à chaque livraison.
 
 ```markdown
@@ -91,7 +91,7 @@ la partie variable, remplie depuis Linear à chaque livraison.
 
 ## Périmètre STRICT
 Tu touches uniquement : <fichiers>. Tu ne touches jamais : les autres modules,
-CLAUDE.md, .claude/, .pilotage/. Un autre agent travaille en parallèle :
+CLAUDE.md, .claude/, .pilot/. Un autre agent travaille en parallèle :
 tout chevauchement sera un conflit au merge.
 
 ## Règles du projet (rappel, détail dans CLAUDE.md)
@@ -264,7 +264,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | Analyse critique des vidéos sources | `Gestion_projet/sources/analyse-videos-2026-08-26.md`, `sources/analyse-video-2026-08-27-factory-missions.md` |
 | Gabarit MISSION, allowlist, CLAUDE.md d'exemple | `AlanZien/pilotage-sandbox` (banc d'essai) |
 | Fiches de poste permanentes | `~/.claude/agents/verifier.md`, `tdd-writer.md` |
-| Commandes de pilotage | `~/.claude/skills/pilotage/` |
+| Commandes de pilotage | `~/.claude/skills/pilot/` |
 | Recette condensée pour Claude | Mémoire globale `recette-deux-agents-paralleles` |
 
 Toute évolution de la méthode se fait ici d'abord, se teste sur le sandbox, puis s'installe

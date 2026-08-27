@@ -9,7 +9,7 @@
   bougera (un merge par feature) seulement avec disjoncteur de budget + validation
   de bout en bout.
 - Les producteurs ne lisent pas de fichiers de phase : MISSION.md + CLAUDE.md.
-- `/pilotage next` doit router depuis les statuts Linear (comme /gsd:next), et
+- `/pilot next` doit router depuis les statuts Linear (comme /gsd:next), et
   chaque commande propose la suivante.
 - Parallèle seulement si la disjonction est décidée au découpage ; sinon série.
 

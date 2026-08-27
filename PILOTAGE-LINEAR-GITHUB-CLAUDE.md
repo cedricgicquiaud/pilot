@@ -421,7 +421,7 @@ Pour que Claude sache que le projet est piloté par Linear, le `CLAUDE.md` du
 dépôt contient une section :
 
 ```
-## Pilotage
+## Pilot
 - Workspace Linear : <nom> (connexion MCP : linear)
 - Team : <nom du projet> — clé <CODE> — id <id>
 - Feature = Project Linear ; tâche = issue. Toute fiche suit les templates
@@ -431,11 +431,11 @@ dépôt contient une section :
 - Merge : humain | automatique si tests verts
 - Cahier de recette : <emplacement>
 - Capacité : observée | N relectures / semaine
-- Barème : .pilotage/calibration.md
+- Barème : .pilot/calibration.md
 - Règle : aucun développement sans fiche Linear ; rien de créé sans liste validée.
 ```
 
-Cette section est écrite par `/pilotage init`, qui crée aussi la team, ses
+Cette section est écrite par `/pilot init`, qui crée aussi la team, ses
 statuts, ses labels, ses templates et son archivage automatique (par l'API
 Linear, car la connexion MCP ne sait pas créer ces éléments de structure).
 
@@ -529,17 +529,17 @@ avancer » ce qui peut avancer seul.
 
 | Moment | Commande | Claude s'arrête quand |
 |---|---|---|
-| Début du projet | `/pilotage init` | Le PRD est à valider |
-| Après le PRD | `/pilotage roadmap` | La liste des features est à valider |
-| Début d'une feature | `/pilotage feature <nom>` | Le cadrage, puis le découpage, sont à valider |
+| Début du projet | `/pilot init` | Le PRD est à valider |
+| Après le PRD | `/pilot roadmap` | La liste des features est à valider |
+| Début d'une feature | `/pilot feature <nom>` | Le cadrage, puis le découpage, sont à valider |
 | Après le découpage | « livre <feature> » | Les PR sont ouvertes, auditées, sans bloquant |
-| Après les merges | `/pilotage sync` | Linear et le `CLAUDE.md` sont à jour |
-| Tâche isolée | `/pilotage fix` | La PR est ouverte |
-| N'importe quand | `/pilotage next` | Voir B.3 |
+| Après les merges | `/pilot sync` | Linear et le `CLAUDE.md` sont à jour |
+| Tâche isolée | `/pilot fix` | La PR est ouverte |
+| N'importe quand | `/pilot next` | Voir B.3 |
 
 ## B.3 `next` : l'étape logique, déduite de Linear
 
-`/pilotage next` lit le statut de la feature en cours et propose l'étape qui
+`/pilot next` lit le statut de la feature en cours et propose l'étape qui
 suit. Aucun fichier d'état à entretenir : Linear le tient.
 
 | Statut trouvé | Ce que `next` propose |

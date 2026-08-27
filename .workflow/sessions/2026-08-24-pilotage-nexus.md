@@ -13,14 +13,14 @@
 - Piège découvert : les initiatives sont au niveau WORKSPACE — supprimer une team
   laisse ses initiatives orphelines (MVP, V2 supprimées à la main).
 
-### Skill pilotage (~/.claude/skills/pilotage/)
+### Skill pilotage (~/.claude/skills/pilot/)
 - Multi-workspace : linear_api.py `--workspace <slug>` / linear-<slug>.env,
-  save-key.sh <slug>, init_team.py --workspace ; section Pilotage nomme connexion + clé.
+  save-key.sh <slug>, init_team.py --workspace ; section Pilot nomme connexion + clé.
 - MCP suffit pour le quotidien : statut de feature = save_project → state, dates =
   save_project/save_milestone (un collaborateur sans clé API joue feature/next/fix/sync ;
   la clé ne sert qu'à init et aux initiatives). GraphQL projectCreate : description ≤ 255 c.,
   corps long dans `content`.
-- Projet à plusieurs : init copie la skill dans le dépôt (.claude/skills/pilotage) + .mcp.json.
+- Projet à plusieurs : init copie la skill dans le dépôt (.claude/skills/pilot) + .mcp.json.
 - Icônes/couleurs : palette par initiative (20 noms d'icônes API vérifiés) ; l'intérieur
   des barres de timeline n'est PAS colorable (vérifié à l'écran) — repères = pastille de
   statut, losanges de jalons (Display → Properties → Milestones), grouping par statut.
@@ -29,8 +29,8 @@
   « Terminé quand » = preuves spécifiques, jamais génériques.
 
 ### Nexus (team NEX, workspace agentos-tracker — compte unique conservé)
-- init joué : team NEX complète ; PR #417 mergée (section Pilotage dans CLAUDE.md,
-  .pilotage/calibration.md, skill embarquée, .mcp.json) ; NEX-1 Terminée automatiquement.
+- init joué : team NEX complète ; PR #417 mergée (section Pilot dans CLAUDE.md,
+  .pilot/calibration.md, skill embarquée, .mcp.json) ; NEX-1 Terminée automatiquement.
 - Roadmap créée : initiative « MVP Guemini » (cible 06/02/2027) = 24 features historiques
   Terminées (dates réelles des 376 PR, 20/05→19/08) + 11 features de roadmap À cadrer
   (jalons datés 30/09 → 06/02, couloirs Cédric/Greg, tailles, priorités).

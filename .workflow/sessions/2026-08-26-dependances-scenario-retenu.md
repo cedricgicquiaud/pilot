@@ -29,8 +29,8 @@ et glissements ») et le HTML (section 3) :
 3. **`sync` recale et raconte** — recalcul complet dans les deux sens (retard ET avance),
    jamais une feature avant la fin de sa bloquante, réserve intouchée ; récit d'ouverture :
    décalages, alertes sur échéances dépassées (tâches-décisions soulignées), marge restante
-   si la section Pilotage porte une ligne `Échéance :` (marge négative → parler périmètre).
-   `reference/section-pilotage.md` : ligne `Échéance :` ajoutée.
+   si la section Pilot porte une ligne `Échéance :` (marge négative → parler périmètre).
+   `reference/section-pilot.md` : ligne `Échéance :` ajoutée.
 
 ### Applications (comptages vérifiés)
 - **volt-app** : 7 relations EN ÉTOILE autour de « Coffre santé dans le téléphone »

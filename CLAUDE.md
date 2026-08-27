@@ -60,10 +60,10 @@ serveur.
 
 ## Mise en œuvre
 
-Le pilotage est implémenté par la skill globale `~/.claude/skills/pilotage/`
+Le pilotage est implémenté par la skill globale `~/.claude/skills/pilot/`
 (commandes init, roadmap, feature, next, fix, sync, benchmark). La boucle agents
 s'appuie sur les agents globaux `~/.claude/agents/verifier.md` et `tdd-writer.md`,
-et sur le gabarit `.pilotage/MISSION.template.md` du banc d'essai.
+et sur le gabarit `.pilot/MISSION.template.md` du banc d'essai.
 
 Le dépôt `AlanZien/pilotage-sandbox` est le banc d'essai des deux méthodes.
 Circuit d'évolution : on écrit ici, on teste sur le sandbox, on installe dans
