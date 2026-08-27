@@ -1,8 +1,9 @@
 # La boucle agents — faire travailler plusieurs agents Claude Code sans les regarder
 
-_Document interne. Il complète `PILOTAGE-LINEAR-GITHUB-CLAUDE.md` : le pilotage dit **quoi**
-livrer et comment le suivre ; ce document dit **comment** plusieurs agents le produisent en
-parallèle, avec une vérification qui tourne sans humain. Méthode rodée les 26 et 27 août 2026
+_Document interne. Il complète `PILOTAGE-LINEAR-GITHUB-CLAUDE.md` : la Partie B de ce dernier
+décrit le circuit complet d'une feature (cadrer → découper → produire → merger → apprendre) ;
+ce document détaille l'étape « produire » : comment plusieurs agents fabriquent en parallèle,
+avec une vérification qui tourne sans humain. Méthode rodée les 26 et 27 août 2026
 sur le dépôt `AlanZien/pilotage-sandbox` (10 PR mergées, 2 features terminées, 126 tests verts)._
 
 ---
@@ -28,13 +29,21 @@ seconde question fait peur, c'est la boucle qu'il faut renforcer, pas la toléra
 
 Sources : Cherny, « Steps of AI Adoption » (16/07/2026) ; vidéo 1
 <https://www.youtube.com/watch?v=8ZJI4uCp6bA> ; vidéo 2
-<https://www.youtube.com/watch?v=Nmu1-eILb9g> ; Cognition, « Making Fable Cheaper Than Opus ».
+<https://www.youtube.com/watch?v=Nmu1-eILb9g> ; vidéo 3 (Factory « Missions »)
+<https://www.youtube.com/watch?v=ow1we5PzK-o> ; Cognition, « Making Fable Cheaper Than Opus ».
 À retenir : la méthode. Les chiffres (METR, +441 %, jauge en tokens) sont des directions, pas
 des certitudes.
 
 ---
 
 ## 2. La recette
+
+### 2.0 Place dans le circuit
+
+La boucle commence quand le découpage est validé (feature « Planifiée » dans Linear) et se
+termine quand les PR sont ouvertes avec leur rapport d'audit. Avant : cadrage et découpage,
+avec l'humain. Après : merge humain, puis apprentissage. Le tout est décrit dans la Partie B
+du document pilotage ; l'humain ne lance la boucle que par une instruction (« livre X »).
 
 ### 2.1 Vue d'ensemble
 
@@ -195,6 +204,14 @@ bon nombre = chantiers réellement disjoints × capacité à relire ce qui remon
 soir du 26/08, trois producteurs en parallèle sans incident, parce qu'il y avait trois
 livraisons disjointes.
 
+**Parallèle seulement si la disjonction est décidée en amont ; sinon, en série.** Factory
+(vidéo 3) a testé dix agents en parallèle sur un même projet et a abandonné : ils se marchent
+dessus, dupliquent, prennent des décisions d'architecture incohérentes ; la coordination mange
+le gain. Ils exécutent les features une par une et ne parallélisent que les lectures (recherche,
+revue). Notre essai a réussi en parallèle parce qu'un humain avait découpé des livraisons
+disjointes à l'étape précédente. Les deux sont vrais : le parallélisme est un gain quand la
+disjonction est garantie par le découpage, jamais quand on laisse un système découper seul.
+
 **Un agent = un rôle + un contexte + une durée de vie.** Les producteurs et correcteurs
 n'étaient pas des agents installés : des instances jetables de Claude Code, définies par leur
 `MISSION.md`. Seul `verifier` est une fiche de poste permanente. Créer une fiche `producteur`
@@ -221,18 +238,21 @@ comportements opposés. Le casting par marque (« tel modèle est docile ») est
 ## 5. Backlog des manques avant d'industrialiser
 
 Ce qui a été mis en place relève du **management** (fiches de poste, docilité par poste,
-disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**économie** et de la
-**tenue dans le temps**.
+disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**économie**, de la
+**tenue dans le temps** et de la **confiance** nécessaire pour merger moins souvent.
 
 | # | Manque | Pourquoi ça compte | Piste |
 |---|---|---|---|
 | 1 | Disjoncteur de budget tokens par poste | Rien n'arrête un agent parti en boucle. Le manque le plus sérieux avant de monter en nombre. | Budget par session / par workflow. |
-| 2 | Modèle déclaré par poste | Tous les agents ont tourné sur le même modèle. Premier levier de coût (Cognition : meneur cher qui délègue < meneur moyen qui code). | Champ `model` dans les fiches `~/.claude/agents/`. |
+| 2 | Modèle déclaré par poste | Tous les agents ont tourné sur le même modèle. Premier levier de coût (Cognition : meneur cher qui délègue < meneur moyen qui code). Factory ajoute : mettre la validation sur un autre fournisseur que la production, pour qu'ils ne partagent pas les mêmes angles morts. | Champ `model` dans les fiches `~/.claude/agents/`. |
 | 3 | Effort déclaré par poste | Max pour arbitrage et revue, contenu pour l'exécution. Pousser partout coûte et fait dériver. | Champ `effort` dans les fiches. |
 | 4 | Banc d'essai maison | L'essai a évalué le dispositif, pas les modèles. Recruter un modèle sur un poste se fait sur épreuve comparative. | Deux livraisons identiques, deux modèles, même audit. |
-| 5 | Maillon « revue visuelle » | Personne ne regarde l'écran. Indispensable pour tout projet avec interface. | Agent qui ouvre l'app dans le navigateur, capture, audite comme `verifier` audite le diff. |
+| 5 | Validation de bout en bout | Personne n'ouvre l'application. Factory : un validateur « testeur utilisateur » qui lance l'app, remplit, clique, vérifie les parcours ; c'est là que passe la majorité du temps réel, et c'est ce qui leur permet de ne pas relire chaque PR. Indispensable avant de déplacer le curseur du merge. | Agent qui ouvre l'app dans le navigateur, joue les parcours, audite l'écran comme `verifier` audite le diff. |
 | 6 | Fiche `producteur` permanente | Nécessaire au niveau 3 (boucle hors session). | Squelette du gabarit MISSION en fiche d'agent ; la chair reste générée. |
-| 7 | Élaguer les consignes tous les six mois | Les modèles récents ont besoin de moins d'échafaudage (Cherny : « we cut 80 % of the prompt »). | Relire `CLAUDE.md`, règles FORGE, skills : retirer ce qui tient debout tout seul. |
+| 7 | Élaguer les consignes tous les six mois | Les modèles récents ont besoin de moins d'échafaudage (Cherny : « we cut 80 % of the prompt »). | Relire `CLAUDE.md` et skills : retirer ce qui tient debout tout seul. |
+| 8 | Contrat de validation à l'échelle de la feature | Nos « Terminé quand » sont par tâche, jamais consolidés. Factory écrit avant tout code la liste de « ce qui devra être vrai », chaque feature devant couvrir ses phrases ; des tests écrits après le code « confirment des décisions, ils n'attrapent pas de bugs ». Prévu à l'étape « Cadrer » du circuit. | Section de la fiche feature Linear ; le découpage affecte chaque phrase à une livraison ; `verifier` contrôle la couverture. |
+| 9 | Vue de contrôle | Sur plusieurs heures, un fil de discussion ne montre ni l'avancement ni la dépense. | Un tableau : livraisons finies / en cours, budget consommé, rapports de handoff. Lié au n° 1. |
+| 10 | Reprise automatique après audit | Chez nous : audit → corrections → PR, puis stop. Factory enchaîne des jalons regroupant plusieurs livraisons et crée des tâches de suivi sans humain. C'est ce qui autorise « un merge par feature » au lieu d'un par livraison. | Après 1 et 5 seulement. |
 
 ---
 
@@ -241,7 +261,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | Quoi | Où |
 |---|---|
 | Ce document (la méthode expliquée) | `Gestion_projet/BOUCLE-AGENTS.md` |
-| Analyse critique des vidéos sources | `Gestion_projet/sources/analyse-videos-2026-08-26.md` |
+| Analyse critique des vidéos sources | `Gestion_projet/sources/analyse-videos-2026-08-26.md`, `sources/analyse-video-2026-08-27-factory-missions.md` |
 | Gabarit MISSION, allowlist, CLAUDE.md d'exemple | `AlanZien/pilotage-sandbox` (banc d'essai) |
 | Fiches de poste permanentes | `~/.claude/agents/verifier.md`, `tdd-writer.md` |
 | Commandes de pilotage | `~/.claude/skills/pilotage/` |
