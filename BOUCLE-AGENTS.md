@@ -55,7 +55,8 @@ Feature Linear (découpée en livraisons disjointes)
  │ Producteur A │   │ Producteur B │   ← 1 worktree + 1 MISSION.md chacun
  └──────┬───────┘   └──────┬───────┘
         ▼                  ▼
-   Relecteur (verifier) — n'a pas écrit le code, signale, ne corrige pas
+   Relecteur (verifier) + Testeur (testeur) — n'ont pas écrit le code, signalent, ne corrigent pas
+   (l'un lit le diff, l'autre joue le cahier de recette à l'écran)
         │
         ▼
    Correcteur — liste fermée de corrections, rien d'autre
@@ -76,6 +77,7 @@ Une itération complète = 18 à 25 minutes par livraison, mesuré sur le bac à
 | **Commandes pré-autorisées** | La liste des commandes sûres dans `.claude/settings.json`, versionnée. | Tests, git local, lectures, quelques outils Linear. Réseau, suppressions, merge restent en manuel. `settings.local.json` (hors git) pour `gh pr create`. Voir 2.4. |
 | **Producteur TDD** | Le producteur est la fiche de poste `tdd-writer` : test rouge → code minimal → test vert → refactor, un commit par transition. Il refuse d'écrire du code avant un test. | `~/.claude/agents/tdd-writer.md`. Le `MISSION.md` est sa partie variable. Sur le sandbox du 26/08, les producteurs étaient génériques : tests présents, mais rien ne prouvait qu'ils précédaient le code. |
 | **Relecteur indépendant** | Un agent qui n'a pas écrit le code audite le diff avant tout merge. | Agent `verifier` (`~/.claude/agents/verifier.md`), read-only. Jamais de merge sans lui. Il vérifie aussi, dans l'historique, que chaque test précède le code qu'il couvre. |
+| **Testeur utilisateur** | Un agent qui n'a pas lu le code ouvre l'application et joue les cases du cahier de recette de la livraison, comme un utilisateur. | Agent `testeur` (`~/.claude/agents/testeur.md`), read-only, à côté de `verifier` : l'un lit le diff, l'autre regarde l'écran. Rend constaté / refusé / non testable par case. L'instrument (navigateur piloté, Maestro…) et la commande de lancement sont déclarés dans la section `## Pilot` du projet, pas dans la fiche. |
 
 ### 2.3 Le gabarit `MISSION.md`
 
@@ -237,11 +239,54 @@ verts, décisions listées ». Trois niveaux d'automatisation existent :
 | 2 | Un agent orchestrateur qui appelle `tdd-writer` puis `verifier` | Non testé |
 | 3 | Un workflow encodé (l'enchaînement fixé par du code, pas par un modèle) | À faire |
 
+**Le testeur fait le travail ; l'outillage lui coûte un tiers du temps.** Essai à froid du
+28/08 sur la livraison « Recherche et filtres » de Carnet, déjà mergée : compte jetable et
+contacts créés par l'interface, 8 cases sur 8 jouées et constatées, console propre, 15 à
+20 minutes. Environ un tiers perdu en frictions : `file://` refusé (il faut un serveur local),
+deux navigateurs connectés, une extension de mots de passe qui bloque un champ, une session
+d'un essai précédent encore ouverte, des captures qui ne survivent pas à la session. Les
+trois premières sont réglées dans la fiche ; les autres sont au backlog. Deux cases du
+cahier étaient ambiguës (jeu de données non précisé, contact supprimé dans ou hors du
+filtre) : même leçon que les « Terminé quand », une case dit sa donnée et son refus. Ce que
+l'essai ne prouve pas : qu'il attrape un défaut réel, puisque la livraison n'en avait pas.
+
 **Docilité par contrat, pas par marque de modèle.** L'exécutant a « périmètre STRICT » et
 interdiction de réinterpréter ; le relecteur a mandat de contredire. Même modèle partout,
 comportements opposés. Le casting par marque (« tel modèle est docile ») est périssable.
 
 ---
+
+## 4 bis. Écarts avec les sources
+
+Relecture du 28/08 : ce que les trois vidéos préconisent, contre ce qui est en place.
+
+| Préconisation | Source | Chez nous | Écart |
+|---|---|---|---|
+| Le contrat (`CLAUDE.md`) | V1 | `CLAUDE.md` + idiomes gravés au fil des audits + `MISSION.md` | Couvert |
+| L'examen, tests **et** navigateur | V1 | Tests lancés par le producteur ; `testeur` depuis le 28/08 | Couvert, à inscrire dans `run` |
+| Les bacs à sable (worktrees, allowlist, deux agents) | V1 | Rodé, trois producteurs le 26/08 | Couvert |
+| La relecture par un agent neuf | V1 | `verifier` | Couvert, découverte n° 1 de l'essai |
+| Le test des deux heures (deux chantiers, écran fermé) | V1 | Run Facturation : 1,4 h en une instruction, **un agent, écran ouvert** | Non fait tel quel |
+| Pas d'agents en plus avant que la boucle mérite confiance | V1 | Règle « parallèle seulement si disjoint » | Respecté |
+| Docilité et effort réglés par poste | V2 | Docilité par contrat : oui ; effort et modèle : non | Backlog 2, 3 |
+| Disjoncteurs : budget et accès | V2 | Accès : allowlist ; budget : rien | Backlog 1 |
+| Recruter un modèle sur épreuve | V2 | — | Backlog 4, sans objet à un seul modèle |
+| Le meneur délègue, ne délègue jamais le jugement | V2, Cognition | Merge humain, décisions remontées | Couvert, invariants |
+| Contrat de validation avant le code | V3 | Fait au cadrage (Facturation : 24 phrases) ; couverture non contrôlée | Backlog 8 |
+| Validateur « testeur utilisateur » | V3 | `testeur` | Couvert, voir backlog 5 |
+| Handoff structuré | V3 | Rapport final du `MISSION.md`, audit joint à la PR | Couvert |
+| Vue de contrôle (avancement, budget) | V3 | Linear pour l'avancement, rien pour la dépense | Backlog 9 |
+| Élaguer les consignes tous les six mois | V2 | Aucune date | Backlog 7 |
+| Ne pas piloter au compteur de tokens | V1 (critique) | Pas de jauge | Respecté |
+
+Sur un abonnement Max, le disjoncteur de budget ne protège pas l'argent (plafonné) mais le
+quota (fenêtre de 5 h, limite hebdomadaire) : un agent en boucle vide la réserve de tous les
+autres. L'unité utile n'est donc pas le dollar mais le nombre d'actions et la durée par
+mission, imposés par un hook `PreToolUse`. Nécessaire au moment de fermer l'écran, pas avant.
+
+Ordre retenu le 28/08 : `testeur` dans la boucle de chaque livraison, limité aux cases de la
+livraison (fait à froid) ; disjoncteur ; épreuve des deux heures sur le sandbox ; seulement
+ensuite un second projet (mobile, Maestro) et deux agents en parallèle.
 
 ## 5. Backlog des manques avant d'industrialiser
 
@@ -255,7 +300,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | 2 | Modèle déclaré par poste | Tous les agents ont tourné sur le même modèle. Premier levier de coût (Cognition : meneur cher qui délègue < meneur moyen qui code). Factory ajoute : mettre la validation sur un autre fournisseur que la production, pour qu'ils ne partagent pas les mêmes angles morts. | Champ `model` dans les fiches `~/.claude/agents/`. |
 | 3 | Effort déclaré par poste | Max pour arbitrage et revue, contenu pour l'exécution. Pousser partout coûte et fait dériver. | Champ `effort` dans les fiches. |
 | 4 | Banc d'essai maison | L'essai a évalué le dispositif, pas les modèles. Recruter un modèle sur un poste se fait sur épreuve comparative. | Deux livraisons identiques, deux modèles, même audit. |
-| 5 | Validation de bout en bout | Personne n'ouvre l'application. Factory : un validateur « testeur utilisateur » qui lance l'app, remplit, clique, vérifie les parcours ; c'est là que passe la majorité du temps réel, et c'est ce qui leur permet de ne pas relire chaque PR. Indispensable avant de déplacer le curseur du merge. | Agent qui ouvre l'app dans le navigateur, joue les parcours, audite l'écran comme `verifier` audite le diff. |
+| 5 | Validation de bout en bout | En partie résolu par `testeur` (§ 2.2, essai du 28/08). Reste : l'inscrire dans `/pilot run` et le gabarit `MISSION.md` (le producteur remplit les cases `UAT.md` de sa livraison) ; un profil de navigateur dédié aux tests, sans extension ; des captures qui survivent (fichier joint à la PR) ; un état vierge de l'application avant chaque passage ; l'instrument mobile (Maestro sur simulateur) au premier projet mobile. | Section `## Pilot` : `Lancer l'app :`, `Testeur :`. Rapport de `run` en deux colonnes : prouvé (tests, audit, cases jouées) / à relire (esthétique, non testable). |
 | 6 | Fiche `producteur` permanente | Résolu par `tdd-writer` (§ 2.2). Reste à ajouter dans sa fiche les invariants de la boucle (périmètre strict, STOP après PR, décisions signalées non tranchées) pour le niveau 3. | Compléter `tdd-writer.md` ; `MISSION.md` reste la partie variable. |
 | 7 | Élaguer les consignes tous les six mois | Les modèles récents ont besoin de moins d'échafaudage (Cherny : « we cut 80 % of the prompt »). | Relire `CLAUDE.md` et skills : retirer ce qui tient debout tout seul. |
 | 8 | Contrat de validation à l'échelle de la feature | Nos « Terminé quand » sont par tâche, jamais consolidés. Factory écrit avant tout code la liste de « ce qui devra être vrai », chaque feature devant couvrir ses phrases ; des tests écrits après le code « confirment des décisions, ils n'attrapent pas de bugs ». Prévu à l'étape « Cadrer » du circuit. | Section de la fiche feature Linear ; le découpage affecte chaque phrase à une livraison ; `verifier` contrôle la couverture. |
@@ -271,7 +316,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | Ce document (la méthode expliquée) | `Gestion_projet/BOUCLE-AGENTS.md` |
 | Analyse critique des vidéos sources | `Gestion_projet/sources/analyse-videos-2026-08-26.md`, `sources/analyse-video-2026-08-27-factory-missions.md` |
 | Gabarit MISSION, allowlist, CLAUDE.md d'exemple | `AlanZien/pilotage-sandbox` (banc d'essai) |
-| Fiches de poste permanentes | `~/.claude/agents/verifier.md`, `tdd-writer.md` |
+| Fiches de poste permanentes | `~/.claude/agents/verifier.md`, `tdd-writer.md`, `testeur.md` |
 | Commandes de pilotage | `~/.claude/skills/pilot/` |
 | Recette condensée pour Claude | Mémoire globale `recette-deux-agents-paralleles` |
 
