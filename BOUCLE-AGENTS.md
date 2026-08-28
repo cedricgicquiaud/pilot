@@ -189,9 +189,14 @@ indépendant. Les deux producteurs avaient reproduit le même défaut d'idiome :
 extérieur le voit. C'est la découverte n° 1 de l'essai ; la plomberie (worktrees,
 permissions) n'était que mécanique.
 
-**Chaque leçon d'audit se grave dans le `CLAUDE.md` du projet.** Les failles du matin sont
-devenues une section « Idiomes de code » ; l'après-midi, plus aucun producteur ne les a
-reproduites. Le contrat s'écrit au fil des audits, pas à l'avance.
+**Chaque leçon d'audit se grave dans le `CLAUDE.md` du projet.** Les deux failles du matin
+sont devenues une section « Idiomes de code » (commit de 21:40). Le soir, huit livraisons qui
+manipulaient du texte utilisateur et des mutations ont appliqué ces règles ; les fautes exactes
+n'ont pas réapparu, mais une variante (URL de logo non échappée dans un attribut) est passée et
+a été attrapée par l'audit. Ce qu'on peut affirmer : le contrat s'enrichit au fil des audits,
+et le relecteur reste nécessaire. Ce qu'on ne peut pas affirmer : que c'est la règle écrite,
+plutôt que l'imitation du code déjà corrigé que les producteurs avaient sous les yeux, qui a
+évité les fautes. Il faudrait l'épreuve comparative (backlog n° 4) pour le savoir.
 
 **Les fiches Linear font le bon métier au bon niveau.** Sur 8 livraisons, aucun agent n'a
 livré à côté. La qualité tient sur trois étages : la fiche (intention et résultat observable),
