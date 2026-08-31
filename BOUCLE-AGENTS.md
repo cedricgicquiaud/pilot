@@ -298,7 +298,13 @@ exacte, envoie de vraies frappes, force `colorScheme` et écrit des PNG — les 
 tombent ensemble. Il tourne sur le Chrome déjà installé (`channel: 'chrome'`), donc sans
 navigateur à télécharger et sans toucher au profil de l'utilisateur. Sur le tableau de bord du
 sandbox, il a nommé le défaut que les deux agents avaient mis 35 actions à approcher :
-`button#mailbox-toggle « Boîte aux lettres »`, débordement de 74 px à 375 px.
+`button#mailbox-toggle « Boîte aux lettres »`, débordement de 74 px à 375 px. Essai de la fiche
+outillée, deux écrans (tableau de bord et agenda) : **0 action de navigateur piloté, 1 min 15 s
+de bout en bout, deux défauts remontés** avec leurs valeurs et l'élément fautif nommé, dont un
+inédit (à 375 px la semaine de l'agenda est coupée, samedi et dimanche illisibles) — contre 33
+et 35 actions pour 8 et 14 minutes sur **un seul** écran avec l'extension. L'agent a joint le
+test qui verrouillerait les deux défauts, et il a conclu « il n'y a pas de thème sombre » en
+s'appuyant sur l'empreinte identique des deux captures, sans rien avancer sur le code.
 
 **Docilité par contrat, pas par marque de modèle.** L'exécutant a « périmètre STRICT » et
 interdiction de réinterpréter ; le relecteur a mandat de contredire. Même modèle partout,
