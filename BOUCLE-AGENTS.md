@@ -56,7 +56,7 @@ Feature Linear (découpée en livraisons disjointes)
  └──────┬───────┘   └──────┬───────┘
         ▼                  ▼
    Relecteur (verifier) + Testeur (testeur) — n'ont pas écrit le code, signalent, ne corrigent pas
-   (l'un lit le diff, l'autre joue le cahier de recette à l'écran)
+   (l'un lit le diff, l'autre regarde l'écran)
         │
         ▼
    Correcteur — liste fermée de corrections, rien d'autre
@@ -77,7 +77,7 @@ Une itération complète = 18 à 25 minutes par livraison, mesuré sur le bac à
 | **Commandes pré-autorisées** | La liste des commandes sûres dans `.claude/settings.json`, versionnée. | Tests, git local, lectures, quelques outils Linear. Réseau, suppressions, merge restent en manuel. `settings.local.json` (hors git) pour `gh pr create`. Voir 2.4. |
 | **Producteur TDD** | Le producteur est la fiche de poste `tdd-writer` : test rouge → code minimal → test vert → refactor, un commit par transition. Il refuse d'écrire du code avant un test. | `~/.claude/agents/tdd-writer.md`. Le `MISSION.md` est sa partie variable. Sur le sandbox du 26/08, les producteurs étaient génériques : tests présents, mais rien ne prouvait qu'ils précédaient le code. |
 | **Relecteur indépendant** | Un agent qui n'a pas écrit le code audite le diff avant tout merge. | Agent `verifier` (`~/.claude/agents/verifier.md`), read-only. Jamais de merge sans lui. Il vérifie aussi, dans l'historique, que chaque test précède le code qu'il couvre. |
-| **Testeur utilisateur** | Un agent qui n'a pas lu le code ouvre l'application et joue les cases du cahier de recette de la livraison, comme un utilisateur. | Agent `testeur` (`~/.claude/agents/testeur.md`), read-only, à côté de `verifier` : l'un lit le diff, l'autre regarde l'écran. Rend constaté / refusé / non testable par case et **coche lui-même le cahier** (`UAT.md`, section de la livraison, un commit `test: recette …`) : une case cochée veut dire « joué à l'écran par un agent ». Une case refusée est un bloquant, comme chez `verifier` : le correcteur la traite, le testeur rejoue ces cases seulement, **un aller-retour, pas plus** ; si elle reste refusée, la PR s'ouvre quand même, marquée non mergeable. Une case non testable va dans la colonne « à relire » : l'humain la joue avant de merger. L'instrument (navigateur piloté, Maestro…) et la commande de lancement sont déclarés dans la section `## Pilot` du projet, pas dans la fiche. |
+| **Testeur utilisateur** | Un agent qui n'a pas lu le code ouvre l'application et **regarde** les écrans de la livraison, comme un utilisateur. Il ne déroule pas le cahier de recette. | Agent `testeur` (`~/.claude/agents/testeur.md`), read-only, à côté de `verifier` : l'un lit le diff, l'autre regarde l'écran. **Passe fixe et bornée** : l'écran livré en 1280 px et en 375 px, un parcours au clavier, le thème sombre, la console — avec un budget dur de 12 minutes, 40 actions navigateur et 8 captures, au-delà duquel il s'arrête et rapporte ce qu'il a vu. Il cherche ce qu'aucun test ne voit : deux éléments qui se recouvrent, un débordement horizontal, un contour de sélection invisible, un contenu caché sous une barre fixe, un bloc de couleur étiré, un lien annoncé absent, un texte illisible en sombre. Il rend une liste de faits mesurables avec captures ; **il ne coche rien et ne commite rien**. Le chef d'équipe décide de ce qui part en correction, et chaque défaut retenu est ensuite verrouillé par un test. Le cahier de recette complet (`UAT.md`) n'est plus joué par un agent pendant le développement : il est déroulé à la main en phase de recette. L'instrument (navigateur piloté, Maestro…) et la commande de lancement sont déclarés dans la section `## Pilot` du projet. |
 
 ### 2.3 Le gabarit `MISSION.md`
 
@@ -260,8 +260,25 @@ deux navigateurs connectés, une extension de mots de passe qui bloque un champ,
 d'un essai précédent encore ouverte, des captures qui ne survivent pas à la session. Les
 trois premières sont réglées dans la fiche ; les autres sont au backlog. Deux cases du
 cahier étaient ambiguës (jeu de données non précisé, contact supprimé dans ou hors du
-filtre) : même leçon que les « Terminé quand », une case dit sa donnée et son refus. Ce que
-l'essai ne prouve pas : qu'il attrape un défaut réel, puisque la livraison n'en avait pas.
+filtre) : même leçon que les « Terminé quand », une case dit sa donnée et son refus.
+
+**Le testeur attrape de vrais défauts, mais pas en jouant le cahier — en regardant l'écran.**
+Mesure du 31/08 sur 28 passages de `testeur` (WATIDO, sandbox, PILOT) : sur ~115 cases de
+recette déroulées, 108 constatées, et les rares refus portaient souvent sur une case mal
+rédigée (« rebuild > 30 s » alors qu'il prend 7 s) plutôt que sur un défaut. Tout ce qui a été
+trouvé de réel — huit défauts — venait de la colonne « vu hors cahier » : contour de sélection
+invisible (lien `inline` autour d'un SVG `block`, boîtes 0 × 0), bloc de couleur étiré sur toute
+la hauteur d'une carte, bouton fixe par-dessus le menu à 375 px, débordement horizontal, titre
+caché sous la barre fixe. Aucun n'était visible dans les tests, tous verts, ni dans le diff lu
+par `verifier` ; environ une correction sur cinq de la boucle en vient, et chacune a été
+verrouillée ensuite par un test. Le rejeu du cahier, lui, coûtait jusqu'à 2,5 min et 4 M jetons
+**par case**. D'où la fiche actuelle : la passe visuelle remplace le cahier, le cahier repasse
+à l'humain en phase de recette. Contre-épreuve du 31/08 sur le sandbox, nouvelle fiche : 8
+minutes, 33 actions navigateur, 6 captures (contre 22 à 36 minutes et ~290 actions pour
+l'ancienne), et sept défauts remontés dont trois confirmés dans le code sans ouvrir le
+navigateur — aucune règle `:focus` dans la feuille de style, aucun `@media` hors impression.
+L'agent a aussi écarté de lui-même un faux positif (un bouton « coupé » qui n'était qu'un
+artefact de capture, position mesurée à l'appui).
 
 **Docilité par contrat, pas par marque de modèle.** L'exécutant a « périmètre STRICT » et
 interdiction de réinterpréter ; le relecteur a mandat de contredire. Même modèle partout,
@@ -313,7 +330,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | 2 | Modèle déclaré par poste | Tous les agents ont tourné sur le même modèle. Premier levier de coût (Cognition : meneur cher qui délègue < meneur moyen qui code). Factory ajoute : mettre la validation sur un autre fournisseur que la production, pour qu'ils ne partagent pas les mêmes angles morts. | Champ `model` dans les fiches `~/.claude/agents/`. |
 | 3 | Effort déclaré par poste | Max pour arbitrage et revue, contenu pour l'exécution. Pousser partout coûte et fait dériver. | Champ `effort` dans les fiches. |
 | 4 | Banc d'essai maison | L'essai a évalué le dispositif, pas les modèles. Recruter un modèle sur un poste se fait sur épreuve comparative. | Deux livraisons identiques, deux modèles, même audit. |
-| 5 | Validation de bout en bout | En partie résolu par `testeur` (§ 2.2, essai du 28/08). Reste : l'inscrire dans `/pilot run` et le gabarit `MISSION.md` (le producteur remplit les cases `UAT.md` de sa livraison) ; un état vierge de l'application avant chaque passage ; l'instrument mobile (Maestro sur simulateur) au premier projet mobile. Voir aussi 11 et 12. | Section `## Pilot` : `Lancer l'app :`, `Testeur :`. Rapport de `run` en deux colonnes : prouvé (tests, audit, cases jouées) / à relire (esthétique, non testable). |
+| 5 | Validation de bout en bout | En partie résolu par `testeur` (§ 2.2, essais des 28/08 et 31/08). Reste : inscrire la passe visuelle dans `/pilot run` et le gabarit `MISSION.md` ; tranché le 31/08 : **`UAT.md` est le cahier de recette de l'humain**, qu'il déroule lui-même avant mise en ligne ; aucun agent ne le joue ni ne le coche. Le producteur continue de l'écrire (une case par « Terminé quand », non cochée), pour un lecteur qui ne connaît pas le code ; un état vierge de l'application avant chaque passage ; l'instrument mobile (Maestro sur simulateur) au premier projet mobile. Voir aussi 11 et 12. | Section `## Pilot` : `Lancer l'app :`, `Testeur :`. Rapport de `run` en deux colonnes : prouvé (tests, audit, cases jouées) / à relire (esthétique, non testable). |
 | 6 | Fiche `producteur` permanente | Résolu par `tdd-writer` (§ 2.2). Reste à ajouter dans sa fiche les invariants de la boucle (périmètre strict, STOP après PR, décisions signalées non tranchées) pour le niveau 3. | Compléter `tdd-writer.md` ; `MISSION.md` reste la partie variable. |
 | 7 | Élaguer les consignes tous les six mois | Les modèles récents ont besoin de moins d'échafaudage (Cherny : « we cut 80 % of the prompt »). | Relire `CLAUDE.md` et skills : retirer ce qui tient debout tout seul. |
 | 8 | Contrat de validation à l'échelle de la feature | Nos « Terminé quand » sont par tâche, jamais consolidés. Factory écrit avant tout code la liste de « ce qui devra être vrai », chaque feature devant couvrir ses phrases ; des tests écrits après le code « confirment des décisions, ils n'attrapent pas de bugs ». Prévu à l'étape « Cadrer » du circuit. | Section de la fiche feature Linear ; le découpage affecte chaque phrase à une livraison ; `verifier` contrôle la couverture. |
