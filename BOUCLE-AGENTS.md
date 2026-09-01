@@ -290,6 +290,23 @@ plausible. La fiche interdit désormais toute affirmation sur le code, et la mes
 supposition : quand la machine mesure, l'agent n'a plus de trou à combler. C'est la deuxième
 raison d'outiller la passe, après le coût.
 
+**Ce que coûte chaque poste, mesuré.** `cout-agents.py` sur les trois projets, moyennes par
+agent : producteur 7,5 min, 67 échanges, 3,7 M jetons relus ; correcteur 2,8 min, 26 échanges,
+1,1 M ; relecteur 2,6 min, 20 échanges, 0,7 M ; auditeur 2,0 min, 18 échanges, 0,5 M. Le
+testeur d'avant : 6,9 min, 96 échanges, 5,3 M, 52 appels de navigateur. Le même écran par la
+passe outillée : 2,4 min, 27 échanges, 0,8 M, **zéro** appel de navigateur. Sur le banc
+d'essai, l'écart d'un bout à l'autre est d'un facteur 48 sur les jetons relus (39 M pour
+`atest-TB1b`, 0,8 M pour `passe-outillee`). Ces chiffres servent de seuils : au-delà du double
+de la médiane de son poste, un agent est à regarder, pas forcément à blâmer.
+
+**Un agent ne connaît pas sa dépense, mais il sait compter ses essais.** L'outillage n'expose
+aucun compteur de jetons à l'intérieur d'une fiche : un plafond en jetons ne serait pas
+observable par celui qui doit le respecter. D'où des points d'arrêt exprimés dans ce que
+l'agent voit lui-même — trois essais infructueux sur le même test, dix cycles rouge/vert, une
+vingtaine d'échanges pour un audit. C'est moins précis qu'un disjoncteur, mais c'est vérifiable
+après coup par `cout-agents.py`, et surtout ça évite le pire : l'agent qui, à force d'insister,
+finit par contourner le test au lieu d'échouer proprement.
+
 **L'instrument était le vrai plafond, pas le coût.** L'essai du 31/08 avec le navigateur piloté
 par l'extension a buté sur trois des cinq points de la passe : les frappes `Tab` ne parviennent
 pas à la page, `resize_window` ne change pas le viewport (bloqué à 1374 px, le repli par iframe
@@ -352,7 +369,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 
 | # | Manque | Pourquoi ça compte | Piste |
 |---|---|---|---|
-| 1 | Disjoncteur de budget tokens par poste | Rien n'arrête un agent parti en boucle. Le manque le plus sérieux avant de monter en nombre. | Budget par session / par workflow. |
+| 1 | Disjoncteur de budget tokens par poste | **En partie traité le 01/09.** Mesure : `~/.claude/tools/cout-agents/cout-agents.py <projet> --seuils` lit les transcripts de sous-agents et sort le coût par poste (durée, échanges, jetons écrits et relus, appels navigateur), avec les agents au-dessus des seuils. Garde-fous : chaque fiche porte désormais un point d'arrêt qu'un agent peut observer lui-même (`tdd-writer` : trois essais infructueux sur le même test ou dix cycles ; `verifier` : le double d'une vingtaine d'échanges veut dire qu'il a quitté le diff ; `testeur` : 15 actions de navigateur en secours). Reste : un vrai disjoncteur qui **coupe**, l'outillage ne l'expose pas. | Mesure après coup + arrêt auto-imposé ; coupure réelle à venir. |
 | 2 | Modèle déclaré par poste | Tous les agents ont tourné sur le même modèle. Premier levier de coût (Cognition : meneur cher qui délègue < meneur moyen qui code). Factory ajoute : mettre la validation sur un autre fournisseur que la production, pour qu'ils ne partagent pas les mêmes angles morts. | Champ `model` dans les fiches `~/.claude/agents/`. |
 | 3 | Effort déclaré par poste | Max pour arbitrage et revue, contenu pour l'exécution. Pousser partout coûte et fait dériver. | Champ `effort` dans les fiches. |
 | 4 | Banc d'essai maison | L'essai a évalué le dispositif, pas les modèles. Recruter un modèle sur un poste se fait sur épreuve comparative. | Deux livraisons identiques, deux modèles, même audit. |
@@ -360,7 +377,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | 6 | Fiche `producteur` permanente | Résolu par `tdd-writer` (§ 2.2). Reste à ajouter dans sa fiche les invariants de la boucle (périmètre strict, STOP après PR, décisions signalées non tranchées) pour le niveau 3. | Compléter `tdd-writer.md` ; `MISSION.md` reste la partie variable. |
 | 7 | Élaguer les consignes tous les six mois | Les modèles récents ont besoin de moins d'échafaudage (Cherny : « we cut 80 % of the prompt »). | Relire `CLAUDE.md` et skills : retirer ce qui tient debout tout seul. |
 | 8 | Contrat de validation à l'échelle de la feature | Nos « Terminé quand » sont par tâche, jamais consolidés. Factory écrit avant tout code la liste de « ce qui devra être vrai », chaque feature devant couvrir ses phrases ; des tests écrits après le code « confirment des décisions, ils n'attrapent pas de bugs ». Prévu à l'étape « Cadrer » du circuit. | Section de la fiche feature Linear ; le découpage affecte chaque phrase à une livraison ; `verifier` contrôle la couverture. |
-| 9 | Vue de contrôle | Sur plusieurs heures, un fil de discussion ne montre ni l'avancement ni la dépense. | Un tableau : livraisons finies / en cours, budget consommé, rapports de handoff. Lié au n° 1. |
+| 9 | Vue de contrôle | **En partie traité le 01/09** par `cout-agents.py` : après coup, le coût par poste et les agents à regarder. Manque toujours le direct — pendant un run, le fil ne montre ni l'avancement ni la dépense. | Un tableau : livraisons finies / en cours, budget consommé, rapports de handoff. Lié au n° 1. |
 | 10 | Reprise automatique après audit | Chez nous : audit → corrections → PR, puis stop. Factory enchaîne des jalons regroupant plusieurs livraisons et crée des tâches de suivi sans humain. C'est ce qui autorise « un merge par feature » au lieu d'un par livraison. | Après 1 et 5 seulement. |
 | 11 | Profil de navigateur dédié aux tests | **Devenu marginal le 31/08** : la passe visuelle tourne sans fenêtre et sans profil utilisateur, donc aucune extension tierce ne peut la bloquer. Le besoin ne subsiste que pour le navigateur piloté gardé en secours (parcours interactif, formulaire à soumettre). | Créer le profil le jour où le secours servira vraiment. |
 | 12 | Captures durables | **Résolu le 31/08.** La passe visuelle passe par Playwright (`~/.claude/tools/passe-visuelle/passe-visuelle.mjs`, Chrome du système, rien à télécharger) : elle écrit ses images en fichiers dans `.pilot/recette/<date>-<écran>/` (dossier ignoré de git) et un `mesures.json` à côté. Reste ouvert : les images restent locales, elles ne s'affichent pas dans la PR — à traiter le jour où le manque se fait sentir. | Fait. |
