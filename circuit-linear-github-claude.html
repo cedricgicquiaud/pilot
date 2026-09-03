@@ -106,7 +106,7 @@
       <div class="role" style="--c: var(--claude)">
         <h3>Claude</h3>
         <p>L'ouvrier. Lit la tâche dans Linear, écrit le code dans GitHub, ouvre la PR.</p>
-        <p class="not">Ne merge jamais sans gate verte.</p>
+        <p class="not">Ne merge jamais : c'est toi qui décides.</p>
       </div>
     </div>
   </section>
@@ -162,7 +162,7 @@
   </section>
 
   <section>
-    <h2>3. Les trois étages de Linear</h2>
+    <h2>3. Les étages de Linear</h2>
     <p>GitHub range tout à plat. Linear empile, et c'est l'empilement qui donne une roadmap. Attention au vocabulaire de Linear : ce qu'il appelle « projet » est une <strong>feature</strong> du produit, pas le produit lui-même.</p>
     <figure>
       <svg viewBox="0 0 720 320" role="img" aria-label="Boîtes imbriquées : une initiative contient des features, chaque feature contient des tâches.">
@@ -204,20 +204,22 @@
     <p>Ce qui se passe réellement pour « Onboarding guidé » (trois écrans à la première connexion), et qui appuie sur le bouton à chaque étape.</p>
     <ol class="story">
       <li><span class="who" style="--c: var(--ink); --soft: var(--github-soft)">Toi</span><div>Au cadrage du projet, je te propose la liste de toutes ses features, avec une taille (S, M, L, XL). Tu valides, je les pose sur la roadmap, statut « À cadrer », sans aucune tâche. « Onboarding guidé » en fait partie.</div></li>
-      <li><span class="who" style="--c: var(--claude); --soft: var(--claude-soft)">Claude</span><div>Quand son tour vient, je te propose le découpage de sa première livraison (« Écran de bienvenue ») en tâches ; tu valides ; je crée <code>ABC-21</code>, <code>ABC-22</code>, <code>ABC-23</code> au moule (problème, action, terminé quand). La feature passe « Planifiée ». Dans GitHub, j'ouvre un espace de travail à part pour cette feature (une « branche »), pour ne pas toucher à la version qui marche.</div></li>
-      <li><span class="who" style="--c: var(--claude); --soft: var(--claude-soft)">Claude</span><div>Je code, tâche après tâche, avec les tests. À chaque tâche finie, je la passe en « Terminé » dans Linear. La feature affiche 33 %, 66 %, 100 % sur ta roadmap.</div></li>
-      <li><span class="who" style="--c: var(--claude); --soft: var(--claude-soft)">Claude</span><div>J'ouvre la PR sur GitHub (la demande d'intégrer mon travail dans la version officielle), titre « <code>ABC-21</code> Écran de bienvenue ». Sa description suit un gabarit : la feature et le numéro de livraison, <em>ce qui change</em> (en langage fonctionnel), <em>comment</em>, <em>la preuve</em> (CI verte, sortie réelle), <em>hors périmètre</em>, puis <code>Closes ABC-21, ABC-22, ABC-23</code>. Pas de copie des fiches : Linear les affiche déjà sous la description. Je passe la feature « En revue ».</div></li>
+      <li><span class="who" style="--c: var(--claude); --soft: var(--claude-soft)">Claude</span><div>Quand son tour vient, on cadre la feature : les décisions produit, et surtout <strong>la liste de ce qui devra être vrai à la fin</strong> — dix à trente phrases observables, dont un tiers de refus (« un écran sans titre ne s'enregistre pas »). Un agent relit ce cadrage et te dit ce qui manque, sans proposer de solution. Tu valides.</div></li>
+      <li><span class="who" style="--c: var(--claude); --soft: var(--claude-soft)">Claude</span><div>Je découpe la feature en <strong>livraisons qui ne touchent pas les mêmes fichiers</strong> — c'est ce qui permettra de les produire séparément sans que les travaux se télescopent. Chaque phrase du cadrage est affectée à une livraison. Tu valides, je crée <em>toutes</em> les tâches d'un coup (<code>ABC-21</code>, <code>ABC-22</code>, <code>ABC-23</code>…) au moule : problème, action, terminé quand. La feature passe « Planifiée ».</div></li>
+      <li><span class="who" style="--c: var(--claude); --soft: var(--claude-soft)">Agents</span><div>La production, sans toi. Un agent par livraison, chacun dans sa propre copie du dépôt. Il écrit d'abord le test qui échoue, puis le code minimal qui le fait réussir — un enregistrement par étape, pour qu'on puisse prouver après coup que le test précédait le code. À chaque tâche finie, elle passe en « Terminé » dans Linear et ta barre avance.</div></li>
+      <li><span class="who" style="--c: var(--claude); --soft: var(--claude-soft)">Agents</span><div>La vérification, par <strong>deux agents qui n'ont pas écrit le code</strong>. L'un relit les lignes changées et <strong>relance les tests lui-même</strong> : un rapport qui reprend les chiffres de celui qu'il contrôle ne prouve rien. L'autre ouvre l'application et regarde les écrans livrés. Jamais les deux à la fois — c'est ce qui fait deux preuves différentes. S'ils trouvent quelque chose, un troisième agent corrige la liste, une seule fois.</div></li>
+      <li><span class="who" style="--c: var(--claude); --soft: var(--claude-soft)">Claude</span><div>J'ouvre la PR sur GitHub, titre « <code>ABC-21</code> Écran de bienvenue », avec le rapport d'audit : ce qui est <em>prouvé</em>, ce qu'il te reste <em>à relire</em>, et <em>les décisions à trancher</em> que les agents ont refusé de prendre en chemin. Dernière ligne : <code>Closes ABC-21, ABC-22, ABC-23</code>. Je passe la feature « En revue », et je m'arrête.</div></li>
       <li><span class="who" style="--c: var(--github); --soft: var(--github-soft)">GitHub → Linear</span><div>Les tâches passent « En revue » dans Linear. <span class="auto">Personne n'a rien fait : c'est l'intégration.</span></div></li>
-      <li><span class="who" style="--c: var(--ink); --soft: var(--github-soft)">Toi</span><div>Tu relis la PR, ou tu me laisses merger si la gate est verte (mode autonome).</div></li>
-      <li><span class="who" style="--c: var(--github); --soft: var(--github-soft)">GitHub → Linear</span><div>PR mergée : les trois tâches passent « Terminée », la livraison est finie, la barre de la feature avance. Livraison suivante, même circuit, jusqu'à 100 %. <span class="auto">Automatique aussi.</span> À ma session suivante, je constate le merge et je passe la feature « Terminée ».</div></li>
-      <li><span class="who" style="--c: var(--claude); --soft: var(--claude-soft)">Claude</span><div>Les idées apparues en chemin deviennent des tâches sans feature, dans le backlog Linear. Puis je prends la feature suivante sur la roadmap.</div></li>
+      <li><span class="who" style="--c: var(--ink); --soft: var(--github-soft)">Toi</span><div>Tu relis la PR et tu merges. C'est aussi là que tu tranches les décisions remontées : sans ta réponse, la livraison suivante les devinerait.</div></li>
+      <li><span class="who" style="--c: var(--github); --soft: var(--github-soft)">GitHub → Linear</span><div>PR mergée : les trois tâches passent « Terminée », la livraison est finie, la barre de la feature avance. Livraison suivante, même circuit, jusqu'à 100 %. <span class="auto">Automatique aussi.</span></div></li>
+      <li><span class="who" style="--c: var(--claude); --soft: var(--claude-soft)">Claude</span><div>À ma session suivante, je constate le merge et je passe la feature « Terminée ». <strong>Puis j'apprends</strong> : chaque défaut trouvé à l'audit devient une règle écrite dans le <code>CLAUDE.md</code> du dépôt, que la livraison suivante appliquera. Les décisions que tu as tranchées sont gravées dans la fiche. Les idées apparues en chemin deviennent des tâches sans feature. Puis je prends la feature suivante.</div></li>
     </ol>
   </section>
 
   <section>
     <h2>5. La seule règle</h2>
     <div class="rule">
-      <p><strong>Le code de la tâche voyage dans le nom de la branche et le titre de la PR.</strong> C'est ce qui permet à GitHub de retrouver la bonne tâche Linear et de la faire avancer sans que personne n'y touche. Et rien n'est créé dans Linear sans ta validation. Sans ce code, les deux outils ne se reconnaissent pas et tu retombes sur deux listes à tenir à la main.</p>
+      <p><strong>Le code de la tâche voyage dans le nom de la branche et le titre de la PR.</strong> C'est ce qui permet à Linear de reconnaître ses tâches dans ce que fait GitHub, et de les faire avancer sans que personne n'y touche — les tâches seulement : le statut d'une feature, c'est Claude qui le pose. Et rien n'est créé dans Linear sans ta validation. Sans ce code, les deux outils ne se reconnaissent pas et tu retombes sur deux listes à tenir à la main.</p>
     </div>
     <p>Ce qui ne s'automatise pas, par choix : ta décision de merger, et l'ordre des features sur la roadmap. Le reste suit.</p>
   </section>

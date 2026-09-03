@@ -27,8 +27,10 @@ Il est en deux parties :
 
 Une seule règle fait tenir l'ensemble : **le code Linear d'une tâche
 (`ABC-12`) voyage dans le nom de la branche et le titre de la PR.** C'est ce qui
-permet à GitHub de retrouver la tâche et de la faire avancer sans intervention.
-Cette règle ne dépend d'aucune méthode de développement.
+permet à Linear de reconnaître ses tâches dans ce que fait GitHub, et de les faire
+avancer sans intervention — les tâches seulement ; les statuts de feature restent
+posés par Claude (§ 5). Rien n'est à configurer côté GitHub : tout se passe dans
+Linear. Cette règle ne dépend d'aucune méthode de développement.
 
 ---
 
@@ -57,7 +59,7 @@ Cette règle ne dépend d'aucune méthode de développement.
 
 ---
 
-## 3. Vocabulaire : trois étages
+## 3. Vocabulaire : quatre étages
 
 C'est la gestion de projet classique, en quatre étages : le projet, ses
 grandes fonctionnalités, les livraisons de chaque fonctionnalité, les tâches.
@@ -246,10 +248,14 @@ n'importe quel développement, quelle que soit la méthode :
 Un projet peut ajouter un statut final propre à sa méthode (« Rétro faite »,
 voir Partie B).
 
-Limite à connaître : **l'intégration GitHub ne change jamais le statut d'une
-feature**, seulement celui des tâches. Entre le merge et la session suivante de
-Claude, la feature affiche 100 % mais reste « En revue ». C'est le seul
-décalage du dispositif.
+GitHub prévient Linear tout seul quand une PR change d'état, **pour les tâches**.
+Il ne touche jamais au statut d'une feature : c'est Claude qui le pose — « En
+revue » quand il ouvre la PR, « Terminée » quand il constate le merge à sa
+session suivante. La barre de progression de la feature, elle, se remplit seule
+à mesure que ses tâches se ferment.
+
+D'où le seul décalage du dispositif : entre le merge et la session suivante de
+Claude, la feature affiche 100 % mais reste « En revue ».
 
 ### Statuts de tâche
 
@@ -422,18 +428,29 @@ dépôt contient une section :
 
 ```
 ## Pilot
-- Workspace Linear : <nom> (connexion MCP : linear)
-- Team : <nom du projet> — clé <CODE> — id <id>
-- Feature = Project Linear ; tâche = issue. Toute fiche suit les templates
-  de la team (Feature / Tâche / Bug).
-- Branches : feature/<CODE>-<n° première tâche>-<slug>, fix/<CODE>-<n°>-<slug>
-- PR : titre <CODE>-<n°> <titre> ; description cite toutes les tâches
-- Merge : humain | automatique si tests verts
-- Cahier de recette : <emplacement>
-- Capacité : observée | N relectures / semaine
-- Barème : .pilot/calibration.md
-- Règle : aucun développement sans fiche Linear ; rien de créé sans liste validée.
+
+**Posé par `init`**
+- Workspace Linear : <slug> (connexion MCP, clé API)
+- Team : <nom> — clé <CODE> — id <id>
+- Agents en parallèle : 1
+- Barème et capacité : .pilot/calibration.md
+- Cahier de recette : UAT.md à la racine
+
+**Selon le projet** — une ligne absente vaut « non »
+- Lancer l'app : <commande> — sans elle, le testeur n'a pas d'écran à ouvrir
+- Amorce de recette : .pilot/amorce-recette.js — sans elle, il voit des écrans vides
+- Release : release — une branche stable en plus de main
+- Échéance : <AAAA-MM-JJ> — sync annonce alors la marge restante
+
+**Le contrat de ce projet** : aucun développement sans fiche Linear ; rien n'est
+créé dans Linear sans liste validée.
 ```
+
+Cette section ne porte que **les valeurs propres à ce projet**. Les règles de la
+méthode — vocabulaire, nommage des branches, format des PR, merge humain — vivent
+dans la skill et ne se recopient pas ici : deux textes qui disent la même chose
+finissent par se contredire. Le moule à jour est
+`~/.claude/skills/pilot/reference/section-pilot.md`.
 
 Cette section est écrite par `/pilot init`, qui crée aussi la team, ses
 statuts, ses labels, ses templates et son archivage automatique (par l'API
@@ -515,7 +532,7 @@ deux, Claude travaille seul.
 |---|---|---|---|---|
 | 1 | **Cadrer** | Vous + Claude | Décisions produit, et la liste « ce qui devra être vrai » à la fin (10 à 30 phrases, dont des refus). Gravé dans la fiche feature. **Vous validez.** | À cadrer |
 | 2 | **Découper** | Claude, puis vous | N livraisons qui ne touchent pas les mêmes fichiers ; chaque phrase de l'étape 1 affectée à une livraison ; une fiche Tâche par tâche, avec un « Terminé quand » dont au moins un refus. **Vous validez la liste** avant toute création dans Linear. | Planifiée |
-| 3 | **Produire** | Agents, sans vous | Un agent par livraison, chacun dans sa copie isolée du dépôt, plusieurs en parallèle. Puis un agent relecteur qui n'a pas écrit le code, un agent correcteur, et une PR par livraison avec le rapport d'audit. Détail : `BOUCLE-AGENTS.md`. | En développement → En revue |
+| 3 | **Produire** | Agents, sans vous | Un agent par livraison, chacun dans sa copie isolée du dépôt — un seul à la fois par défaut, plusieurs quand le projet a prouvé sa boucle. Puis **deux agents qui n'ont pas écrit le code** : l'un relit le diff et relance les tests, l'autre regarde les écrans livrés. Un correcteur si l'un des deux trouve quelque chose. Une PR par livraison, avec le rapport d'audit. Détail : `BOUCLE-AGENTS.md`. | En développement → En revue |
 | 4 | **Merger** | Vous | Lire le rapport d'audit, merger. Trancher les décisions que les agents ont remontées sans les prendre. | Terminée |
 | 5 | **Apprendre** | Claude | Chaque défaut trouvé à l'audit devient une règle dans le `CLAUDE.md` du dépôt ; les décisions tranchées sont gravées dans Linear. | Rétro faite |
 
@@ -536,6 +553,7 @@ avancer » ce qui peut avancer seul.
 | Après les merges | `/pilot sync` | Linear et le `CLAUDE.md` sont à jour |
 | Tâche isolée | `/pilot fix` | La PR est ouverte |
 | N'importe quand | `/pilot next` | Voir B.3 |
+| Une fois, à l'installation | `/pilot benchmark` | Le barème de charge est proposé |
 
 ## B.3 `next` : l'étape logique, déduite de Linear
 
