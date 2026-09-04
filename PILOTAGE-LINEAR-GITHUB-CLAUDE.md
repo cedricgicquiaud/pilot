@@ -450,7 +450,7 @@ Cette section ne porte que **les valeurs propres à ce projet**. Les règles de 
 méthode — vocabulaire, nommage des branches, format des PR, merge humain — vivent
 dans la skill et ne se recopient pas ici : deux textes qui disent la même chose
 finissent par se contredire. Le moule à jour est
-`~/.claude/skills/pilot/reference/section-pilot.md`.
+`.claude/skills/pilot/reference/section-pilot.md`, dans le projet.
 
 Cette section est écrite par `/pilot init`, qui crée aussi la team, ses
 statuts, ses labels, ses templates et son archivage automatique (par l'API
