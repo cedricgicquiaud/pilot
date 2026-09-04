@@ -4,13 +4,19 @@ Guide de travail dans ce dépôt.
 
 ## Nature du dossier
 
-Ce n'est pas un projet logiciel : ni build, ni tests, ni dépendances. C'est un dossier de
-**documentation méthodologique** (en français) qui décrit deux choses complémentaires :
+Ce dépôt contient deux choses : la **documentation** de la méthode, en français, et la
+**méthode elle-même**, dans `implementation/`.
+
+La documentation décrit deux sujets complémentaires :
 
 1. comment **piloter** un projet avec Linear (suivi), GitHub (code) et Claude Code
    (exécution) — présentable à un client ;
 2. comment **produire** en parallèle avec plusieurs agents, et vérifier sans humain
    (la « boucle agents ») — cuisine interne.
+
+`implementation/` contient ce que Claude Code lit pour travailler : les six fiches d'agent,
+la skill `pilot`, deux outils. `./install.sh <projet>` en pose une copie dans le `.claude/`
+du projet, où elle est versionnée avec lui.
 
 Dépôt git : branche de travail `main`, développement sur branches `docs/…`. Le merge est
 humain, comme partout ailleurs.
@@ -24,6 +30,8 @@ humain, comme partout ailleurs.
 | `BOUCLE-AGENTS.md` | La boucle agents : pourquoi, les briques, les invariants, les leçons de chaque essai, le backlog des manques. Journal de bord autant que méthode. |
 | `sources/*.md` | Archives : analyses critiques des vidéos à l'origine de la boucle. **Ne pas réécrire.** |
 | `.workflow/sessions/` | Compte rendu de chaque session : ce qui a été fait, décidé, et ce qui reste. |
+| `implementation/` | La méthode elle-même : fiches d'agent, skill `pilot`, outils. Son `README.md` dit comment elle s'installe. |
+| `install.sh` | Pose la méthode dans le `.claude/` d'un projet. Sert à la première installation comme aux mises à jour. |
 
 `PILOTAGE-…md` et le HTML décrivent la même méthode : toute modification de fond dans l'un
 (statuts, nommage, vocabulaire) doit passer dans l'autre. Le HTML est volontairement plus
@@ -60,10 +68,13 @@ Pour contrôler le HTML après modification, l'ouvrir dans un navigateur
 
 ## Mise en œuvre
 
-La méthode est implémentée dans `~/.claude/` : la skill `pilot`, six fiches d'agent, cinq
-moules, deux outils. **L'inventaire complet est au § 6 de `BOUCLE-AGENTS.md`** — un seul
-endroit le tient à jour.
+La méthode est dans `implementation/`, versionnée avec sa documentation. **L'inventaire
+complet est au § 6 de `BOUCLE-AGENTS.md`** — un seul endroit le tient à jour.
 
-**Toute évolution se répercute des deux côtés** : ce qui change ici doit changer dans
-`~/.claude/`, et inversement. Un document qui décrit ce que la skill ne fait plus est pire
-que pas de document. On écrit ici, on teste, on installe.
+**Le texte et la méthode doivent rester d'accord.** Une modification de fond dans les
+documents doit se retrouver dans `implementation/`, et l'inverse. Un document qui décrit ce
+que la skill ne fait plus est pire que pas de document.
+
+**On modifie la méthode ici, jamais dans un projet.** Ce qu'un projet contient dans son
+`.claude/` est une copie posée par `install.sh` ; la modifier ne remonte nulle part, et la
+prochaine mise à jour l'écrase.

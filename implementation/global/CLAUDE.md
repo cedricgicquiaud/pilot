@@ -21,14 +21,21 @@
 # Pilotage de projet (Linear + GitHub)
 
 - Un projet est **pilote par Linear** si son `CLAUDE.md` contient une section `## Pilot`.
-  Dans ce cas, appliquer la skill `pilot` (~/.claude/skills/pilot/SKILL.md) : aucun
-  developpement sans fiche Linear, rien de cree dans Linear sans liste validee, code Linear
-  dans la branche et le titre de PR.
+  Dans ce cas, appliquer la skill `pilot` (`.claude/skills/pilot/SKILL.md`, dans le projet) :
+  aucun developpement sans fiche Linear, rien de cree dans Linear sans liste validee, code
+  Linear dans la branche et le titre de PR.
+- **La methode vit dans le projet, pas ici.** Chaque projet pilote porte sa copie dans son
+  `.claude/` : les six fiches d'agent, la skill `pilot`, les outils. Elle est versionnee avec
+  lui, donc identique pour tous ceux qui clonent. La version de reference est dans le depot
+  `~/Desktop/PILOT`, dossier `implementation/`.
+- **On ne modifie jamais la copie d'un projet.** Une amelioration se fait dans `~/Desktop/PILOT`,
+  sur une branche, avec une PR. Le projet la recoit en relancant `./install.sh <projet>`.
 - Sans section `## Pilot` : projet non pilote, ne rien faire dans Linear ; le backlog
   reste dans le fichier prevu par le projet (`BACKLOG.md` ou autre).
-- `/pilot init` declare un projet pilote. Ne jamais le proposer spontanement sur un
-  dossier de test ; le proposer seulement quand l'utilisateur demande un tableau de bord
-  partage ou mentionne Linear.
+- Installer la methode dans un projet neuf : `cd ~/Desktop/PILOT && ./install.sh <projet>`,
+  puis `/pilot init` dans ce projet. Ne jamais le proposer spontanement sur un dossier de
+  test ; le proposer seulement quand l'utilisateur demande un tableau de bord partage ou
+  mentionne Linear.
 
 # Circuit d'une feature (projets pilotes)
 

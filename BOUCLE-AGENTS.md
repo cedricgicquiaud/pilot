@@ -364,7 +364,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 
 | # | Manque | Pourquoi ça compte | Piste |
 |---|---|---|---|
-| 1 | Disjoncteur de budget tokens par agent | **En partie traité le 01/09.** Mesure : `~/.claude/tools/cout-agents/cout-agents.py <projet> --seuils` lit les transcripts de sous-agents et sort le coût par agent (durée, échanges, jetons écrits et relus, appels navigateur), avec les agents au-dessus des seuils. Garde-fous : chaque fiche porte désormais un point d'arrêt qu'un agent peut observer lui-même (`tdd-writer` : trois essais infructueux sur le même test ou dix cycles ; `verifier` : le double d'une vingtaine d'échanges veut dire qu'il a quitté le diff ; `testeur` : 15 actions de navigateur en secours). Le relevé est **automatique en fin de `run`** (étape 7 de la commande) : le tableau part dans la réponse finale et sa dernière ligne dans `.pilot/calibration.md`, avec les agents hors seuils nommés — la dépense n'est visible qu'à ce moment-là, après plus personne ne regarde. **Corrigé le 01/09** : le disjoncteur existe. `maxTurns` dans le frontmatter d'une fiche coupe l'agent après n tours ; il est posé sur les six agents, à environ le double des échanges mesurés (tdd-writer 150, correcteur 80, decoupeur 70, testeur 60, verifier et contradicteur 50). Les points d'arrêt auto-imposés restent utiles : ils font rendre un rapport partiel au lieu d'être coupé net. | `maxTurns` par fiche + mesure automatique en fin de run + arrêt auto-imposé. |
+| 1 | Disjoncteur de budget tokens par agent | **En partie traité le 01/09.** Mesure : `.claude/tools/cout-agents/cout-agents.py <projet> --seuils` lit les transcripts de sous-agents et sort le coût par agent (durée, échanges, jetons écrits et relus, appels navigateur), avec les agents au-dessus des seuils. Garde-fous : chaque fiche porte désormais un point d'arrêt qu'un agent peut observer lui-même (`tdd-writer` : trois essais infructueux sur le même test ou dix cycles ; `verifier` : le double d'une vingtaine d'échanges veut dire qu'il a quitté le diff ; `testeur` : 15 actions de navigateur en secours). Le relevé est **automatique en fin de `run`** (étape 7 de la commande) : le tableau part dans la réponse finale et sa dernière ligne dans `.pilot/calibration.md`, avec les agents hors seuils nommés — la dépense n'est visible qu'à ce moment-là, après plus personne ne regarde. **Corrigé le 01/09** : le disjoncteur existe. `maxTurns` dans le frontmatter d'une fiche coupe l'agent après n tours ; il est posé sur les six agents, à environ le double des échanges mesurés (tdd-writer 150, correcteur 80, decoupeur 70, testeur 60, verifier et contradicteur 50). Les points d'arrêt auto-imposés restent utiles : ils font rendre un rapport partiel au lieu d'être coupé net. | `maxTurns` par fiche + mesure automatique en fin de run + arrêt auto-imposé. |
 | 2 | Modèle déclaré par agent | **En partie fait le 01/09** : `model:` accepte `opus`, `sonnet`, `haiku`, `fable`, `inherit` ou un identifiant complet. Posé où le choix était évident — `fable` sur `decoupeur` et `contradicteur`, les deux agents de jugement du cadrage, qui tournent une fois par feature sur du texte court (33 et 21 échanges mesurés). Reste à trancher pour les agents de la boucle : descendre `testeur`, `afix` et `aaudit` sur `sonnet` demande de mesurer ce qu'on y perd, pas de le supposer — c'est le n° 4. | Champ `model` dans les fiches. |
 | 3 | Effort déclaré par agent | **Fait le 01/09** : `effort` accepte `low` à `max` dans le frontmatter. Posé selon la nature du travail, pas selon l'importance de l'agent — `xhigh` sur les deux agents de jugement (`decoupeur`, `contradicteur`), `high` sur `tdd-writer` et `verifier`, `medium` sur `testeur` depuis qu'un outil mesure à sa place. | Champ `effort` dans les fiches. |
 | 4 | Banc d'essai maison | L'essai a évalué le dispositif, pas les modèles. Recruter un modèle sur un agent se fait sur épreuve comparative. **Déclencheur** : le premier `run` sur le sandbox après la reprise des fiches. `tdd-writer` est le dernier agent à descendre de modèle, pas le premier — un modèle moins capable contourne davantage, et c'est le seul qui écrit du code. Le candidat évident est le `testeur`, dont un outil fait les mesures à sa place. | Deux livraisons identiques, deux modèles, même audit. |
@@ -375,7 +375,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | 9 | Vue de contrôle | **En partie traité le 01/09** par `cout-agents.py` : après coup, le coût par agent et les agents à regarder. Manque toujours le direct — pendant un run, le fil ne montre ni l'avancement ni la dépense. | Un tableau : livraisons finies / en cours, budget consommé, rapports de handoff. Lié au n° 1. |
 | 10 | Reprise automatique après audit | Chez nous : audit → corrections → PR, puis stop. Ailleurs, on enchaîne des jalons regroupant plusieurs livraisons sans humain — c'est ce qui autorise « un merge par feature » au lieu d'un par livraison. **Les conditions n° 1 et n° 5 sont levées depuis le 02/09**, mais on n'ouvre pas ce chantier tant que le flux n'a pas fait ses preuves : quatre ou cinq features d'affilée, sur au moins deux projets, avec les cinq constats de l'étape de validation (aucune demande à un humain, aucune sortie de périmètre, tests relancés par le `verifier`, aucune correction manuelle en cours de run, coût dans les repères). Et il manquera encore le n° 9 : enchaîner trois livraisons sans rien voir de ce qui se passe est le cas exact que le merge humain protège. | Après validation du flux sur plusieurs features et plusieurs projets, puis n° 9. |
 | 11 | Profil de navigateur dédié aux tests | **Devenu marginal le 31/08** : la passe visuelle tourne sans fenêtre et sans profil utilisateur, donc aucune extension tierce ne peut la bloquer. Le besoin ne subsiste que pour le navigateur piloté gardé en secours (parcours interactif, formulaire à soumettre). | Créer le profil le jour où le secours servira vraiment. |
-| 12 | Captures durables | **Résolu le 31/08.** La passe visuelle passe par Playwright (`~/.claude/tools/passe-visuelle/passe-visuelle.mjs`, Chrome du système, rien à télécharger) : elle écrit ses images en fichiers dans `.pilot/recette/<date>-<écran>/` (dossier ignoré de git) et un `mesures.json` à côté. Reste ouvert : les images restent locales, elles ne s'affichent pas dans la PR — à traiter le jour où le manque se fait sentir. | Fait. |
+| 12 | Captures durables | **Résolu le 31/08.** La passe visuelle passe par Playwright (`.claude/tools/passe-visuelle/passe-visuelle.mjs`, Chrome du système, rien à télécharger) : elle écrit ses images en fichiers dans `.pilot/recette/<date>-<écran>/` (dossier ignoré de git) et un `mesures.json` à côté. Reste ouvert : les images restent locales, elles ne s'affichent pas dans la PR — à traiter le jour où le manque se fait sentir. | Fait. |
 | 13 | Recherche et contradicteur au cadrage (repris de FORGE, phase FIND) | **Contradicteur fait le 01/09** : fiche `contradicteur`, appelée par `feature` avant la validation du cadrage et par `roadmap` sur la liste proposée. Premier passage sur une feature réelle du sandbox : trois bloquants (un renvoi vers une page qui n'est pas publique, un lien de paiement qui ne peut pas toujours être construit, une livraison non démontrable seule) et six décisions manquantes, tous vérifiés dans le code, en 21 échanges. **Recherche tranchée le 02/09.** Au **PRD** : `init` lance la skill `research-assistant` avant l'entretien — ce qui existe, les standards du domaine, les règles extérieures qui s'imposent ; le document va dans `.pilot/recherche.md`. Systématique, sans question préalable : au moment du PRD personne ne sait encore rien, et une supposition posée là se paie sur toute la roadmap. Au **cadrage d'une feature** : pas de recherche (décision de Cédric). Les questions y sont internes au produit, pas externes ; `WebSearch` et `WebFetch` ont été retirés des outils du `contradicteur`. | Fait. |
 
 ---
@@ -391,26 +391,36 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | Analyse critique des vidéos sources | `sources/analyse-videos-2026-08-26.md`, `sources/analyse-video-2026-08-27-factory-missions.md` |
 | Comptes rendus de session | `.workflow/sessions/` |
 
-**Dans `~/.claude/`** — ce qui s'exécute
+**Dans `implementation/`** — ce qui s'exécute
 
 | Quoi | Où |
 |---|---|
 | Les six fiches d'agent | `agents/` : `tdd-writer.md`, `verifier.md`, `testeur.md`, `correcteur.md`, `decoupeur.md`, `contradicteur.md` |
-| Les commandes de pilotage | `skills/pilot/SKILL.md` — règles communes et résumé des huit commandes |
+| Les commandes de pilotage | `skills/pilot/SKILL.md` — règles communes et résumé des neuf commandes |
 | Le détail des commandes | `skills/pilot/reference/cadrer.md`, `produire.md`, `suivre.md` |
 | Comment s'écrit une fiche d'agent | `skills/pilot/reference/AGENT.template.md` |
 | Le moule d'ordre de mission | `skills/pilot/reference/MISSION.template.md` |
 | Les moules de fiche Linear | `skills/pilot/reference/template-feature.md`, `template-tache.md`, `template-bug.md` |
 | Le moule de configuration d'un projet | `skills/pilot/reference/section-pilot.md` |
 | Les scripts | `skills/pilot/scripts/` : `init_team.py`, `linear_api.py`, `schedule.py`, `benchmark.py` |
+| La recherche préalable au PRD | `skills/research-assistant/SKILL.md` |
 | La passe visuelle | `tools/passe-visuelle/passe-visuelle.mjs` (Playwright sur le Chrome du système) |
 | Le relevé de coût | `tools/cout-agents/cout-agents.py` |
-| Recette condensée pour Claude | `projects/-Users-cedricgicquiaud/memory/recette-deux-agents-paralleles.md` |
+| Ce qui reste personnel | `global/` : le `CLAUDE.md` de préférences et la skill `rendu-fonctionnel`, copiés à la main dans `~/.claude/` |
+| Mémoire de Claude, hors dépôt | `~/.claude/projects/-Users-cedricgicquiaud/memory/recette-deux-agents-paralleles.md` |
+
+**Dans chaque projet piloté** — la copie qui travaille
+
+`./install.sh <projet>` pose `agents/`, `skills/` et `tools/` dans le `.claude/` du projet,
+avec un `METHODE.md` qui note la version installée. Cette copie est versionnée avec le projet :
+tous ceux qui le clonent travaillent avec la même méthode, et l'historique du projet montre
+quelle version a produit quel code.
+
+**La copie ne se modifie jamais.** Une amélioration se fait ici, sur une branche, avec une PR.
+Le projet la reçoit quand il relance `install.sh`.
 
 **Sur le banc d'essai** (`AlanZien/pilotage-sandbox`)
 
-L'allowlist, un `CLAUDE.md` d'exemple, et une copie locale de `.pilot/MISSION.template.md` —
-à resynchroniser depuis la skill à chaque évolution du moule.
-
-Toute évolution de la méthode se fait ici d'abord, se teste sur le sandbox, puis s'installe
-dans `~/.claude/`.
+L'allowlist, un `CLAUDE.md` d'exemple, et `.pilot/MISSION.template.md` adapté au projet — le
+moule porte les idiomes et la commande de tests du dépôt, à reporter quand le moule de
+référence change.

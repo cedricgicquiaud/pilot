@@ -260,6 +260,21 @@ une commande jouée d'après ce résumé sautera la moitié de son travail.
 | `fix` | Une tâche isolée en un geste : fiche, branche, test, PR. Ne passe pas par la boucle. | La PR ouverte |
 | `sync` | Après un merge. Remet les statuts d'aplomb, recale les dates, recalcule le barème, et grave les leçons d'audit dans le `CLAUDE.md` du projet. | Rien — enchaîne sur `next` |
 | `benchmark` | Produit le barème de charge initial à partir de dépôts existants. | La validation des dépôts |
+| `update` | Met la méthode de ce projet à jour depuis le dépôt `pilot`. | Le commit, à valider |
+
+## Où vit la méthode
+
+Ce projet porte sa propre copie de la méthode, dans `.claude/` : les six fiches d'agent, cette
+skill, les outils. Elle est versionnée avec lui. Tous ceux qui clonent le dépôt travaillent
+donc avec la même.
+
+**Cette copie ne se modifie jamais.** Une amélioration se fait dans le dépôt `pilot`, sur une
+branche, avec une PR.
+
+`update` va chercher la nouvelle version : `cd ~/Desktop/PILOT && git pull && ./install.sh
+<ce projet>`, puis un commit `chore: update the pilot method to <version>` qui dit ce qui a
+changé. Ne jamais le faire pendant qu'une livraison est en cours : un agent lancé avec
+d'anciennes fiches finirait avec les nouvelles.
 
 ## Le circuit en une ligne
 

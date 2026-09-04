@@ -82,4 +82,22 @@ Suite proposée : `next`.
 2. `python3 .claude/skills/pilot/scripts/benchmark.py owner/repo … --out ~/.config/pilot/calibration.md`
 3. Montrer le tableau. Copier dans `.pilot/calibration.md` du projet courant s'il est piloté.
 
+## `update` — mettre la méthode de ce projet à jour
+
+La méthode de ce projet est une copie, dans `.claude/`. La version de référence vit dans le
+dépôt `pilot`. Cette commande apporte ici ce qui a changé là-bas.
+
+1. **Refuser si une livraison est en cours** — une branche `feature/…` non mergée, un worktree
+   ouvert. Un agent lancé avec les anciennes fiches finirait avec les nouvelles. Dire ce qui
+   bloque et proposer d'attendre le merge.
+2. Noter la version actuelle : la ligne « Version » de `.claude/METHODE.md`.
+3. `cd ~/Desktop/PILOT && git pull && ./install.sh <racine de ce projet>`
+4. `git diff --stat .claude/` : montrer ce qui a bougé. Lire les fichiers modifiés et **dire en
+   trois lignes ce qui change pour le travail** — une règle nouvelle, une consigne retirée. Un
+   diff de 200 lignes que personne ne lit vaut une mise à jour non faite.
+5. Commit `chore: update the pilot method to <nouvelle version>`, avec ces trois lignes dans le
+   corps. Il part dans la PR en cours, ou dans une PR à lui si le dépôt est propre.
+
+Suite proposée : `next`.
+
 ---
