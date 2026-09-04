@@ -32,10 +32,21 @@
   sur une branche, avec une PR. Le projet la recoit en relancant `./install.sh <projet>`.
 - Sans section `## Pilot` : projet non pilote, ne rien faire dans Linear ; le backlog
   reste dans le fichier prevu par le projet (`BACKLOG.md` ou autre).
-- Installer la methode dans un projet neuf : `cd ~/Desktop/PILOT && ./install.sh <projet>`,
-  puis `/pilot init` dans ce projet. Ne jamais le proposer spontanement sur un dossier de
-  test ; le proposer seulement quand l'utilisateur demande un tableau de bord partage ou
-  mentionne Linear.
+- **Proposer le pilotage sur un projet neuf.** Deux moments, et deux seulement :
+  quand l'utilisateur demande de creer un projet ou un depot (`git init`, « on demarre une
+  app qui… ») ; quand il annonce, dans un depot sans section `## Pilot`, un travail qui va
+  durer — une roadmap, plusieurs features, plusieurs ecrans.
+  Poser la question **une fois, en une phrase** : « Je le pilote avec `pilot` — Linear pour le
+  suivi, la boucle d'agents pour produire ? »
+  Rien sur un dossier d'essai, un script isole, un depot ouvert pour une correction ponctuelle.
+  Le signal est ce que l'utilisateur annonce, jamais l'etat du depot : « depot vide » ou « peu
+  de commits » declencherait sur les bancs d'essai.
+- **Oui** : `cd ~/Desktop/PILOT && ./install.sh <projet>`, puis `/pilot init` dans le projet.
+- **Non** : ecrire la trace dans le `CLAUDE.md` du projet, sans quoi la question revient a
+  chaque session. Sous un titre `## Suivi`, jamais `## Pilot` — ce titre-la est le marqueur
+  d'un projet pilote, il declarerait l'inverse de ce qu'on ecrit :
+  `Projet non pilote par Linear (decision du <AAAA-MM-JJ>). Backlog dans <fichier>.`
+  Elle dit aussi ou vit le backlog a qui ouvre le depot.
 
 # Circuit d'une feature (projets pilotes)
 
