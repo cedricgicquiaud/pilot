@@ -71,6 +71,15 @@ avec la PR suivante) ; chaque décision tranchée au merge est gravée dans la s
 « Décisions produit » de la fiche feature ; les idées hors périmètre deviennent des tâches
 isolées. Feature → « Rétro faite ». Supprimer les worktrees de la feature
 (`git worktree remove`).
+**Contrôler que Linear voit encore GitHub.** Sur une tâche de la livraison qu'on vient de
+réconcilier, `get_issue` doit montrer sa PR en pièce jointe (`attachments`). Si la liste est
+vide alors que la PR est mergée, **l'intégration ne voit plus ce dépôt** : le lien vers la fiche
+ne s'affiche plus dans les PR, et les statuts de tâche ne bougent que parce que les agents les
+posent à la main. Le dire dans le compte rendu, avec le chemin exact : Linear → Settings →
+Integrations → GitHub → Connected organizations, ajouter l'organisation du dépôt. C'est
+arrivé le 04/09 sur le sandbox, un mois après son `init` : le dépôt avait changé de
+propriétaire, et rien ne l'avait signalé.
+
 Les modifications de `.pilot/calibration.md` ne font **pas** de PR à part : elles partent
 dans la PR de la livraison suivante (ou de la prochaine tâche isolée).
 Suite proposée : `next`.
