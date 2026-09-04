@@ -27,6 +27,19 @@ sur ce workspace ; intégration GitHub activée dans ce workspace (Settings → 
    pressenties). Annoncer d'emblée le nombre de lots (trois, en général : utilisateurs et
    problème ; périmètre et hors périmètre ; contraintes et versions). **S'arrêter : l'humain
    valide le PRD.** Si un cadrage existe déjà, le lire et passer à l'étape 1.
+
+0 bis. **La direction visuelle**, si le produit a des écrans. Sans elle, les agents rendront
+   l'interface que le modèle produit par défaut — et personne ne pourra dire qu'elle est fausse,
+   puisque rien ne disait ce qui était attendu. Trois questions, pas plus :
+   **des produits dont tu aimes l'interface** (URL, captures d'écran, un nom suffit) ; **ce qui
+   est imposé** (logo, couleurs, police, charte existante, bibliothèque de composants) ; **le
+   registre** — dense et professionnel, ou aéré et grand public.
+   La recherche de l'étape 0 sert aussi ici : elle a regardé les produits comparables, elle peut
+   dire à quoi ils ressemblent.
+   Écrire `.pilot/design.md` : les références avec ce qu'on leur emprunte, ce qui est imposé, le
+   registre, et les écrans-types du produit (liste, formulaire, tableau de bord). **S'arrêter :
+   l'humain valide.** Produit sans écran (bibliothèque, API, script) : sauter cette étape et le
+   dire.
 1. Demander le **workspace** (slug d'URL ; s'il y a plusieurs connexions MCP, laquelle), le
    **nom** du projet et la **clé** (3 lettres, proposer une valeur d'après le nom).
    Rappeler : plan gratuit = 2 teams par workspace.

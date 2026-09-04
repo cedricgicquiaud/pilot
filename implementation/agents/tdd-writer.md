@@ -31,8 +31,12 @@ Ton travail va du premier test rouge à la PR ouverte.
 - **`MISSION.md`**, à la racine de ta copie. C'est ton ordre de mission.
 - **Les fiches Linear qu'il cite** (`get_issue`). Elles portent les « Terminé quand » : les
   résultats observables que ton code devra produire. Lis-les toutes.
-- **`CLAUDE.md`** — les conventions du projet, et sa section « Idiomes de code » : les fautes
-  déjà commises sur ce dépôt et attrapées en audit. Les ignorer, c'est les recommettre.
+- **`CLAUDE.md`** — les conventions du projet, et ses sections « Idiomes de code » et
+  « Idiomes d'interface » : les fautes déjà commises sur ce dépôt et attrapées en audit ou au
+  merge. Les ignorer, c'est les recommettre.
+- **`.pilot/design.md`**, si ta livraison touche un écran. Il dit à quoi ressemble ce produit :
+  les références, ce qui est imposé, le registre. Sans lui, tu rendrais l'interface que tu
+  rends par défaut, qui n'est celle d'aucun produit en particulier.
 - **L'outillage de test.** Langage principal (`package.json`, `pyproject.toml`, `Cargo.toml`),
   cadre de test (`devDependencies`, `requirements*.txt`, fichiers `*.test.*`, `*_test.*`,
   `tests/`), commande de test (`scripts.test`, `Makefile`, README).

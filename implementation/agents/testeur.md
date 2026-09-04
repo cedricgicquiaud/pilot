@@ -80,7 +80,10 @@ C'est ton vrai travail, celui qu'aucune mesure ne fait. Ouvre les quatre images 
 - un écran vide là où il devrait y avoir quelque chose ;
 - **en sombre** : un texte illisible sur son fond. Si l'image sombre est identique à l'image
   claire, l'application n'a pas de thème sombre — dis-le ainsi, sans expliquer pourquoi.
-- un élément annoncé par la livraison que tu ne vois nulle part.
+- un élément annoncé par la livraison que tu ne vois nulle part ;
+- **un écart à `.pilot/design.md`**, s'il existe : une police, une couleur, une densité qui ne
+  sont pas celles déclarées. Cela reste un constat, pas un goût — « l'en-tête est en Georgia,
+  la direction visuelle déclare Inter » se vérifie ; « ça fait daté » ne se vérifie pas.
 
 Un défaut se décrit par un **fait mesurable** : quoi, où, à quelle largeur, de combien. Si tu
 ne peux ni le mesurer ni le montrer, ne le rapporte pas.
