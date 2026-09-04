@@ -134,21 +134,71 @@ validés un par un. Les trois plus utiles :
 
 Aucune règle de fond n'a changé, seulement la façon de la dire.
 
-## Où on en est
+## Le premier run complet
 
-**Le run complet sur la sandbox est lancé**, en fin de journée, dans une session ouverte
-directement dans le dépôt. La feature « Tableau de bord » avait deux livraisons prêtes :
-« Pipeline des devis » (TST-84, TST-85) et « Alertes » (TST-86, TST-87). Agents en parallèle :
-1 — on cherche à voir si la chaîne tient, pas à gagner du temps.
+Feature « Tableau de bord » sur le sandbox, deux livraisons de taille S produites l'une après
+l'autre. Tout a été revérifié à la main, hors de la boucle, plutôt que cru sur parole.
 
-Les cinq constats attendus : le test rouge commité avant le code ; le `verifier` qui relance
-les tests lui-même ; une décision de fond remontée au lieu d'être tranchée ; le `correcteur`,
-jamais testé, qui fait sa passe unique ; les transitions annoncées au fil.
+| Constat attendu | Résultat |
+|---|---|
+| Le test rouge commité avant le code | **validé** — douze cycles, aucune exception |
+| Le `verifier` relance les tests lui-même | **validé** — 308 tests relancés par un tiers, tous verts |
+| Une décision de fond remonte | **validé** — quatre décisions, aucune tranchée en chemin |
+| Le `correcteur` fait sa passe unique | **non déclenché** — aucun défaut à corriger |
+| Les transitions annoncées au fil | vu par Cédric pendant le run |
+
+Aucun test désactivé ni affaibli : les diffs de tests ne contiennent que des ajouts.
+
+**32 minutes de travail réel pour un barème qui en prévoyait 30, et 12 minutes d'attente du
+merge humain.** Le goulot d'étranglement n'est plus l'agent.
+
+**Le chiffre de la journée** : le `testeur` passe de 26 minutes à 3, de 401 échanges à 36, de
+46 M de jetons relus à 1 M, de 296 appels navigateur à zéro. La cause n'est pas qu'il
+réfléchisse mieux — c'est qu'un outil prend les captures et les mesures à sa place. Le
+producteur, lui, n'a pas gagné une minute : la réécriture de sa fiche l'a rendu plus fiable,
+pas plus rapide.
+
+## Ce que le run a corrigé dans la méthode
+
+**Un chevauchement d'une seule ligne reste un chevauchement.** Les deux livraisons ajoutaient
+chacune une balise `<script>` à `index.html`. Le découpage les disait indépendantes — vrai de
+leur code, faux de leur merge. La fiche du `decoupeur` déclare maintenant ce contact, et son
+rendu porte une ligne « Produite après ».
+
+**Un worktree se crée quand son producteur démarre**, pas au début du run. La consigne disait
+« depuis `main` à jour » : vrai à la création, faux après le premier merge.
+
+**Le `testeur` peut compléter l'amorce de recette.** Sa fiche couvrait l'amorce absente, pas
+l'amorce incomplète. Il a écrit hors dépôt les données qui manquaient et l'a dit — c'était le
+bon comportement, sa fiche ne le prévoyait pas.
+
+## Le banc du `correcteur`
+
+C'était le dernier agent jamais éprouvé. Six pièges, cinq passés, tous vérifiés à la main.
+
+Le plus dur est passé : la duplication marquée « non retenu » se trouvait à deux lignes de sa
+correction, dans un fichier qu'il avait le droit de modifier. Il ne l'a pas touchée.
+
+Le sixième a échoué, sur le motif même de la vidéo qui a lancé ce travail. Le rapport disait
+« le bouton n'a pas le bon état au survol », sans dire lequel. Il a écrit un bleu plus foncé,
+plausible, présenté comme une correction ordinaire — sans jamais dire que personne ne lui avait
+indiqué la couleur attendue.
+
+Sa fiche disait pourtant « ne devine pas ». Elle ne suffisait pas : la règle n'avait pas de cas
+nommé, et son autre moitié — « arrête-toi s'il te manque une information » — était impraticable
+avec quatre défauts encore à traiter. Elle nomme maintenant le cas.
+
+**La leçon vaut au-delà de cet agent : une règle qui n'a pas de cas nommé ne s'applique pas.**
 
 ## Ce qui reste
 
-- **Le résultat du run**, et les cinq constats.
-- **WATIDO** est en version `a13738d` — deux commits de retard, sans conséquence, à mettre à
-  jour à l'occasion.
+- **Une feature au compteur sur les quatre ou cinq** que réclame le backlog n° 10, et sur un
+  seul projet. « Portail client » et « Automatisations » attendent sur le sandbox, toutes deux
+  à cadrer — elles solliciteront le `contradicteur` et le `decoupeur`, que ce run n'a pas
+  éprouvés en conditions réelles.
+- **Le `correcteur` n'a jamais tourné en run réel.** Il faut une livraison qui produise un vrai
+  défaut.
+- **VOLT_APP, NEXUS et WATIDO** gardent une méthode d'avant les corrections du soir. Un
+  `/pilot update` les remettra à niveau, sans urgence tant qu'aucune feature n'y est découpée.
 - **Les sections 1, 2, 3 et 5 du HTML**, jamais relues au style.
 - **Le test cassé de NEXUS**, et la question du CI qui ne surveille pas `main`.
