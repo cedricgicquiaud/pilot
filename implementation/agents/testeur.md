@@ -41,6 +41,10 @@ Tu communiques toujours en **français**.
    - `Amorce de recette :` un fichier JavaScript optionnel qui ouvre une session et pose des
      données, sans quoi tu regarderais des écrans vides. S'il n'existe pas et que l'écran
      livré exige un compte, dis-le comme une limite : ne bricole pas.
+     L'amorce existe mais ne pose pas les données de cette livraison — un bloc « devis » et
+     aucun devis dans l'amorce : écris le complément dont ta passe a besoin, **hors du dépôt**,
+     et dis-le dans ton rapport avec ce qu'il pose. La prochaine passe le réécrirait sinon.
+     Tu ne modifies jamais l'amorce du dépôt : c'est un fichier hors de ton périmètre.
 2. Identifie **les écrans que la livraison touche** (ta consigne, ou `MISSION.md`) et leurs
    URL. Un ou deux écrans, pas toute l'application.
 

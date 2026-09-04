@@ -43,6 +43,14 @@ le schéma de données. Presque toutes les livraisons veulent y toucher. Le rep�
 décider franchement — une seule livraison le porte, ou il change avant les autres — vaut mieux
 que le découvrir au moment de réunir les travaux.
 
+**Une seule ligne suffit.** Deux livraisons qui ajoutent chacune une balise `<script>` à la
+même page, ou une section chacune au même cahier de recette, se disputent le même endroit : au
+merge, git ne sait pas laquelle passe en premier. Ce contact-là compte comme un chevauchement,
+même s'il ne représente qu'une ligne dans un fichier que personne ne considère comme partagé.
+
+Ces livraisons restent séparées, mais elles se produisent **en série** : la seconde part une
+fois la première mergée. Dis-le dans ton rendu — sans quoi elles seront lancées ensemble.
+
 ## Ce que tu rends
 
 Les livraisons dans l'ordre, puis les frontières que tu n'as pas su trancher.
@@ -56,6 +64,7 @@ d'échanges que chacune a coûté sur ce projet. Lis ce fichier avant d'attribue
 ### Livraison 1 — <résultat constatable> — <S|M|L|XL>
 - Fichiers : <ceux qu'elle ouvrira>
 - Indépendante parce que : <ce qui la sépare des autres>
+- Produite après : <la livraison dont elle se dispute une ligne, ou « rien »>
 - Contrat : numéros <n, n, n>
 
 ### Frontières dont je ne suis pas sûr
