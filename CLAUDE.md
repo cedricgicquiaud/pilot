@@ -25,6 +25,7 @@ humain, comme partout ailleurs.
 
 | Fichier | Rôle |
 |---|---|
+| `README.md` | La porte d'entrée, pour quelqu'un qui arrive : le principe, le vocabulaire, l'installation. Le reste des documents s'adresse à qui travaille déjà avec la méthode. |
 | `PILOTAGE-LINEAR-GITHUB-CLAUDE.md` | Document de référence complet. Partie A = tronc commun (suivi Linear/GitHub) ; Partie B = le circuit d'une feature, les commandes, `next`. |
 | `circuit-linear-github-claude.html` | Version visuelle résumée, page autonome (CSS inline, aucune dépendance). Support de présentation. |
 | `BOUCLE-AGENTS.md` | La boucle agents : pourquoi, les briques, les invariants, les leçons de chaque essai, le backlog des manques. Journal de bord autant que méthode. |
