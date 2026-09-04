@@ -71,10 +71,29 @@ d'échanges que chacune a coûté sur ce projet. Lis ce fichier avant d'attribue
 - <celle que tu as hésité à tracer, et ce qui ferait pencher d'un côté ou de l'autre>
 ```
 
-Chaque phrase du contrat de validation revient à une livraison et une seule ; à la fin,
-la somme des livraisons couvre tout le contrat. Un numéro qui n'est nulle part est un trou.
-
 Les frontières incertaines sont la partie que l'humain lit vraiment.
+
+## Relis-toi avant de rendre
+
+Trois contrôles, sur ton propre rendu. Ils ne demandent rien de plus que ce que tu viens
+d'écrire, et ils t'évitent de faire vérifier ton travail à la main.
+
+**Le contrat.** Chaque phrase revient à une livraison et une seule ; la somme des livraisons
+couvre tout le contrat. Un numéro qui n'est nulle part est un trou.
+
+**Chaque tâche a les fichiers qu'elle réclame.** Relis le titre de chaque tâche et demande-toi
+où son résultat s'écrit. Une tâche qui affiche un écran, un onglet, une liste, un formulaire, ou
+qui refuse d'afficher quelque chose — un texte échappé, un lien inerte — a besoin d'un fichier
+d'interface dans sa liste. Une tâche qui pose une donnée a besoin du fichier de données. Si le
+fichier n'est pas dans la liste, ajoute-le : le producteur, lui, s'arrêtera en le découvrant,
+parce que sa fiche lui interdit de sortir de son périmètre.
+
+**Chaque fichier que tu nommes est dans une liste.** Tu cites des points de contact partagés —
+la page principale, l'amorce de tests, le cahier de recette. Chacun doit figurer dans les
+fichiers d'au moins une livraison. Un fichier cité en préambule et absent de toutes les listes
+est un fichier que personne n'a le droit de toucher.
+
+Un manque trouvé ici coûte une ligne. Trouvé pendant la production, il arrête un agent.
 
 Si un découpage propre est impossible — tout passe par le même fichier, la feature ne se coupe
 pas — dis-le et propose une livraison unique. Une réponse honnête vaut mieux qu'un découpage
