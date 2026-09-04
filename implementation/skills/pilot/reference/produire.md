@@ -42,7 +42,13 @@ qu'on ne peut pas interrompre au bon moment.
    worktree add ../<repo>-<n> -b feature/<CODE>-<n° première tâche>-<slug> origin/main`. Même
    en série (n = 1), jamais depuis la branche de la livraison précédente : les livraisons sont
    disjointes, leurs PR doivent être indépendantes et mergeables dans n'importe quel ordre, sans
-   rebase. Des PR empilées obligent à merger dans l'ordre et à retarger les bases. Y écrire
+   rebase. Des PR empilées obligent à merger dans l'ordre et à retarger les bases.
+
+   **Un worktree se crée au moment où son producteur démarre, pas au début du run.** Le
+   découpage a peut-être laissé un point de contact : deux livraisons qui ajoutent chacune une
+   ligne au même fichier partagé. Créer leurs deux worktrees d'avance les fait partir du même
+   `main`, et les deux lignes se retrouvent au même endroit au merge. Le découpage indique ces
+   contacts ; en série, la livraison suivante part après le merge de la précédente. Y écrire
    `MISSION.md` depuis le gabarit. **Il ne porte que le variable** : tâches (codes), fichiers
    modifiables (ceux du jalon), décisions produit recopiées de la fiche feature, **le texte des
    phrases du contrat** affectées à cette livraison (le numéro seul ne dit pas ce qu'il faut
