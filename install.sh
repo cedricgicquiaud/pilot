@@ -8,6 +8,9 @@
 # Sert aussi bien à la première pose qu'à une mise à jour : les fichiers du projet sont
 # alignés sur la version de ce dépôt, qui fait foi.
 #
+# Le script ne touche qu'à ce qui lui appartient. Une skill, une fiche d'agent ou un outil
+# propre au projet, posé à côté, n'est jamais supprimé.
+#
 # Après l'installation, le projet contient sa propre copie de la méthode. Elle est
 # versionnée avec lui : chaque membre du projet travaille avec la même.
 
@@ -35,36 +38,83 @@ fi
 
 VERSION="$(git -C "$SOURCE" rev-parse --short HEAD 2>/dev/null || echo inconnu)"
 DATE="$(date +%F)"
+METHODE="$PROJET/.claude/METHODE.md"
 
 echo "Source  : $SOURCE (version $VERSION)"
 echo "Projet  : $PROJET"
 echo
 
-mkdir -p "$PROJET/.claude"
+mkdir -p "$PROJET/.claude/agents" "$PROJET/.claude/skills" "$PROJET/.claude/tools"
 
-# rsync --delete aligne la destination sur la source. Les chemins exclus ne sont ni
-# copiés ni supprimés : les dépendances déjà installées dans le projet survivent.
-copier() {
-  local quoi="$1"
-  mkdir -p "$PROJET/.claude/$quoi"
+# --- Les fiches d'agent -----------------------------------------------------------------
+#
+# Elles vivent à plat dans .claude/agents/, à côté de fiches qui peuvent appartenir au
+# projet. On ne peut donc pas aligner le dossier entier. La liste posée à l'installation
+# précédente est relue dans METHODE.md : une fiche qui y était et n'est plus dans la méthode
+# est retirée, les autres ne sont pas touchées.
+
+FICHES=""
+for f in "$SOURCE"/implementation/agents/*.md; do
+  FICHES="$FICHES $(basename "$f")"
+done
+
+if [ -f "$METHODE" ]; then
+  ANCIENNES="$(sed -n 's/^- fiche: //p' "$METHODE")"
+  for vieille in $ANCIENNES; do
+    case " $FICHES " in
+      *" $vieille "*) ;;
+      *) [ -f "$PROJET/.claude/agents/$vieille" ] && {
+           mv "$PROJET/.claude/agents/$vieille" "$PROJET/.claude/agents/.$vieille.retiree"
+           echo "  retirée : .claude/agents/$vieille (renommée, plus dans la méthode)"
+         } ;;
+    esac
+  done
+fi
+
+echo "Installé :"
+for f in $FICHES; do
+  cp "$SOURCE/implementation/agents/$f" "$PROJET/.claude/agents/$f"
+done
+echo "  .claude/agents/ — $(echo $FICHES | wc -w | tr -d ' ') fiches"
+
+# --- Les skills et les outils -----------------------------------------------------------
+#
+# Chacun est un dossier qui nous appartient en entier : rsync --delete l'aligne sur la
+# source, y compris pour les fichiers retirés. Les dossiers voisins ne sont pas touchés.
+# Les chemins exclus ne sont ni copiés ni supprimés : les dépendances déjà installées
+# dans le projet survivent.
+
+aligner() {
+  local chemin="$1"
+  mkdir -p "$PROJET/.claude/$chemin"
   rsync -a --delete \
     --exclude='__pycache__' --exclude='*.pyc' \
     --exclude='.DS_Store' --exclude='node_modules' \
-    "$SOURCE/implementation/$quoi/" "$PROJET/.claude/$quoi/"
-  echo "  .claude/$quoi"
+    "$SOURCE/implementation/$chemin/" "$PROJET/.claude/$chemin/"
+  echo "  .claude/$chemin"
 }
 
-echo "Installé :"
-copier agents
-copier skills
-copier tools
+for d in "$SOURCE"/implementation/skills/*/; do
+  aligner "skills/$(basename "$d")"
+done
+for d in "$SOURCE"/implementation/tools/*/; do
+  aligner "tools/$(basename "$d")"
+done
 
-cat > "$PROJET/.claude/METHODE.md" <<EOF
-# Méthode pilot — version installée
+# --- La trace ---------------------------------------------------------------------------
 
-- Version : \`$VERSION\` (dépôt \`pilot\`)
-- Installée le : $DATE
-
+{
+  echo "# Méthode pilot — version installée"
+  echo
+  echo "- Version : \`$VERSION\` (dépôt \`pilot\`)"
+  echo "- Installée le : $DATE"
+  echo
+  echo "Fiches d'agent posées par l'installation — cette liste sert à retirer proprement"
+  echo "une fiche qui sortirait de la méthode. Ne pas la modifier à la main."
+  echo
+  for f in $FICHES; do echo "- fiche: $f"; done
+  echo
+  cat <<EOF
 Ce dossier est une **copie**. La version de référence vit dans le dépôt \`pilot\`, dans
 \`implementation/\`. Une amélioration de la méthode s'y fait, sur une branche, avec une PR.
 
@@ -77,6 +127,7 @@ cd <dépôt pilot> && git pull && ./install.sh $PROJET
 Modifier les fichiers de ce dossier ne remonte nulle part, et la prochaine mise à jour
 les écrase.
 EOF
+} > "$METHODE"
 echo "  .claude/METHODE.md"
 
 echo
