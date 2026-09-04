@@ -194,7 +194,13 @@ défauts restent à traiter. Elle nomme maintenant le cas — un défaut qui ne 
 attend va dans « Non corrigé », avec la question qui manque. La leçon vaut au-delà de cet
 agent : une règle qui n'a pas de cas nommé ne s'applique pas.
 
-**Une panne silencieuse se cache derrière ce qui marche encore (04/09).** Depuis une semaine,
+**Une panne silencieuse se cache derrière ce qui marche encore (04/09).** Corollaire trouvé le
+même jour : la même panne a laissé quatre tâches isolées affichées « À faire » alors que leurs
+PR étaient mergées. Personne ne les fermait — le producteur d'une livraison pose lui-même le
+statut de ses tâches, `fix` ne le fait pas et compte sur l'intégration GitHub. Deux agents, deux
+comportements, et rien qui rattrape. `sync` traite désormais les tâches sans feature. Ce que la
+panne a d'abord montré, c'est l'endroit du circuit où deux mécanismes se relayaient sans que
+personne l'ait décidé. Depuis une semaine,
 les PR du sandbox ne portaient plus le lien vers leur fiche Linear. Le symptôme paraissait
 cosmétique. La cause ne l'était pas : le dépôt avait changé de propriétaire GitHub, et
 l'organisation nouvelle n'était pas déclarée dans l'intégration de Linear, qui ne voyait donc

@@ -37,7 +37,8 @@ suivante. On peut le taper à tout moment, y compris après une semaine d'absenc
 2. Branche `fix/<CODE>-<n>-<slug>` (ou `chore/…`). Bug : d'abord le test qui reproduit
    (rouge), puis la correction (vert). Chore sans comportement : pas de test exigé.
 3. PR titrée `<CODE>-<n> <titre>`, description `Closes <CODE>-<n>`. S'arrêter.
-4. Suite proposée : « merge, puis `next` ».
+4. Suite proposée : « merge, puis `next` ». **La tâche reste « À faire » jusqu'au merge** :
+   c'est l'intégration GitHub qui la ferme, et `sync` qui contrôle qu'elle l'a fait.
 
 ## `sync` — réconciliation
 
@@ -71,6 +72,13 @@ avec la PR suivante) ; chaque décision tranchée au merge est gravée dans la s
 « Décisions produit » de la fiche feature ; les idées hors périmètre deviennent des tâches
 isolées. Feature → « Rétro faite ». Supprimer les worktrees de la feature
 (`git worktree remove`).
+**Les tâches isolées aussi.** `sync` ne regarde pas que les features : lister les tâches de la
+team sans feature, encore ouvertes, et chercher leur PR (`gh pr list --search "<CODE>-<n>"`).
+PR mergée et tâche ouverte → la passer « Terminée » et joindre l'URL de la PR (`save_issue`,
+champ `links`). Une tâche isolée n'a personne pour la fermer : le producteur d'une livraison
+pose lui-même le statut de ses tâches, `fix` ne le fait pas — il compte sur l'intégration
+GitHub. Quand celle-ci tombe, les fiches restent ouvertes sans que rien ne le signale.
+
 **Contrôler que Linear voit encore GitHub.** Sur une tâche de la livraison qu'on vient de
 réconcilier, `get_issue` doit montrer sa PR en pièce jointe (`attachments`). Si la liste est
 vide alors que la PR est mergée, **l'intégration ne voit plus ce dépôt** : le lien vers la fiche
