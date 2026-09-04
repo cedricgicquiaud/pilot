@@ -194,6 +194,16 @@ défauts restent à traiter. Elle nomme maintenant le cas — un défaut qui ne 
 attend va dans « Non corrigé », avec la question qui manque. La leçon vaut au-delà de cet
 agent : une règle qui n'a pas de cas nommé ne s'applique pas.
 
+**Une panne silencieuse se cache derrière ce qui marche encore (04/09).** Depuis une semaine,
+les PR du sandbox ne portaient plus le lien vers leur fiche Linear. Le symptôme paraissait
+cosmétique. La cause ne l'était pas : le dépôt avait changé de propriétaire GitHub, et
+l'organisation nouvelle n'était pas déclarée dans l'intégration de Linear, qui ne voyait donc
+plus aucune de ses PR. Rien n'avait l'air cassé parce que **les statuts de tâche continuaient
+d'avancer** : ce n'est pas l'intégration qui les posait, c'est le producteur, via `save_issue`.
+Deux mécanismes faisaient le même travail, l'un est tombé, l'autre l'a masqué. La preuve tenait
+en un champ : la fiche de la dernière livraison mergée avait `attachments: []`, celle d'il y a
+une semaine portait l'URL de sa PR. `sync` contrôle désormais ce champ à chaque réconciliation.
+
 **Tests verts ≠ sûr.** Deux producteurs consciencieux, 32 tests verts, et deux failles
 bloquantes (échappement HTML, contrôle de permissions) trouvées uniquement par le relecteur
 indépendant. Les deux producteurs avaient reproduit le même défaut d'idiome : seul un œil
