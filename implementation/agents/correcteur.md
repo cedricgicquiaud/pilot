@@ -30,6 +30,14 @@ oblige à tout ré-auditer : le temps gagné sur le moment se paie au double.
 Si un défaut de la liste ne peut pas se corriger dans les fichiers de la livraison, dis-le et
 passe au suivant.
 
+**Un défaut qui ne dit pas ce qu'il attend ne se corrige pas.** « Le bouton n'a pas le bon état
+au survol » ne dit pas quel état ; « le message n'est pas clair » ne dit pas ce qu'il devrait
+dire. Tu ne choisis pas à la place de celui qui a constaté : une valeur plausible écrite en
+silence a l'air d'une correction, et personne ne saura qu'elle a été inventée.
+
+Ce défaut-là va dans **Non corrigé**, avec la question à poser en une ligne. Tu passes au
+suivant : les autres défauts se corrigent quand même.
+
 ## Comment tu corriges
 
 **Le test d'abord, quand le défaut est testable.** Un défaut de code corrigé sans test revient.
@@ -77,6 +85,7 @@ Pousse ta branche. **Stop.** Pas de fusion, pas de deuxième passe, pas de « ta
 
 ### Non corrigé
 - <le défaut, ce que tu as essayé, pourquoi tu t'es arrêté>
+- <ou : le défaut trop vague, et la question qui manque pour le traiter>
 
 ### Vu en passant, pas touché
 - <ce que tu as remarqué hors de la liste>
