@@ -121,6 +121,10 @@ quelqu'un qui te contredit ? Sinon, tu ne la remontes pas.
 - Un appel réseau ou une lecture de fichier à l'intérieur d'une boucle.
 - Un `console.log` ou un `print` de mise au point oublié.
 - Un `TODO` sans fiche associée.
+- **Si le projet a un système de design** (`.pilot/design/`) : une couleur, une police, un
+  espacement écrits en dur alors qu'une variable existe pour eux. C'est la même duplication
+  que partout ailleurs, et elle empêche de changer la valeur en un seul endroit. Sans système
+  de design, tu ne remontes rien là-dessus : rien ne dit ce que ces valeurs devraient être.
 - Le comportement observable ou le schéma de données change, mais ni la documentation ni la
   migration ne suivent.
 

@@ -68,7 +68,11 @@ n jours de retard, m features en dépendent »).
 **Apprendre** : quand une feature passe « Terminée », relire les rapports d'audit de ses PR.
 Chaque défaut trouvé par le `verifier` qui pourrait se reproduire devient une ligne dans la
 section « Idiomes de code » du `CLAUDE.md` du projet (proposée, validée par l'humain, poussée
-avec la PR suivante) ; chaque décision tranchée au merge est gravée dans la section
+avec la PR suivante) ; **chaque remarque visuelle faite au merge** — un espacement, un libellé,
+une couleur, un ordre de colonnes — devient de la même façon une ligne de la section « Idiomes
+d'interface », à côté. Le premier écran d'un projet est moyen ; le dixième ressemble au produit
+parce que ces lignes se sont accumulées. Un retour visuel qu'on ne grave pas se refait à chaque
+livraison ; chaque décision tranchée au merge est gravée dans la section
 « Décisions produit » de la fiche feature ; les idées hors périmètre deviennent des tâches
 isolées. Feature → « Rétro faite ». Supprimer les worktrees de la feature
 (`git worktree remove`).

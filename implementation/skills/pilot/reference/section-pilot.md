@@ -11,6 +11,8 @@ _seulement ce qui est propre à ce dépôt._
   quand la boucle a fait ses preuves sur ce projet)
 - Barème et capacité : `.pilot/calibration.md`
 - Cahier de recette : `UAT.md` à la racine, lié depuis chaque feature
+- Direction visuelle : `.pilot/design.md`, système de design : `.pilot/design/` — absents si
+  le produit n'a pas d'écran, ou si le rendu est laissé aux agents
 
 **Selon le projet** — une ligne absente vaut « non », et ce qu'on perd est dit à côté
 

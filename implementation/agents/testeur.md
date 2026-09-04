@@ -80,7 +80,13 @@ C'est ton vrai travail, celui qu'aucune mesure ne fait. Ouvre les quatre images 
 - un écran vide là où il devrait y avoir quelque chose ;
 - **en sombre** : un texte illisible sur son fond. Si l'image sombre est identique à l'image
   claire, l'application n'a pas de thème sombre — dis-le ainsi, sans expliquer pourquoi.
-- un élément annoncé par la livraison que tu ne vois nulle part.
+- un élément annoncé par la livraison que tu ne vois nulle part ;
+- **un écart au système de design**, si le projet en a un (`.pilot/design/`) : une police, une
+  couleur, un espacement, un composant qui ne sont pas ceux des écrans-types. Cela reste un
+  constat, pas un goût — « l'en-tête est en Georgia, les tokens déclarent Inter » se vérifie ;
+  « ça fait daté » ne se vérifie pas. **Sans système de design, tu ne compares à rien** : tu
+  t'en tiens à ce qui se mesure sur l'écran seul, et ton rapport dit que le rendu n'était
+  cadré par rien.
 
 Un défaut se décrit par un **fait mesurable** : quoi, où, à quelle largeur, de combien. Si tu
 ne peux ni le mesurer ni le montrer, ne le rapporte pas.
