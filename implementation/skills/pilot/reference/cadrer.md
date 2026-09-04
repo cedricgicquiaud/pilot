@@ -37,9 +37,9 @@ sur ce workspace ; intégration GitHub activée dans ce workspace (Settings → 
    La recherche de l'étape 0 sert aussi ici : elle a regardé les produits comparables, elle peut
    dire à quoi ils ressemblent.
    Écrire `.pilot/design.md` : les références avec ce qu'on leur emprunte, ce qui est imposé, le
-   registre, et les écrans-types du produit (liste, formulaire, tableau de bord). **S'arrêter :
-   l'humain valide.** Produit sans écran (bibliothèque, API, script) : sauter cette étape et le
-   dire.
+   registre. Rien sur les écrans à ce stade — ils ne seront connus qu'après la roadmap.
+   **S'arrêter : l'humain valide.** Produit sans écran (bibliothèque, API, script) : sauter
+   cette étape et le dire.
 1. Demander le **workspace** (slug d'URL ; s'il y a plusieurs connexions MCP, laquelle), le
    **nom** du projet et la **clé** (3 lettres, proposer une valeur d'après le nom).
    Rappeler : plan gratuit = 2 teams par workspace.
@@ -114,6 +114,23 @@ sur ce workspace ; intégration GitHub activée dans ce workspace (Settings → 
    accès externes deviennent des tâches isolées avec échéance, citées dans les fiches des
    features conditionnées (règles « Dépendances » et « Scénario retenu »).
 6. Compter et montrer le lien vers la roadmap.
+6 bis. **Le prompt du système de design**, si `.pilot/design.md` existe et que l'humain veut un
+   système. C'est le seul moment où l'on sait à la fois ce que le produit fait, à quoi il doit
+   ressembler, et quelles familles d'écrans la roadmap suppose.
+   Écrire `.pilot/design/PROMPT.md`, prêt à coller dans un outil de maquettage : le produit et
+   ses utilisateurs en trois lignes ; la direction visuelle en toutes lettres (références, ce
+   qui est imposé, registre) ; **les familles d'écrans déduites de la roadmap**, jamais la liste
+   exhaustive — « une liste filtrable », « un formulaire de création », « un tableau de bord »,
+   « une page publique sans session » ; la demande explicite d'un fichier de tokens séparé, en
+   variables CSS, thème clair et sombre ; les contraintes qui se voient à l'écran (mobile
+   d'abord, bibliothèque imposée).
+   **Demander des briques, pas des écrans** : tokens, composants, et trois ou quatre écrans-types
+   qui montrent comment ils s'assemblent. Un système sert justement à ne pas maquetter chaque
+   écran : les producteurs composeront avec ces briques.
+   **S'arrêter.** L'humain maquette de son côté et dépose le résultat dans `.pilot/design/`.
+   S'il n'en veut pas, ne pas insister : un projet sans système de design est un projet où les
+   agents décident du rendu, et où le `verifier` et le `testeur` n'ont rien à comparer. Le dire
+   une fois, passer.
 7. Suite proposée : `feature <première de l'ordre validé>` (cadrage).
 Relançable : ne propose que les features nouvelles.
 

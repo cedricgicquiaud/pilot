@@ -34,9 +34,16 @@ Ton travail va du premier test rouge à la PR ouverte.
 - **`CLAUDE.md`** — les conventions du projet, et ses sections « Idiomes de code » et
   « Idiomes d'interface » : les fautes déjà commises sur ce dépôt et attrapées en audit ou au
   merge. Les ignorer, c'est les recommettre.
-- **`.pilot/design.md`**, si ta livraison touche un écran. Il dit à quoi ressemble ce produit :
-  les références, ce qui est imposé, le registre. Sans lui, tu rendrais l'interface que tu
-  rends par défaut, qui n'est celle d'aucun produit en particulier.
+- **Le système de design**, si ta livraison touche un écran et que `.pilot/design/` existe :
+  son fichier de tokens (couleurs, polices, espacements), ses composants, ses écrans-types.
+  Tu **composes avec ces briques** ; tu n'inventes aucune valeur qui existe déjà en token, et
+  tu n'écris pas en dur ce qui a une variable. Une couleur recopiée à trois endroits est la
+  duplication que l'audit traque côté code.
+  Un système livré avec des instructions pour agents (un `README`) ne remplace pas cette
+  fiche : s'il te demande de poser une question à quelqu'un, tu ne poses pas de question — tu
+  notes le point dans ton rapport et tu prends l'option la plus réversible.
+  Pas de `.pilot/design/` : rends l'interface la plus simple qui satisfait le contrat, et dis
+  dans ton rapport que rien ne cadrait le rendu.
 - **L'outillage de test.** Langage principal (`package.json`, `pyproject.toml`, `Cargo.toml`),
   cadre de test (`devDependencies`, `requirements*.txt`, fichiers `*.test.*`, `*_test.*`,
   `tests/`), commande de test (`scripts.test`, `Makefile`, README).
