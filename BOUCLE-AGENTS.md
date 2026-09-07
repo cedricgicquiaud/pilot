@@ -101,17 +101,19 @@ Il est jetable parce que tout ce qu'il contient de durable vit ailleurs.
 
 ### 2.4 L'allowlist de référence
 
-`.claude/settings.json` du sandbox :
+`.claude/settings.json` d'un projet, posé par `init` :
 
 ```json
 {
   "permissions": {
     "allow": [
-      "Bash(node --test:*)",
-      "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)",
+      "Bash(node --test:*)", "Bash(npm run:*)", "Bash(python3 -m http.server:*)",
+      "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(git show:*)",
       "Bash(git add:*)", "Bash(git commit:*)", "Bash(git push:*)", "Bash(git branch:*)",
       "Bash(ls:*)", "Bash(cat:*)", "Bash(grep:*)", "Bash(find:*)",
-      "Bash(head:*)", "Bash(tail:*)",
+      "Bash(head:*)", "Bash(tail:*)", "Bash(sort:*)", "Bash(echo:*)",
+      "Bash(lsof:*)", "Bash(ps:*)", "Bash(kill:*)", "Bash(pkill:*)", "Bash(sleep:*)",
+      "Bash(curl:*)",
       "mcp__linear__get_issue", "mcp__linear__list_issues", "mcp__linear__get_project",
       "mcp__linear__save_issue", "mcp__linear__save_project", "mcp__linear__save_comment"
     ]
@@ -119,8 +121,17 @@ Il est jetable parce que tout ce qu'il contient de durable vit ailleurs.
 }
 ```
 
-Adapter la commande de tests au projet. Ne jamais y mettre : suppression, merge, réseau
-autre que `git push`.
+Trois lignes se remplacent selon le projet : la commande de tests, celle qui lance l'app,
+celle qui la construit. Ne jamais y mettre : suppression de fichiers, merge, réseau autre
+que `git push` et `curl` vers l'app locale.
+
+**Une commande composée n'est autorisée que si chacun de ses morceaux l'est.** Le testeur
+qui écrit `pkill -f "next dev"; sleep 1; curl localhost:3000/api/health` attend un humain sur
+`sleep`, même si `pkill` est autorisé. C'est pour ça que `sleep`, `echo`, `sort` et `curl`
+sont dans la liste : pas pour eux-mêmes, mais parce qu'un agent les glisse dans une chaîne
+sans y penser, et qu'une chaîne refusée arrête l'agent jusqu'au retour de l'humain. Les
+fiches des quatre agents de la boucle disent la règle de l'autre côté : une commande par
+appel, sans `sleep`, `curl` ni `echo` autour.
 
 ### 2.5 Deux façons de lancer un agent
 
@@ -161,9 +172,10 @@ Quatre décisions de produit sont remontées au lieu d'être tranchées en chemi
 travail réel pour un barème qui en prévoyait 30, et **12 minutes d'attente du merge humain** :
 le goulot d'étranglement n'est plus l'agent.
 
-Deux réserves. Le `correcteur` ne s'est pas déclenché — rien à corriger sur les deux tours ;
-c'est le seul agent qui n'a jamais tourné. Et un run ne prouve pas une méthode : il faut les
-quatre ou cinq features d'affilée, sur deux projets, que le backlog n° 10 réclame.
+Deux réserves. Le `correcteur` ne s'est pas déclenché sur ces deux tours ; il a tourné
+l'après-midi même sur « Portail client », deux fois, dont une où il a laissé un défaut et
+marqué la PR non mergeable, comme sa fiche le prévoit. Et un run ne prouve pas une méthode : il
+faut les quatre ou cinq features d'affilée, sur deux projets, que le backlog n° 10 réclame.
 
 **L'outil vaut mieux que l'agent qui l'imite.** Le `testeur` pilotait le navigateur clic par
 clic : 26, 23, 14 et 9 minutes sur quatre passes, jusqu'à 401 échanges et 46 M de jetons relus,
@@ -209,6 +221,33 @@ d'avancer** : ce n'est pas l'intégration qui les posait, c'est le producteur, v
 Deux mécanismes faisaient le même travail, l'un est tombé, l'autre l'a masqué. La preuve tenait
 en un champ : la fiche de la dernière livraison mergée avait `attachments: []`, celle d'il y a
 une semaine portait l'URL de sa PR. `sync` contrôle désormais ce champ à chaque réconciliation.
+
+**Le deuxième projet a tenu, et il a donné la vraie vitesse (05/09).** `crm-workday`, un dossier
+vide le 04/09 à 18:30 : étude, PRD, direction visuelle, team Linear de 13 features, puis la
+feature 1 cadrée, découpée en cinq livraisons, produite, auditée et rétro faite le 05/09, et la
+première livraison de la feature 2 mergée à minuit. Sur une vraie pile (Next.js, Postgres,
+tests de bout en bout), une livraison coûte **50 à 80 minutes de travail d'agents**, quelle que
+soit la taille annoncée — contre 15 sur la page statique du sandbox. Le producteur en prend la
+moitié, à écrire un test puis son code, 45 commits par livraison. Rien à gagner là sans casser
+l'invariant. Et cinq livraisons sur cinq sont sorties une taille au-dessus de l'annonce : le
+barème venait du sandbox, le `decoupeur` lit maintenant ce que la dernière livraison du projet
+a coûté en lignes avant de se prononcer.
+
+**Un agent qui attend ressemble à un agent qui travaille (04 et 05/09).** Quatre fois en deux
+jours. Sur le sandbox, le testeur bloqué 101 minutes sur `lsof` et `kill`. Sur crm-workday, le
+producteur 73 minutes, le relecteur 152, le correcteur 53 — la livraison 2.1a affichait six
+heures d'horloge pour 81 minutes de travail. Chaque fois, l'agent venait de lancer une commande
+composée dont un morceau n'était pas dans la liste blanche : `pkill … ; sleep 1 ; curl …`,
+`echo … ; git show … | sort`, `lsof … && kill … ; npm run build`. Et chaque fois, personne
+devant l'écran pour cliquer. Le pire n'est pas le temps perdu : c'est que le lead, en fin de
+run, a écrit « le relecteur a relancé les tests et le build » sans regarder la transcription.
+Une cause plausible, fausse, devenue une leçon dans la note du projet et une ligne de six heures
+dans la calibration. Trois corrections : la liste blanche de référence porte les morceaux que
+les agents glissent dans leurs chaînes (§ 2.4) et les fiches disent « une commande par appel » ;
+`cout-agents.py` sépare horloge, temps actif et attente, et nomme la commande avant chaque
+attente ; `run` et `sync` ne reportent plus que le temps actif, et un chiffre non mesuré s'écrit
+« estimé ». La règle, pour le lead : quand un agent dépasse son seuil, lire ses trous avant
+d'écrire une cause.
 
 **Tests verts ≠ sûr.** Deux producteurs consciencieux, 32 tests verts, et deux failles
 bloquantes (échappement HTML, contrôle de permissions) trouvées uniquement par le relecteur
@@ -425,13 +464,13 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | 2 | Modèle déclaré par agent | **En partie fait le 01/09** : `model:` accepte `opus`, `sonnet`, `haiku`, `fable`, `inherit` ou un identifiant complet. Posé où le choix était évident — `fable` sur `decoupeur` et `contradicteur`, les deux agents de jugement du cadrage, qui tournent une fois par feature sur du texte court (33 et 21 échanges mesurés). Reste à trancher pour les agents de la boucle : descendre `testeur`, `afix` et `aaudit` sur `sonnet` demande de mesurer ce qu'on y perd, pas de le supposer — c'est le n° 4. | Champ `model` dans les fiches. |
 | 3 | Effort déclaré par agent | **Fait le 01/09** : `effort` accepte `low` à `max` dans le frontmatter. Posé selon la nature du travail, pas selon l'importance de l'agent — `xhigh` sur les deux agents de jugement (`decoupeur`, `contradicteur`), `high` sur `tdd-writer` et `verifier`, `medium` sur `testeur` depuis qu'un outil mesure à sa place. | Champ `effort` dans les fiches. |
 | 4 | Banc d'essai maison | L'essai a évalué le dispositif, pas les modèles. Recruter un modèle sur un agent se fait sur épreuve comparative. **Déclencheur** : le premier `run` sur le sandbox après la reprise des fiches. `tdd-writer` est le dernier agent à descendre de modèle, pas le premier — un modèle moins capable contourne davantage, et c'est le seul qui écrit du code. Le candidat évident est le `testeur`, dont un outil fait les mesures à sa place. | Deux livraisons identiques, deux modèles, même audit. |
-| 4 bis | Le `correcteur` éprouvé | **Fait le 04/09.** Banc à six pièges : 5 sur 6. Réussis : test avant correction avec un rouge réel, défaut visuel corrigé sans test et signalé comme tel, liste fermée respectée alors que la duplication était dans un fichier ouvert à deux lignes de la correction, aucun test existant modifié, suite complète relancée. Raté : un défaut décrit sans sa cible — il a inventé la valeur au lieu de poser la question. Fiche corrigée le jour même. | Fait. Reste à le voir tourner en run réel : les deux livraisons du 04/09 n'ont produit aucun défaut. |
+| 4 bis | Le `correcteur` éprouvé | **Fait le 04/09.** Banc à six pièges : 5 sur 6. Réussis : test avant correction avec un rouge réel, défaut visuel corrigé sans test et signalé comme tel, liste fermée respectée alors que la duplication était dans un fichier ouvert à deux lignes de la correction, aucun test existant modifié, suite complète relancée. Raté : un défaut décrit sans sa cible — il a inventé la valeur au lieu de poser la question. Fiche corrigée le jour même. | Fait. Tourné en run réel le 04/09 sur le sandbox (3 sur 3 puis 3 sur 4 corrigés, PR marquée non mergeable comme prévu) et cinq fois sur crm-workday le 05/09, sans jamais élargir sa liste. |
 | 5 | Validation de bout en bout | **Fait le 02/09.** La passe visuelle est inscrite dans `run` (étape 4) et dans la fiche du `testeur` ; la moitié « gabarit `MISSION.md` » est devenue sans objet depuis le partage fiche / mission — le moule ne porte plus que le variable. Tranché le 31/08 : **`UAT.md` est le cahier de recette de l'humain**, qu'il déroule lui-même avant mise en ligne ; aucun agent ne le joue ni ne le coche. Le producteur continue de l'écrire (une case par « Terminé quand », non cochée), pour un lecteur qui ne connaît pas le code ; un état vierge de l'application avant chaque passage ; l'instrument mobile (Maestro sur simulateur) au premier projet mobile. Voir aussi 11 et 12. | Section `## Pilot` : `Lancer l'app :`, `Testeur :`. Rapport de `run` en deux colonnes : prouvé (tests, audit, cases jouées) / à relire (esthétique, non testable). |
 | 6 | Fiche `producteur` permanente | **Fait le 02/09.** `tdd-writer.md` porte désormais les invariants de la boucle : périmètre strict, « tu ne tranches pas », `UAT.md`, URL des écrans, push, PR, STOP, format du rapport. Le gabarit `MISSION.md` a été allégé d'autant : il ne porte plus que la partie variable. Éprouvé sur banc le 01/09 — l'agent a refusé un piège de périmètre et remonté une décision au lieu de la trancher, alors que son `MISSION.md` était muet sur les deux. | Fait. |
 | 7 | Élaguer les consignes tous les six mois | **Première passe faite les 01 et 02/09.** `SKILL.md` : 597 → 276 lignes, le détail des commandes sorti dans `reference/cadrer.md`, `produire.md`, `suivre.md`. Douze règles retirées du moule de mission, quatre définitions de `section-pilot.md`, les six fiches réécrites. Prochaine passe à prévoir vers mars 2027. | Relire `CLAUDE.md` et skills : retirer ce qui tient debout tout seul. |
 | 8 | Contrat de validation à l'échelle de la feature | **Fait le 02/09.** La chaîne est complète : le contrat s'écrit au cadrage (10 à 30 phrases, un tiers de refus), le découpage affecte chaque phrase à une livraison, `MISSION.md` en porte **le texte** et plus seulement les numéros, et le `verifier` contrôle qu'un test couvre chacune. Le maillon qui manquait était le texte dans `MISSION.md` : sans lui, le `verifier` lisait « numéros 4, 5, 6 » et n'avait rien à vérifier. _Constat d'origine :_ nos « Terminé quand » étaient par tâche, jamais consolidés. Factory écrit avant tout code la liste de « ce qui devra être vrai », chaque feature devant couvrir ses phrases ; des tests écrits après le code « confirment des décisions, ils n'attrapent pas de bugs ». Prévu à l'étape « Cadrer » du circuit. | Section de la fiche feature Linear ; le découpage affecte chaque phrase à une livraison ; `verifier` contrôle la couverture. |
-| 9 | Vue de contrôle | **En partie traité le 01/09** par `cout-agents.py` : après coup, le coût par agent et les agents à regarder. Manque toujours le direct — pendant un run, le fil ne montre ni l'avancement ni la dépense. | Un tableau : livraisons finies / en cours, budget consommé, rapports de handoff. Lié au n° 1. |
-| 10 | Reprise automatique après audit | Chez nous : audit → corrections → PR, puis stop. Ailleurs, on enchaîne des jalons regroupant plusieurs livraisons sans humain — c'est ce qui autorise « un merge par feature » au lieu d'un par livraison. **Les conditions n° 1 et n° 5 sont levées depuis le 02/09**, mais on n'ouvre pas ce chantier tant que le flux n'a pas fait ses preuves : quatre ou cinq features d'affilée, sur au moins deux projets, avec les cinq constats de l'étape de validation (aucune demande à un humain, aucune sortie de périmètre, tests relancés par le `verifier`, aucune correction manuelle en cours de run, coût dans les repères). **Première feature au compteur le 04/09** : « Tableau de bord » sur le sandbox, deux livraisons, les cinq constats tenus — sauf que le `correcteur` n'a pas eu de défaut à traiter, donc rien ne dit encore comment la boucle se comporte quand elle en trouve un. Et il manquera encore le n° 9 : enchaîner trois livraisons sans rien voir de ce qui se passe est le cas exact que le merge humain protège. | Après validation du flux sur plusieurs features et plusieurs projets, puis n° 9. |
+| 9 | Vue de contrôle | **En partie traité le 01/09** par `cout-agents.py` : après coup, le coût par agent et les agents à regarder. **Depuis le 07/09** il sépare horloge, temps actif et attente, nomme la commande avant chaque attente de plus de cinq minutes, et retrouve les transcripts par leur dossier de travail même si la session a été lancée d'ailleurs. Manque toujours le direct — pendant un run, le fil ne montre ni l'avancement ni la dépense. | Un tableau : livraisons finies / en cours, budget consommé, rapports de handoff. Lié au n° 1. |
+| 10 | Reprise automatique après audit | Chez nous : audit → corrections → PR, puis stop. Ailleurs, on enchaîne des jalons regroupant plusieurs livraisons sans humain — c'est ce qui autorise « un merge par feature » au lieu d'un par livraison. **Les conditions n° 1 et n° 5 sont levées depuis le 02/09**, mais on n'ouvre pas ce chantier tant que le flux n'a pas fait ses preuves : quatre ou cinq features d'affilée, sur au moins deux projets, avec les cinq constats de l'étape de validation (aucune demande à un humain, aucune sortie de périmètre, tests relancés par le `verifier`, aucune correction manuelle en cours de run, coût dans les repères). **Compteur au 07/09 : deux features terminées, deux en cours, sur deux projets** — « Tableau de bord » et « Portail client » (2 livraisons sur 3) sur le sandbox, la feature 1 et la feature 2 (1 livraison sur 9) sur crm-workday. Quatre constats sur cinq tiennent ; le cinquième, le coût dans les repères, a échoué sur crm-workday parce que les repères venaient du sandbox et que les attentes de permission passaient pour du travail (leçon ci-dessus). À rejouer avec la liste blanche complétée. Et il manquera encore le n° 9 : enchaîner trois livraisons sans rien voir de ce qui se passe est le cas exact que le merge humain protège. | Après validation du flux sur plusieurs features et plusieurs projets, puis n° 9. |
 | 11 | Profil de navigateur dédié aux tests | **Devenu marginal le 31/08** : la passe visuelle tourne sans fenêtre et sans profil utilisateur, donc aucune extension tierce ne peut la bloquer. Le besoin ne subsiste que pour le navigateur piloté gardé en secours (parcours interactif, formulaire à soumettre). | Créer le profil le jour où le secours servira vraiment. |
 | 12 | Captures durables | **Résolu le 31/08.** La passe visuelle passe par Playwright (`.claude/tools/passe-visuelle/passe-visuelle.mjs`, Chrome du système, rien à télécharger) : elle écrit ses images en fichiers dans `.pilot/recette/<date>-<écran>/` (dossier ignoré de git) et un `mesures.json` à côté. Reste ouvert : les images restent locales, elles ne s'affichent pas dans la PR — à traiter le jour où le manque se fait sentir. | Fait. |
 | 13 | Recherche et contradicteur au cadrage (repris de FORGE, phase FIND) | **Contradicteur fait le 01/09** : fiche `contradicteur`, appelée par `feature` avant la validation du cadrage et par `roadmap` sur la liste proposée. Premier passage sur une feature réelle du sandbox : trois bloquants (un renvoi vers une page qui n'est pas publique, un lien de paiement qui ne peut pas toujours être construit, une livraison non démontrable seule) et six décisions manquantes, tous vérifiés dans le code, en 21 échanges. **Recherche tranchée le 02/09.** Au **PRD** : `init` lance la skill `research-assistant` avant l'entretien — ce qui existe, les standards du domaine, les règles extérieures qui s'imposent ; le document va dans `.pilot/recherche.md`. Systématique, sans question préalable : au moment du PRD personne ne sait encore rien, et une supposition posée là se paie sur toute la roadmap. Au **cadrage d'une feature** : pas de recherche (décision de Cédric). Les questions y sont internes au produit, pas externes ; `WebSearch` et `WebFetch` ont été retirés des outils du `contradicteur`. | Fait. |
