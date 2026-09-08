@@ -55,6 +55,14 @@ livraison, c'est du bruit qui cache les vraies transitions.
    modifiables (ceux du jalon), décisions produit recopiées de la fiche feature, **le texte des
    phrases du contrat** affectées à cette livraison (le numéro seul ne dit pas ce qu'il faut
    prouver), idiomes du `CLAUDE.md` qui touchent ces fichiers, commande de tests, titre de la PR.
+   **La liste des fichiers se déduit du contrat, phrase par phrase** : pour chaque phrase,
+   écris les fichiers qui la portent, et vérifie qu'ils sont dans la liste. Deux fois de suite
+   sur crm-workday, une phrase du contrat demandait un écran que la liste n'ouvrait pas ; le
+   producteur a signalé et s'est arrêté, comme sa fiche le veut, et il a fallu le relancer.
+   Quand ça arrive quand même, **le producteur relancé ouvre un nouveau cycle** : son code
+   n'a jamais été relu, donc `verifier` et `testeur` repassent, puis une correction, une
+   seule. Ce n'est pas une seconde correction sur le même audit, c'est le premier aller-retour
+   d'un second cycle.
    La façon de travailler — ordre des commits, périmètre, « tu ne tranches pas », `UAT.md`, stop
    après la PR, format du rapport — est dans la fiche de l'agent, pas ici : deux textes qui
    disent la même chose finissent par se contredire. L'exclure de git (`.git/info/exclude`).
@@ -74,13 +82,15 @@ livraison, c'est du bruit qui cache les vraies transitions.
    - `testeur` sur l'application lancée (`Lancer l'app`), dans le worktree de la livraison :
      il lance `.claude/tools/passe-visuelle/passe-visuelle.mjs` sur chaque écran livré
      (avec l'`Amorce de recette` déclarée, sans quoi il ne verrait que des écrans vides).
-     Sa consigne porte trois choses : **les écrans, trois au plus** (au-delà, une seconde
-     passe ou un second testeur : sur quatre ou cinq écrans il double son budget à chaque
-     fois) ; **le geste qui ouvre l'écran** quand il ne s'affiche qu'après une action (« ⌘K
-     puis "acm" », « clic sur Nouveau ») ; **ce qui est déjà connu** — les tâches isolées
-     ouvertes de la team et les écarts « à relire » des livraisons précédentes de la feature,
-     pour qu'il ne les rapporte pas une troisième fois et que le correcteur ne soit pas lancé
-     sur du connu.
+     Sa consigne porte quatre choses : **la commande `Lancer l'app`**, que l'outil lance et
+     arrête lui-même (un testeur qui tue à la main un serveur lancé en tâche de fond peut
+     rester bloqué une heure sur ce `kill`) ; **les écrans, trois au plus** (au-delà, une
+     seconde passe ou un second testeur : sur quatre ou cinq écrans il double son budget à
+     chaque fois) ; **le geste qui ouvre l'écran** quand il ne s'affiche qu'après une action
+     (« ⌘K puis "acm" », « clic sur Nouveau ») ; **ce qui est déjà connu** — les tâches
+     isolées ouvertes de la team et les écarts « à relire » des livraisons précédentes de la
+     feature, pour qu'il ne les rapporte pas une troisième fois et que le correcteur ne soit
+     pas lancé sur du connu.
      L'outil mesure en dix secondes le débordement horizontal et l'élément fautif, les
      recouvrements, le parcours clavier et la console, et dépose images et `mesures.json`
      dans `.pilot/recette/<date>-<écran>/`. L'agent ne refait pas ces mesures : il regarde
