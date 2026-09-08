@@ -49,3 +49,30 @@ fiches d'avant, ce qui les exclut de la mesure.
 Après le merge : `/pilot update` sur crm-workday avant 2.5a. Puis deux producteurs en parallèle
 sur une feature qui s'y prête (le lead a proposé 2.5a dès la PR de 2.3 ouverte : c'est le
 tuilage, pas le parallèle, et il a eu raison de le dire).
+
+## Après-midi — l'épreuve des deux heures, préparée
+
+Cédric voulait tester la parallélisation, puis a demandé si l'enchaînement des livraisons
+sans merge ne serait pas plus utile. J'ai d'abord proposé l'enchaînement ; il a objecté que ça
+touchait trop de choses pour une méthode qui marche. Relecture des sources : Cherny prescrit
+« deux chantiers le matin, fermer l'écran, partir deux heures » ; le tableau des écarts dit
+encore « non fait tel quel » ; l'enchaînement est le backlog n° 10, prévu sous conditions, dont
+la vue en direct (n° 9) qui manque toujours. Décision : l'épreuve des deux heures dans sa
+forme d'origine, sans toucher au merge humain par livraison.
+
+**Ce que le sandbox n'avait pas appris** : deux worktrees d'une application avec serveur et
+base partagent le port, les deux bases et le journal des migrations.
+
+- `pilot`, PR `docs/deux-producteurs` : un paragraphe dans `produire.md` (un poste par
+  worktree, une migration au plus par paire), la ligne `Poste par worktree :` dans le modèle
+  de section Pilot, une phrase dans la fiche du découpeur (le journal des migrations est un
+  contact). Aucune règle ne change.
+- crm-workday, PR `chore/deux-postes` : `npm run dev` et les tests d'écran lisent le port de
+  `APP_URL` dans `.env.local` ; postes A (3001, `crm_a`, `crm_test_a`) et B (3002, `crm_b`,
+  `crm_test_b`), bases créées ; `Agents en parallèle : 2`. Vérifié depuis un worktree sur le
+  poste A : 171 tests unitaires, serveur sur 3001, 70 tests d'écran, le 3000 et `crm` intacts.
+  Appris : Next refuse un `node_modules` en lien symbolique ; la base du poste se migre par
+  `npm run db:migrate`.
+
+**Suite** : merge des deux PR, le découpeur recoupe les quatre livraisons restantes de la
+feature 2 pour deux agents, Cédric valide la paire, `run`, écran fermé, deux heures.

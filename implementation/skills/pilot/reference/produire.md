@@ -66,6 +66,21 @@ livraison, c'est du bruit qui cache les vraies transitions.
    La façon de travailler — ordre des commits, périmètre, « tu ne tranches pas », `UAT.md`, stop
    après la PR, format du rapport — est dans la fiche de l'agent, pas ici : deux textes qui
    disent la même chose finissent par se contredire. L'exclure de git (`.git/info/exclude`).
+   **Deux producteurs à la fois : chaque worktree a son poste.** Sur une page statique, deux
+   worktrees vivent côte à côte sans rien partager. Sur une application avec serveur et base,
+   ils partagent tout : le port, la base de développement, la base de test, et le journal des
+   migrations. Le second serveur refuse de démarrer, les tests de l'un cassent sur les tables
+   de l'autre, et l'outil de passe visuelle photographie l'application du voisin. Avant de
+   monter `Agents en parallèle` à 2, la section Pilot porte une ligne `Poste par worktree :`
+   qui dit ce qui change d'un worktree à l'autre — sur crm-workday, un fichier `.env.local`
+   par poste, A ou B, avec son port et ses deux bases. Au moment de créer le worktree, le lead
+   lui attribue un poste libre et y copie ce fichier ; `Lancer l'app` reste la même commande.
+   Le testeur reçoit l'URL du poste. **Une migration au plus par paire** : le journal des
+   migrations est un fichier partagé, deux branches qui y ajoutent chacune une entrée se
+   contredisent au merge ; le découpeur le déclare comme contact. Sans ligne `Poste par
+   worktree`, on reste à 1.
+   C'est ce qui permet l'épreuve des deux heures de la méthode : deux livraisons disjointes,
+   deux worktrees, l'écran fermé, et deux PR à relire au retour.
 3. **Lancer les producteurs**, un agent `tdd-writer` par worktree, au plus `n` à la fois
    (une livraison finie libère une place pour la suivante ; le plafond reste le nombre de
    livraisons disjointes). Session indépendante (pane) quand le travail est long et doit être
