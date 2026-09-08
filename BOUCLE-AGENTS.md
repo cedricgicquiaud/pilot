@@ -254,6 +254,23 @@ attente ; `run` et `sync` ne reportent plus que le temps actif, et un chiffre no
 « estimé ». La règle, pour le lead : quand un agent dépasse son seuil, lire ses trous avant
 d'écrire une cause.
 
+**Le second projet, quatre livraisons plus tard (07/09).** Les livraisons 2.1b, 2.2 et 2.3 de
+crm-workday ont tourné le même jour, 59 minutes, 2 h 15 et 3 h 35 d'horloge. La première est
+propre. Les deux autres ont appris trois choses. **La liste des fichiers d'une mission se
+déduit du contrat, phrase par phrase** : deux fois, une phrase demandait un écran que la
+liste du lead n'ouvrait pas ; le producteur a signalé au lieu de contourner, c'est ce qu'on
+lui demande, mais il a fallu le relancer et tout réauditer. **Un producteur relancé ouvre un
+second cycle**, avec son audit et sa correction unique : le lead l'a fait sans que la règle
+l'ait prévu, et la règle le dit maintenant. **Un testeur ne tue jamais un serveur** : celui
+de 2.3 avait lancé `npm run dev` en tâche de fond et l'a arrêté par `kill <pid>` ; le `kill`
+n'est revenu qu'au bout de 44 minutes, puis 53 la seconde fois, sans qu'aucune permission
+soit en cause (`kill` était autorisé). Le mécanisme n'est pas élucidé, deux cas ne suffisent
+pas ; la parade ne dépend pas du mécanisme : l'outil de passe visuelle lance le serveur dans
+son propre groupe de processus, attend qu'il réponde, et l'arrête en partant. L'agent ne
+touche plus à un processus. Le relevé de coût distingue désormais un agent **bloqué** sur une
+commande d'un agent **en veille** après son rapport, qui attend qu'on le relance : le second
+cas n'est pas une perte, sauf si le lead tarde.
+
 **Tests verts ≠ sûr.** Deux producteurs consciencieux, 32 tests verts, et deux failles
 bloquantes (échappement HTML, contrôle de permissions) trouvées uniquement par le relecteur
 indépendant. Les deux producteurs avaient reproduit le même défaut d'idiome : seul un œil
