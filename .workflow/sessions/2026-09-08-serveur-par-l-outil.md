@@ -102,3 +102,26 @@ PR `fix/passe-visuelle-recharge-l-url-demandee` :
 Noté pour crm-workday : un poste neuf a besoin de `npm run seed:admin` en plus de la migration,
 sinon l'amorce ne peut pas ouvrir de session. À écrire dans sa section Pilot par la session du
 projet.
+
+## Nuit — ce qui n'aurait pas dû remonter jusqu'à Cédric
+
+Le découpeur a recoupé les quatre livraisons restantes pour deux agents : 2.5b ∥ 2.6b, puis 2.4,
+puis 2.6a, en déplaçant la clause « fusionner » de la phrase 31 vers 2.6a, seule façon de
+rendre la paire sûre. Cédric a validé. Mais avant de lancer, il a dû dicter deux choses au lead
+qu'il n'aurait pas pu trouver seul : le compte de recette du poste B, et l'endroit où graver la
+décision sur l'historique à la suppression. Sa question : « est-ce que ça va arriver à chaque
+fois ? » Non, si la méthode apprend. PR `docs/controle-de-poste` :
+
+- **Contrôle de poste avant tout producteur** (`produire.md`) : le lead prépare le poste selon la
+  recette de la section Pilot, puis le vérifie par la commande du testeur sur un écran protégé.
+  « ÉCRAN INATTENDU » ou serveur muet : on prépare et on recommence. Aucun producteur sur un
+  poste non contrôlé.
+- **La ligne `Poste par worktree` porte la recette** du poste (modèle de section Pilot) :
+  dépendances, migration, compte de recette.
+- **Une décision de cadrage amendée se grave** dans la fiche Linear, au découpage (`cadrer.md`)
+  comme pendant un run (`produire.md`), avec « amende la décision n° X ». La règle existait pour
+  les décisions prises au merge.
+
+Principe donné à Cédric : une question de produit, il répond ; une question technique, ou une
+commande qu'il se retrouve à dicter, c'est un trou dans la méthode et la réponse est « écris la
+règle ».
