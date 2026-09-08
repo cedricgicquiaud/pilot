@@ -182,7 +182,12 @@ clic : 26, 23, 14 et 9 minutes sur quatre passes, jusqu'à 401 échanges et 46 M
 296 appels navigateur. Avec la passe visuelle outillée, la même vérification prend 2,9 et
 2,2 minutes, 36 et 28 échanges, 1 M de jetons relus, zéro appel navigateur. Dix fois plus
 rapide, quarante fois moins de jetons. Le producteur, lui, n'a pas bougé d'une minute : la
-réécriture de sa fiche l'a rendu plus fiable, pas plus rapide. Ce qui coûte cher dans une
+réécriture de sa fiche l'a rendu plus fiable, pas plus rapide. Corollaire vu le 07/09 : ce que
+l'outil ne sait pas faire, l'agent le refait à la main au prix fort. La palette ⌘K de
+crm-workday ne s'affichait qu'après un raccourci ; l'outil photographiait la page fermée. Le
+testeur a écrit deux scripts hors dépôt, brûlé ses quinze actions de navigateur sans ouvrir la
+palette, doublé son budget, et rendu un cas « non observé ». L'outil sait maintenant cliquer,
+presser une touche, taper et attendre un élément avant la capture. Ce qui coûte cher dans une
 boucle d'agents, ce n'est pas de réfléchir, c'est de faire à la main ce qu'un script fait en
 dix secondes — et de faire revenir chaque capture d'écran dans la conversation.
 
