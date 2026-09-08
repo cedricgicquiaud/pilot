@@ -76,3 +76,29 @@ base partagent le port, les deux bases et le journal des migrations.
 
 **Suite** : merge des deux PR, le découpeur recoupe les quatre livraisons restantes de la
 feature 2 pour deux agents, Cédric valide la paire, `run`, écran fermé, deux heures.
+
+## Soir — l'outil rechargeait la mauvaise page
+
+La session de crm-workday, en faisant `/pilot update`, a signalé que les deux défauts notés la
+veille n'en faisaient qu'un : après l'amorce, l'outil rechargeait la page courante et non l'URL
+demandée. Sur un écran protégé, le premier chargement redirige vers `/connexion`, l'amorce y
+ouvre la session, et le rechargement rejoue `/connexion`, gestes compris. Ma correction de la
+veille (« reload » au lieu de « goto », pour les URL à fragment) avait créé ce cas.
+
+Décision (Cédric) : corriger avant 2.5b, sinon l'épreuve des deux heures aurait mesuré deux
+testeurs photographiant la page de connexion.
+
+PR `fix/passe-visuelle-recharge-l-url-demandee` :
+- après l'amorce, passage par une page vide puis chargement de l'URL demandée : vrai
+  chargement, y compris sur une URL à fragment, et sur l'URL voulue après une redirection ;
+- l'outil compare le chemin obtenu au chemin demandé et écrit « ÉCRAN INATTENDU : /connexion au
+  lieu de /entreprises », code de sortie 1 ; la fiche du testeur dit d'en faire une limite ;
+- prouvé sur crm-workday, poste A, depuis un worktree (base `crm_a` remise à neuf, compte de
+  recette créé) : ancien outil → image de la connexion ; corrigé → liste des entreprises avec les
+  trois sociétés de l'amorce ; sans amorce → « ÉCRAN INATTENDU » ; palette ouverte par
+  `--touche Meta+K --saisie acm --attendre "[cmdk-list]"` sur l'écran protégé → image de la
+  palette remplie.
+
+Noté pour crm-workday : un poste neuf a besoin de `npm run seed:admin` en plus de la migration,
+sinon l'amorce ne peut pas ouvrir de session. À écrire dans sa section Pilot par la session du
+projet.
