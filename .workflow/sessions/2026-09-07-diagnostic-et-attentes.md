@@ -88,3 +88,38 @@ projet. Les chiffres d'horloge ont été écrits sous l'étiquette « relevé co
 3. `run` de la livraison 2.1b sur crm-workday. Attendu : moins d'une heure d'horloge, zéro
    attente. C'est le test des corrections de cette PR.
 4. Puis deux producteurs en parallèle sur la première feature qui s'y prête.
+
+## Suite de journée — le run 2.1b, et la PR du testeur
+
+**Le run 2.1b sur crm-workday a validé la correction du matin.** Même projet, même pile,
+même producteur : 59 minutes d'horloge, 58 minutes actives, zéro attente de permission. La
+veille, 81 minutes de travail et 4 h 38 d'attente. Le lead a lu la colonne attente avant de
+conclure (« 12 min du testeur = veille après rapport ») et a affiché chaque transition.
+Barème M annoncé 2,2 h, mesuré 1,0 h : `sync` le redescendra.
+
+**Ce que le run a montré de nouveau.** Le testeur a doublé son budget (87 échanges pour 40)
+parce que l'outil de passe visuelle ne savait pas ouvrir la palette ⌘K avant la capture : il
+a écrit deux scripts hors dépôt, brûlé ses quinze actions de navigateur sans l'ouvrir, et
+rendu un cas « non observé ». Et le lead a écrit cinq fois « accusé d'arrêt, déjà pris en
+compte ».
+
+**PR `docs/testeur-action-avant-capture`** :
+
+1. L'outil de passe visuelle accepte des gestes avant la capture : `--clic`, `--touche`,
+   `--saisie`, `--action fichier.js`, `--attendre sélecteur`. Un geste raté est nommé en fin
+   de relevé et l'outil sort en erreur. Plusieurs amorces séparées par des virgules. Après
+   l'amorce, `reload` au lieu de `goto` : sur une URL à fragment, `goto` ne rechargeait rien.
+   Testé sur le sandbox : sans geste (inchangé), geste réussi, geste raté (code 1).
+2. Fiche du `testeur` : trois écrans au plus par passe ; une section « Déjà connu » pour les
+   défauts déjà ouverts que la consigne lui donne ; les gestes de l'outil à la place des
+   scripts hors dépôt ; un clic sans effet dans le navigateur piloté se contre-vérifie avant
+   d'être rapporté.
+3. `produire.md` : la consigne du testeur porte les écrans (trois au plus), le geste qui ouvre
+   l'écran, et la liste de ce qui est déjà connu ; l'accusé d'arrêt d'un agent déjà rendu ne
+   vaut pas une ligne.
+4. `BOUCLE-AGENTS.md` : le corollaire dans la leçon « l'outil vaut mieux que l'agent qui
+   l'imite ».
+
+**Reste pour plus tard** : deux producteurs en parallèle (un essai, rien à écrire) ; le
+testeur sur un modèle moins cher (épreuve comparative) ; la reprise automatique après audit
+(décision de Cédric, pas avant deux ou trois livraisons de plus).
