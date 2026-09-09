@@ -18,7 +18,14 @@
   par écran (1280 px, clair, 2000 px de haut au plus, 23 Ko mesurés sur le sandbox) dans
   `.pilot/pr/<CODE>/`, commitée par le lead après l'audit et affichée dans le rapport de PR,
   section « Écrans ». Fiche du testeur, `produire.md` (étapes 4 et 5), backlog. Branche
-  `feat/captures-dans-la-pr`.
+  PR #36, mergée.
+- PR #37 (autre session) : le producteur regarde ce qui existe avant d'écrire, banc à quatre
+  runs sur le sandbox, backlog 4 ter.
+- Sandbox : la méthode est arrivée sur `main` par un push direct (commit 9200095), par erreur —
+  un changement de branche avait échoué et la commande a continué sur `main`. Cédric a choisi
+  de garder ; PR #60 et #59 fermées sans merge, branches supprimées. Leçon : ne jamais enchaîner
+  un `git checkout` et un push avec `;`, seulement avec `&&`.
+- Le HTML de présentation est d'accord avec le Markdown : rien à relire.
 
 ## Décidé
 
@@ -31,8 +38,8 @@
 
 ## Reste
 
-- Merge de la PR des écrans dans la PR, puis `/pilot update` sur crm-workday avant 2.4.
+- Rien en attente sur la méthode. `/pilot update` sur crm-workday avant 2.4.
 - crm-workday, session du projet : `/pilot update`, `sync`, défaut de la #19 en tâche isolée,
   2.4 seule, puis tour 2 à deux agents.
-- Backlog : n° 4 (testeur sur un modèle moins cher, à mesurer au tour 2), relecture du HTML
-  de présentation, n° 10 (fermé tant que le flux n'a pas prouvé cinq features).
+- Backlog : n° 4 (testeur sur un modèle moins cher, à mesurer au tour 2), n° 10 (fermé tant
+  que le flux n'a pas prouvé cinq features). « Trois producteurs » se décide après le tour 2.
