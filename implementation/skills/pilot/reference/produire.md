@@ -166,6 +166,21 @@ terminal voit quand même où en est chaque agent et ce qu'il a coûté.
    Puis `testeur` **relance sa passe sur le seul écran corrigé** — dix secondes, il compare
    les mesures. Un aller-retour, pas plus : si le défaut persiste, la PR s'ouvre quand même,
    marquée **non mergeable** dans son rapport, défauts en tête. Mineur → commentaire.
+
+   **Les écrans dans la PR.** Le testeur a écrit, pour chaque écran, une image légère dans
+   `.pilot/pr/<CODE>/<écran>.jpg` (option `--pr` de l'outil ; sa consigne porte le code de
+   la livraison). Quand l'audit est fini — après la repasse s'il y en a eu une, pour que
+   l'image montre l'état corrigé — commite ces images dans la branche de la livraison et
+   pousse : `git add .pilot/pr && git commit -m "chore: screens for the PR" && git push`.
+   Trois images par livraison au plus, une par écran, autour de 50 Ko chacune : le dépôt ne
+   s'en ressent pas. Elles s'affichent dans le rapport (section « Écrans » ci-dessous) par
+   leur adresse GitHub, qui se construit ainsi :
+
+   ```bash
+   https://github.com/$(gh repo view --json nameWithOwner -q .nameWithOwner)/blob/$(git rev-parse HEAD)/.pilot/pr/<CODE>/<écran>.jpg?raw=true
+   ```
+
+   Le dossier `.pilot/pr/` n'est pas ignoré de git, contrairement à `.pilot/recette/`.
 5. **Rapport dans chaque PR** (commentaire), au gabarit fixe ci-dessous. Il est lu par un
    humain qui décide de merger en trente secondes : le verdict d'abord, le fonctionnel
    ensuite, la technique repliée. Jamais de tableau à deux colonnes (il suggère une
@@ -180,6 +195,10 @@ terminal voit quand même où en est chaque agent et ce qu'il a coûté.
    - <N> tests verts (<n> nouveaux).
    - Audit du code : rien de bloquant ; <n> point(s) important(s) corrigé(s) (<en un mot ce que c'était>).
    - Recette à l'écran : <c> cas sur <t> constatés<, m refusés : …>.
+
+   ### Écrans
+   ![<écran>](<adresse GitHub de .pilot/pr/<CODE>/<écran>.jpg>)
+   <une image par écran livré, trois au plus, l'image après correction s'il y en a eu une>
 
    ### À relire par toi (ce que la boucle ne sait pas juger)
    - <Écran>, <élément> : <ce qu'on voit, en mots d'utilisateur>.        (5 au plus)

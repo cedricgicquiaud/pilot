@@ -13,7 +13,12 @@
   secondes ; `--une-fois` pour l'instantané que le lead joint à ses lignes de transition ;
   `--notifier` envoie les alertes en notification macOS par `cmux notify`. Aucune fiche
   d'agent ne bouge. Vérifié sur les journaux du tour 1 et sur trois journaux simulés
-  (actif, bloqué, rendu). Branche `feat/vue-de-controle-en-direct`.
+  (actif, bloqué, rendu). PR #35, mergée, propagée au sandbox (PR #60).
+- Backlog n° 12, les écrans dans la PR : option `--pr` de la passe visuelle, une image JPEG
+  par écran (1280 px, clair, 2000 px de haut au plus, 23 Ko mesurés sur le sandbox) dans
+  `.pilot/pr/<CODE>/`, commitée par le lead après l'audit et affichée dans le rapport de PR,
+  section « Écrans ». Fiche du testeur, `produire.md` (étapes 4 et 5), backlog. Branche
+  `feat/captures-dans-la-pr`.
 
 ## Décidé
 
@@ -26,9 +31,8 @@
 
 ## Reste
 
-- Merge de la PR de la vue en direct, puis `/pilot update` sur crm-workday avant 2.4.
+- Merge de la PR des écrans dans la PR, puis `/pilot update` sur crm-workday avant 2.4.
 - crm-workday, session du projet : `/pilot update`, `sync`, défaut de la #19 en tâche isolée,
   2.4 seule, puis tour 2 à deux agents.
-- Backlog : n° 4 (testeur sur un modèle moins cher, à mesurer au tour 2), n° 12 (captures
-  dans la PR, quand le manque se fera sentir), n° 10 (fermé tant que le flux n'a pas prouvé
-  cinq features).
+- Backlog : n° 4 (testeur sur un modèle moins cher, à mesurer au tour 2), relecture du HTML
+  de présentation, n° 10 (fermé tant que le flux n'a pas prouvé cinq features).
