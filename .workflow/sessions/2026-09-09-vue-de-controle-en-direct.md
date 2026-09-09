@@ -26,6 +26,13 @@
   de garder ; PR #60 et #59 fermées sans merge, branches supprimées. Leçon : ne jamais enchaîner
   un `git checkout` et un push avec `;`, seulement avec `&&`.
 - Le HTML de présentation est d'accord avec le Markdown : rien à relire.
+- Backlog n° 4, le banc des modèles : `testeur` et `verifier` joués deux fois sur TST-91 du
+  sandbox, Sonnet contre le modèle actuel. Sonnet ne rapporte que ce que l'outil mesure ou ce
+  que les tests disent ; le modèle actuel ajoute à chaque fois un ou deux constats réels,
+  vérifiés. Décision de Cédric : le verifier reste (relecteur, il contredit) ; le testeur passe
+  sur Sonnet en exécutant pur, le jugement sur l'image revenant à l'humain par les écrans dans
+  la PR. Le tdd-writer et le correcteur restent à mettre au banc. PR #39. Première utilisation
+  réelle de la vue en direct sur ces quatre agents : elle les a vus, au bon seuil.
 
 ## Décidé
 
@@ -41,5 +48,6 @@
 - Rien en attente sur la méthode. `/pilot update` sur crm-workday avant 2.4.
 - crm-workday, session du projet : `/pilot update`, `sync`, défaut de la #19 en tâche isolée,
   2.4 seule, puis tour 2 à deux agents.
-- Backlog : n° 4 (testeur sur un modèle moins cher, à mesurer au tour 2), n° 10 (fermé tant
-  que le flux n'a pas prouvé cinq features). « Trois producteurs » se décide après le tour 2.
+- Backlog : le banc du tdd-writer (Sonnet contre Fable, même livraison, même audit), n° 10
+  (fermé tant que le flux n'a pas prouvé cinq features). « Trois producteurs » se décide après
+  le tour 2.
