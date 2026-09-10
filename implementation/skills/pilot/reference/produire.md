@@ -26,22 +26,15 @@ qu'on ne peut pas interrompre au bon moment. **L'accusé d'arrêt d'un agent qui
 son rapport ne vaut pas une ligne** : cinq « accusé d'arrêt, déjà pris en compte » par
 livraison, c'est du bruit qui cache les vraies transitions.
 
-**Dis comment suivre le run en direct, dans le message de lancement.** Entre deux lignes du
-fil, l'humain ne voit rien : pendant les quarante minutes d'un producteur, la session est
-muette. Un tableau des agents en cours existe, à lancer dans un second terminal — un panneau
-cmux à côté de la session, ou n'importe quel terminal :
+**Le fil de Claude Code montre déjà chaque agent en cours** : sa durée, ses jetons, son geste
+du moment, en se plaçant sur sa ligne. Ne le refais pas dans tes messages. Ce qu'il ne calcule
+pas, l'outil de coût le surveille en silence : un agent bloqué plus de cinq minutes sur une
+commande, ou au-dessus de son seuil, déclenche une notification macOS. Donne la ligne dans le
+message de lancement, pour qui veut la lancer dans un second terminal :
 
 ```
 python3 .claude/tools/cout-agents/cout-agents.py . --direct --notifier
 ```
-
-Une ligne par agent : état (actif, bloqué sur une commande, rapport rendu), minutes actives,
-jetons relus contre son seuil, dernier geste. Rafraîchi toutes les trente secondes ; avec
-`--notifier`, un agent bloqué plus de cinq minutes ou au-dessus de son seuil déclenche une
-notification macOS. Mets cette ligne dans le message de lancement du run, juste sous le plan.
-**Et à chaque fois que tu reprends la parole**, joins l'instantané du moment,
-`--direct --une-fois`, sous ta ligne de transition : l'humain qui n'a pas ouvert de second
-terminal voit quand même où en est chaque agent et ce qu'il a coûté.
 
 1. Pré-requis : feature « Planifiée », `.claude/settings.json` (allowlist) et
    `.pilot/MISSION.template.md` présents, branche principale à jour. Lire `Agents en
