@@ -33,6 +33,11 @@
   sur Sonnet en exécutant pur, le jugement sur l'image revenant à l'humain par les écrans dans
   la PR. Le tdd-writer et le correcteur restent à mettre au banc. PR #39. Première utilisation
   réelle de la vue en direct sur ces quatre agents : elle les a vus, au bon seuil.
+- Le 10/09 au matin, le banc du producteur : livraison inventée « Étiquettes de contact »,
+  Opus contre Fable, deux worktrees au même commit, même verifier sur chaque copie. Même
+  qualité à l'audit (10/10, rien de bloquant, 3 ou 4 mineurs), Opus 40 % de jetons en moins.
+  Décision de Cédric : tdd-writer et correcteur passent sur Opus, à confirmer au tour 2 de
+  crm-workday. Les deux branches `bench/TST-B1-etiquettes-*` restent en local sur le sandbox.
 
 ## Décidé
 
@@ -48,6 +53,5 @@
 - Rien en attente sur la méthode. `/pilot update` sur crm-workday avant 2.4.
 - crm-workday, session du projet : `/pilot update`, `sync`, défaut de la #19 en tâche isolée,
   2.4 seule, puis tour 2 à deux agents.
-- Backlog : le banc du tdd-writer (Sonnet contre Fable, même livraison, même audit), n° 10
-  (fermé tant que le flux n'a pas prouvé cinq features). « Trois producteurs » se décide après
+- Backlog : seul le n° 10 reste (fermé tant que le flux n'a pas prouvé cinq features). « Trois producteurs » se décide après
   le tour 2.
