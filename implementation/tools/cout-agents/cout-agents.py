@@ -270,9 +270,13 @@ def etapes(chemin):
                 del attendus[it.get("tool_use_id")]
     return out, fini
 
-def suivre(projet, nom, depuis, journal=None):
-    import time
+ANSI = {"green": "32", "orange": "38;5;208", "yellow": "33", "red": "31", "blue": "34", "cyan": "36", "purple": "35", "pink": "95"}
+
+def suivre(projet, nom, depuis, journal=None, couleur=""):
+    import time, shutil, subprocess
     vus = {}
+    code = ANSI.get(couleur, "")
+    teinte = (lambda x: f"\033[{code}m{x}\033[0m") if code else (lambda x: x)
     if journal:
         # lancé par le hook au démarrage de l'agent : le fichier peut mettre quelques secondes à exister
         for _ in range(60):
@@ -280,6 +284,9 @@ def suivre(projet, nom, depuis, journal=None):
             time.sleep(1)
         else: print(f"journal jamais apparu : {journal}"); return 1
         nom = nom_agent(journal)
+        if shutil.which("cmux") and os.environ.get("CMUX_SURFACE_ID"):
+            subprocess.run(["cmux", "rename-tab", "--surface", os.environ["CMUX_SURFACE_ID"], nom],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     while True:
         maintenant = datetime.datetime.now(datetime.timezone.utc)
         fichiers = [journal] if journal else [f for f in transcripts(projet)
@@ -289,8 +296,8 @@ def suivre(projet, nom, depuis, journal=None):
                 print(f"aucun agent « {nom} » en cours (journal bougé depuis {depuis} min)"); return 1
             f = fichiers[0]; lignes, fini = etapes(f)
             deja = vus.get(f, 0)
-            if deja == 0: print(nom + "\n")
-            for t, x in lignes[deja:]: print(f"  {t.astimezone().strftime('%H:%M')}  {x}", flush=True)
+            if deja == 0: print(teinte(nom) + "\n")
+            for t, x in lignes[deja:]: print(f"  {t.astimezone().strftime('%H:%M')}  {teinte(x)}", flush=True)
             vus[f] = len(lignes)
             # l'agent a rendu : son dernier événement est un texte sans appel d'outil, et rien depuis 60 s
             x = lire(f)
@@ -328,7 +335,8 @@ def main():
     else: depuis = 120
     if "--journal" in sys.argv:
         j = sys.argv[sys.argv.index("--journal") + 1]
-        return suivre(os.getcwd(), None, depuis, journal=j)
+        couleur = sys.argv[sys.argv.index("--couleur") + 1] if "--couleur" in sys.argv else ""
+        return suivre(os.getcwd(), None, depuis, journal=j, couleur=couleur)
     if "--suivre" in sys.argv:
         i = sys.argv.index("--suivre")
         nom = sys.argv[i + 1] if len(sys.argv) > i + 1 and not sys.argv[i + 1].startswith("--") and sys.argv[i + 1] not in args[:1] else None
