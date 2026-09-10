@@ -275,8 +275,6 @@ ANSI = {"green": "32", "orange": "38;5;208", "yellow": "33", "red": "31", "blue"
 def suivre(projet, nom, depuis, journal=None, couleur=""):
     import time, shutil, subprocess
     vus = {}
-    code = ANSI.get(couleur, "")
-    teinte = (lambda x: f"\033[{code}m{x}\033[0m") if code else (lambda x: x)
     if journal:
         # lancé par le hook au démarrage de l'agent : le fichier peut mettre quelques secondes à exister
         for _ in range(60):
@@ -284,13 +282,16 @@ def suivre(projet, nom, depuis, journal=None, couleur=""):
             time.sleep(1)
         else: print(f"journal jamais apparu : {journal}"); return 1
         nom = nom_agent(journal)
-        try:  # le nom donné à l'agent, quand le fichier ne le porte pas
+        try:  # le nom donné à l'agent et la couleur de sa fiche : Claude Code les écrit à côté du journal
             meta = json.load(open(journal[:-len(".jsonl")] + ".meta.json"))
             if meta.get("name"): nom = meta["name"]
+            if meta.get("color"): couleur = meta["color"]
         except Exception: pass
         if shutil.which("cmux") and os.environ.get("CMUX_SURFACE_ID"):
             subprocess.run(["cmux", "rename-tab", "--surface", os.environ["CMUX_SURFACE_ID"], nom],
                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    code = ANSI.get(couleur, "")
+    teinte = (lambda x: f"\033[{code}m{x}\033[0m") if code else (lambda x: x)
     while True:
         maintenant = datetime.datetime.now(datetime.timezone.utc)
         fichiers = [journal] if journal else [f for f in transcripts(projet)
