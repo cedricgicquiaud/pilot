@@ -254,10 +254,13 @@ def etapes(chemin):
                     out.append((t, "… " + premiere[:110]))
             elif it.get("type") == "tool_use":
                 inp = it.get("input") or {}; cmd = str(inp.get("command", ""))
-                mc = re.search(r'git commit[^"]*-m\s+"([^"]+)"', cmd) or re.search(r"git commit[^']*-m\s+'([^']+)'", cmd)
+                mc = None
+                if "git commit" in cmd:
+                    mh = re.search(r"<<\s*'?EOF'?\s*\n(.+)", cmd)
+                    mc = mh or re.search(r'git commit[^"]*-m\s+"([^"\n]+)', cmd) or re.search(r"git commit[^']*-m\s+'([^'\n]+)", cmd)
                 if mc:
-                    msg = mc.group(1); genre = msg.split(":")[0].strip()
-                    out.append((t, f"commit : {'test' if genre == 'test' else 'code' if genre in ('feat', 'fix', 'refactor') else genre} — {msg[:80]}"))
+                    msg = mc.group(1).strip(); genre = msg.split(":")[0].strip()
+                    out.append((t, f"commit {'test' if genre == 'test' else 'code' if genre in ('feat', 'fix', 'refactor') else genre} — {msg.split(':', 1)[-1].strip()[:80]}"))
                 elif "gh pr create" in cmd: out.append((t, "PR ouverte"))
                 elif re.search(r"vitest|playwright test|node --test|pytest|npm test|npm run test", cmd): attendus[it.get("id")] = t
             elif it.get("type") == "tool_result" and it.get("tool_use_id") in attendus:
@@ -266,7 +269,9 @@ def etapes(chemin):
                 mp2 = re.search(r"ℹ pass (\d+)", s_ or ""); mf2 = re.search(r"ℹ fail (\d+)", s_ or "")
                 verts = (mp and mp.group(1)) or (mp2 and mp2.group(1)); rouges = (mf and mf.group(1)) or (mf2 and mf2.group(1))
                 if verts or rouges:
-                    out.append((t, f"tests : {verts or 0} verts" + (f", {rouges} rouges" if rouges and rouges != "0" else "")))
+                    ligne = f"tests : {verts or 0} verts" + (f", {rouges} rouges" if rouges and rouges != "0" else "")
+                    if out and out[-1][1].startswith("tests :"): out[-1] = (t, ligne)
+                    else: out.append((t, ligne))
                 del attendus[it.get("tool_use_id")]
     return out, fini
 
@@ -300,9 +305,13 @@ def suivre(projet, nom, depuis, journal=None, couleur=""):
             if not fichiers:
                 print(f"aucun agent « {nom} » en cours (journal bougé depuis {depuis} min)"); return 1
             f = fichiers[0]; lignes, fini = etapes(f)
-            if f not in vus: print(teinte(nom) + "\n", flush=True)
-            deja = vus.get(f, 0)
-            for t, x in lignes[deja:]: print(f"  {t.astimezone().strftime('%H:%M')}  {teinte(x)}", flush=True)
+            if vus.get(f) != len(lignes):
+                # le panneau dit « ça avance », pas « voilà tout » : les cinq dernières étapes, une ligne chacune
+                larg = shutil.get_terminal_size((80, 24)).columns
+                print("\033[2J\033[H" + teinte(nom) + "\n", flush=True)
+                for t, x in lignes[-5:]:
+                    x = x.replace("\n", " ").replace("**", "")
+                    print(f"  {t.astimezone().strftime('%H:%M')}  {teinte(x[:max(10, larg - 10)])}", flush=True)
             vus[f] = len(lignes)
             # l'agent a rendu : son dernier événement est un texte sans appel d'outil, et rien depuis 60 s
             x = lire(f)
