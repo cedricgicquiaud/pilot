@@ -36,6 +36,14 @@ message de lancement, pour qui veut la lancer dans un second terminal :
 python3 .claude/tools/cout-agents/cout-agents.py . --direct --notifier
 ```
 
+**Préviens l'humain quand il n'est plus devant l'écran.** L'outil `PushNotification` envoie
+une notification sur le Mac, et sur son téléphone si le contrôle à distance est connecté. Trois
+moments la justifient, et seulement ceux-là : le run est fini et des PR attendent son merge
+(« 2 PR prêtes, 3 décisions à trancher ») ; un agent attend une permission depuis plus de cinq
+minutes (« producteur 2.4 bloqué sur npm run build ») ; le run s'est arrêté sur une erreur.
+Jamais pour une transition ordinaire : une notification inutile coûte l'attention à toutes
+les suivantes. Moins de 200 caractères, ce qu'il doit faire en premier.
+
 1. Pré-requis : feature « Planifiée », `.claude/settings.json` (allowlist) et
    `.pilot/MISSION.template.md` présents, branche principale à jour. Lire `Agents en
    parallèle : n` dans la section Pilot (**défaut 1** : les livraisons se font l'une après
