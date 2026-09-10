@@ -18,7 +18,26 @@
   par écran (1280 px, clair, 2000 px de haut au plus, 23 Ko mesurés sur le sandbox) dans
   `.pilot/pr/<CODE>/`, commitée par le lead après l'audit et affichée dans le rapport de PR,
   section « Écrans ». Fiche du testeur, `produire.md` (étapes 4 et 5), backlog. Branche
-  `feat/captures-dans-la-pr`.
+  PR #36, mergée.
+- PR #37 (autre session) : le producteur regarde ce qui existe avant d'écrire, banc à quatre
+  runs sur le sandbox, backlog 4 ter.
+- Sandbox : la méthode est arrivée sur `main` par un push direct (commit 9200095), par erreur —
+  un changement de branche avait échoué et la commande a continué sur `main`. Cédric a choisi
+  de garder ; PR #60 et #59 fermées sans merge, branches supprimées. Leçon : ne jamais enchaîner
+  un `git checkout` et un push avec `;`, seulement avec `&&`.
+- Le HTML de présentation est d'accord avec le Markdown : rien à relire.
+- Backlog n° 4, le banc des modèles : `testeur` et `verifier` joués deux fois sur TST-91 du
+  sandbox, Sonnet contre le modèle actuel. Sonnet ne rapporte que ce que l'outil mesure ou ce
+  que les tests disent ; le modèle actuel ajoute à chaque fois un ou deux constats réels,
+  vérifiés. Décision de Cédric : le verifier reste (relecteur, il contredit) ; le testeur passe
+  sur Sonnet en exécutant pur, le jugement sur l'image revenant à l'humain par les écrans dans
+  la PR. Le tdd-writer et le correcteur restent à mettre au banc. PR #39. Première utilisation
+  réelle de la vue en direct sur ces quatre agents : elle les a vus, au bon seuil.
+- Le 10/09 au matin, le banc du producteur : livraison inventée « Étiquettes de contact »,
+  Opus contre Fable, deux worktrees au même commit, même verifier sur chaque copie. Même
+  qualité à l'audit (10/10, rien de bloquant, 3 ou 4 mineurs), Opus 40 % de jetons en moins.
+  Décision de Cédric : tdd-writer et correcteur passent sur Opus, à confirmer au tour 2 de
+  crm-workday. Les deux branches `bench/TST-B1-etiquettes-*` restent en local sur le sandbox.
 
 ## Décidé
 
@@ -31,8 +50,8 @@
 
 ## Reste
 
-- Merge de la PR des écrans dans la PR, puis `/pilot update` sur crm-workday avant 2.4.
+- Rien en attente sur la méthode. `/pilot update` sur crm-workday avant 2.4.
 - crm-workday, session du projet : `/pilot update`, `sync`, défaut de la #19 en tâche isolée,
   2.4 seule, puis tour 2 à deux agents.
-- Backlog : n° 4 (testeur sur un modèle moins cher, à mesurer au tour 2), relecture du HTML
-  de présentation, n° 10 (fermé tant que le flux n'a pas prouvé cinq features).
+- Backlog : seul le n° 10 reste (fermé tant que le flux n'a pas prouvé cinq features). « Trois producteurs » se décide après
+  le tour 2.
