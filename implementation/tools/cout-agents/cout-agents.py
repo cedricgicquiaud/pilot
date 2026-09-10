@@ -54,10 +54,12 @@ def ts(v):
     except Exception: return None
 
 def commande(item):
-    """Ce qu'un tool_use a lancé, en une ligne courte."""
+    """Ce qu'un tool_use a lancé, en une ligne courte, sans le `cd <dossier> &&` qui la précède."""
     inp = item.get("input") or {}
     for k in ("command", "description", "file_path", "pattern", "url"):
-        if inp.get(k): return f"{item.get('name')} {str(inp[k])[:90]}"
+        if inp.get(k):
+            v = re.sub(r"^\s*cd\s+\S+\s*&&\s*", "", str(inp[k])).strip()
+            return f"{item.get('name')} {v[:90]}" if item.get("name") != "Bash" else v[:90]
     return item.get("name") or "?"
 
 def lire(chemin):
@@ -161,12 +163,12 @@ def etat(x, maintenant):
     depuis = (maintenant - x["dernier"]).total_seconds() / 60 if x["dernier"] else 0
     cmd = x["derniere_commande"] or "(aucune commande)"
     if depuis * 60 <= TROU:
-        return "actif", f"{cmd}  (il y a {depuis*60:.0f} s)"
+        return "actif", f"il y a {depuis*60:.0f} s · {cmd}"
     if x["dernier_type"] == "texte":
         return "rendu", f"rapport rendu il y a {duree(depuis)}"
     if x["dernier_type"] == "commande":
-        return "bloqué", f"sur : {cmd}  (depuis {duree(depuis)})"
-    return "réfléchit", f"réponse en cours depuis {duree(depuis)}, après : {cmd}"
+        return "bloqué", f"depuis {duree(depuis)} · {cmd}"
+    return "réfléchit", f"depuis {duree(depuis)} · après {cmd}"
 
 def alertes_de(x, e, depuis_min):
     s = SEUILS.get(x["type"], {})
@@ -195,16 +197,15 @@ def tableau_direct(projet, depuis, deja_notifie, avec_notif):
     out = [f"Agents en cours — {os.path.basename(projet)}  ({len(lignes)} depuis {depuis} min)  {heure}", ""]
     if not lignes:
         out.append("  aucun journal d'agent n'a bougé dans ce délai"); return out
-    out.append(f"{'agent':32} {'état':9} {'actif':>7} {'relus':>12} {'seuil':>6}   dernier geste")
+    out.append(f"{'agent':24} {'état':9} {'actif':>7} {'relus':>9}   dernier geste")
     alertes = []
     for x in lignes:
         e, phrase = etat(x, maintenant)
         depuis_min = (maintenant - x["dernier"]).total_seconds() / 60
         s = SEUILS.get(x["type"], {})
-        seuil = f"/{s['jetons_relus_M']} M" if s else ""
-        relus = f"{x['relus']/1e6:.0f} M"
-        drapeau = "  ! " if alertes_de(x, e, depuis_min) else "    "
-        out.append(f"{x['nom'][:32]:32} {e:9} {duree(x['actif']):>7} {relus:>12} {seuil:>6}{drapeau}{phrase[:70]}")
+        relus = f"{x['relus']/1e6:.0f}/{s['jetons_relus_M']} M" if s else f"{x['relus']/1e6:.0f} M"
+        drapeau = " ! " if alertes_de(x, e, depuis_min) else "   "
+        out.append(f"{x['nom'][:24]:24} {e:9} {duree(x['actif']):>7} {relus:>9}{drapeau}{phrase[:40]}")
         for a in alertes_de(x, e, depuis_min):
             alertes.append((x["nom"], a))
     actif = sum(x["actif"] for x in lignes); relus = sum(x["relus"] for x in lignes)
