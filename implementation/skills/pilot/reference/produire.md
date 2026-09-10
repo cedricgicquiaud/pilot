@@ -26,15 +26,21 @@ qu'on ne peut pas interrompre au bon moment. **L'accusé d'arrêt d'un agent qui
 son rapport ne vaut pas une ligne** : cinq « accusé d'arrêt, déjà pris en compte » par
 livraison, c'est du bruit qui cache les vraies transitions.
 
-**Le fil de Claude Code montre déjà chaque agent en cours** : sa durée, ses jetons, son geste
-du moment, en se plaçant sur sa ligne. Ne le refais pas dans tes messages. Ce qu'il ne calcule
-pas, l'outil de coût le surveille en silence : un agent bloqué plus de cinq minutes sur une
-commande, ou au-dessus de son seuil, déclenche une notification macOS. Donne la ligne dans le
-message de lancement, pour qui veut la lancer dans un second terminal :
+**L'humain voit les grandes étapes de chaque agent dans un panneau cmux, sans rien faire.**
+Un hook `SubagentStart`, posé dans `.claude/settings.json` par `install.sh`, ouvre à chaque
+agent lancé un panneau qui suit ses étapes en français : la phrase qu'il écrit avant chaque
+critère, puis « commit : test », « commit : code », « tests : 68 verts », « PR ouverte ».
+Jamais une commande. Le panneau se ferme quand l'agent a rendu son rapport. Sans cmux, rien
+ne s'ouvre ; la même chose se lance à la main, dans n'importe quel terminal :
 
 ```
-python3 .claude/tools/cout-agents/cout-agents.py . --direct --notifier
+python3 .claude/tools/cout-agents/cout-agents.py . --suivre            # un bloc par agent
+python3 .claude/tools/cout-agents/cout-agents.py . --suivre <nom>      # le flux d'un agent
+python3 .claude/tools/cout-agents/cout-agents.py . --direct --notifier # alertes seulement
 ```
+
+Ne refais pas ce suivi dans tes messages : le fil garde ses lignes de transition, une par
+événement.
 
 **Préviens l'humain quand il n'est plus devant l'écran.** L'outil `PushNotification` envoie
 une notification sur le Mac, et sur son téléphone si le contrôle à distance est connecté. Trois

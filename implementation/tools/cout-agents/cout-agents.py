@@ -5,6 +5,17 @@ Usage :
   python3 .claude/tools/cout-agents/cout-agents.py [dossier du projet] [--detail] [--seuils]
   python3 .claude/tools/cout-agents/cout-agents.py [dossier du projet] --direct [--une-fois] [--notifier] [--depuis 120]
 
+Mode suivre : pendant un run, les grandes étapes de chaque agent, en français, sans code.
+  python3 .claude/tools/cout-agents/cout-agents.py [dossier du projet] --suivre [nom d'agent] [--depuis 120]
+Une ligne par étape : l'heure, puis la phrase que l'agent a écrite entre deux commandes, ou un
+repère mécanique — « commit : test », « commit : code », « tests : 68 verts », « PR ouverte ».
+Jamais une commande. Sans nom : un bloc par agent en cours, l'un sous l'autre, les dernières
+étapes de chacun, rafraîchi toutes les 10 s. Avec un nom : le flux complet de cet agent, qui
+suit jusqu'à son rapport final puis s'arrête (à lancer dans un panneau cmux par agent).
+
+Avec `--journal <fichier>` : le flux d'un agent désigné par son fichier de journal ; c'est ce que
+lance le hook `SubagentStart` (`panneau-agent.sh`) dans un panneau cmux à chaque agent lancé.
+
 Mode direct : pendant un run, un tableau des agents en cours, rafraîchi toutes les 30 s, à
 lancer dans un second terminal (un panneau cmux à côté de la session). Une ligne par agent dont
 le journal a bougé depuis `--depuis` minutes (120 par défaut) : état, temps actif, jetons relus
@@ -222,6 +233,82 @@ def tableau_direct(projet, depuis, deja_notifie, avec_notif):
                 deja_notifie.add(cle); notifier(f"pilot — {nom}", a)
     return out
 
+def etapes(chemin):
+    """Les grandes étapes d'un agent : ses phrases, et les repères mécaniques tirés des commandes."""
+    out = []; fini = False; attendus = {}
+    for ligne in open(chemin, errors="replace"):
+        try: d = json.loads(ligne)
+        except Exception: continue
+        t = ts(d.get("timestamp", ""))
+        m = d.get("message") or {}; c = m.get("content")
+        if not t or not isinstance(c, list): continue
+        for it in c:
+            if not isinstance(it, dict): continue
+            if d.get("type") == "assistant" and it.get("type") == "text":
+                texte = it.get("text", "").strip()
+                if not texte: continue
+                premiere = texte.split("\n")[0].strip("# ").strip()
+                if len(texte) > 400 and any(k in texte for k in ("## Livraison", "## Audit", "## Passe visuelle", "### ")):
+                    out.append((t, "rapport rendu")); fini = True
+                elif premiere:
+                    out.append((t, "… " + premiere[:110]))
+            elif it.get("type") == "tool_use":
+                inp = it.get("input") or {}; cmd = str(inp.get("command", ""))
+                mc = re.search(r'git commit[^"]*-m\s+"([^"]+)"', cmd) or re.search(r"git commit[^']*-m\s+'([^']+)'", cmd)
+                if mc:
+                    msg = mc.group(1); genre = msg.split(":")[0].strip()
+                    out.append((t, f"commit : {'test' if genre == 'test' else 'code' if genre in ('feat', 'fix', 'refactor') else genre} — {msg[:80]}"))
+                elif "gh pr create" in cmd: out.append((t, "PR ouverte"))
+                elif re.search(r"vitest|playwright test|node --test|pytest|npm test|npm run test", cmd): attendus[it.get("id")] = t
+            elif it.get("type") == "tool_result" and it.get("tool_use_id") in attendus:
+                corps = it.get("content"); s_ = corps if isinstance(corps, str) else " ".join(x.get("text", "") for x in corps if isinstance(x, dict))
+                mp = re.search(r"(\d+) passed", s_ or ""); mf = re.search(r"(\d+) failed", s_ or "")
+                mp2 = re.search(r"ℹ pass (\d+)", s_ or ""); mf2 = re.search(r"ℹ fail (\d+)", s_ or "")
+                verts = (mp and mp.group(1)) or (mp2 and mp2.group(1)); rouges = (mf and mf.group(1)) or (mf2 and mf2.group(1))
+                if verts or rouges:
+                    out.append((t, f"tests : {verts or 0} verts" + (f", {rouges} rouges" if rouges and rouges != "0" else "")))
+                del attendus[it.get("tool_use_id")]
+    return out, fini
+
+def suivre(projet, nom, depuis, journal=None):
+    import time
+    vus = {}
+    if journal:
+        # lancé par le hook au démarrage de l'agent : le fichier peut mettre quelques secondes à exister
+        for _ in range(60):
+            if os.path.exists(journal): break
+            time.sleep(1)
+        else: print(f"journal jamais apparu : {journal}"); return 1
+        nom = nom_agent(journal)
+    while True:
+        maintenant = datetime.datetime.now(datetime.timezone.utc)
+        fichiers = [journal] if journal else [f for f in transcripts(projet)
+                    if (maintenant.timestamp() - os.path.getmtime(f)) < depuis * 60 and (not nom or nom_agent(f) == nom)]
+        if nom:
+            if not fichiers:
+                print(f"aucun agent « {nom} » en cours (journal bougé depuis {depuis} min)"); return 1
+            f = fichiers[0]; lignes, fini = etapes(f)
+            deja = vus.get(f, 0)
+            if deja == 0: print(nom + "\n")
+            for t, x in lignes[deja:]: print(f"  {t.astimezone().strftime('%H:%M')}  {x}", flush=True)
+            vus[f] = len(lignes)
+            # l'agent a rendu : son dernier événement est un texte sans appel d'outil, et rien depuis 60 s
+            x = lire(f)
+            rendu = x["dernier_type"] == "texte" and x["dernier"] and (maintenant - x["dernier"]).total_seconds() > 60
+            if fini or rendu: print("\n  — fin —"); return 0
+        else:
+            print("\033[2J\033[H", end="")
+            print(f"Étapes des agents en cours — {os.path.basename(projet)}  {maintenant.astimezone().strftime('%H:%M:%S')}\n")
+            if not fichiers: print("  aucun agent en cours")
+            for f in sorted(fichiers, key=os.path.getmtime):
+                lignes, fini = etapes(f)
+                print(nom_agent(f) + ("  (rapport rendu)" if fini else ""))
+                for t, x in lignes[-8:]: print(f"  {t.astimezone().strftime('%H:%M')}  {x}")
+                print()
+            print("(rafraîchi toutes les 10 s, Ctrl-C pour sortir ; --suivre <nom> pour le flux complet d\'un agent)")
+        try: time.sleep(10 if not nom else 3)
+        except KeyboardInterrupt: return 0
+
 def direct(projet, une_fois, avec_notif, depuis):
     import time
     deja = set()
@@ -239,6 +326,15 @@ def main():
     if "--depuis" in sys.argv:
         i = sys.argv.index("--depuis"); depuis = int(sys.argv[i + 1]); args = [a for a in args if a != sys.argv[i + 1]]
     else: depuis = 120
+    if "--journal" in sys.argv:
+        j = sys.argv[sys.argv.index("--journal") + 1]
+        return suivre(os.getcwd(), None, depuis, journal=j)
+    if "--suivre" in sys.argv:
+        i = sys.argv.index("--suivre")
+        nom = sys.argv[i + 1] if len(sys.argv) > i + 1 and not sys.argv[i + 1].startswith("--") and sys.argv[i + 1] not in args[:1] else None
+        if nom: args = [a for a in args if a != nom]
+        projet = os.path.abspath(args[0]) if args else os.getcwd()
+        return suivre(projet, nom, depuis)
     if "--direct" in sys.argv:
         projet = os.path.abspath(args[0]) if args else os.getcwd()
         return direct(projet, "--une-fois" in sys.argv, "--notifier" in sys.argv, depuis)

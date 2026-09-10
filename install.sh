@@ -101,6 +101,28 @@ for d in "$SOURCE"/implementation/tools/*/; do
   aligner "tools/$(basename "$d")"
 done
 
+# --- Le hook de suivi -------------------------------------------------------------------
+#
+# À chaque sous-agent lancé, Claude Code exécute panneau-agent.sh, qui ouvre un panneau cmux
+# suivant les grandes étapes de l'agent (rien sans cmux). Le hook est posé dans
+# .claude/settings.json du projet, à côté de l'allowlist, sans toucher au reste du fichier.
+
+python3 - "$PROJET/.claude/settings.json" <<'PY'
+import json, os, sys
+chemin = sys.argv[1]
+cmd = '"$CLAUDE_PROJECT_DIR"/.claude/tools/cout-agents/panneau-agent.sh'
+conf = {}
+if os.path.exists(chemin):
+    with open(chemin) as f: conf = json.load(f)
+hooks = conf.setdefault("hooks", {})
+entrees = [e for e in hooks.get("SubagentStart", []) if not any("panneau-agent.sh" in h.get("command", "") for h in e.get("hooks", []))]
+entrees.append({"matcher": ".*", "hooks": [{"type": "command", "command": cmd}]})
+hooks["SubagentStart"] = entrees
+os.makedirs(os.path.dirname(chemin), exist_ok=True)
+with open(chemin, "w") as f: json.dump(conf, f, indent=2, ensure_ascii=False); f.write("\n")
+PY
+echo "  .claude/settings.json — hook SubagentStart (panneau de suivi)"
+
 # --- La trace ---------------------------------------------------------------------------
 
 {
