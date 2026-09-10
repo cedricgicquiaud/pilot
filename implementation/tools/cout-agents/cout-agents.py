@@ -284,6 +284,10 @@ def suivre(projet, nom, depuis, journal=None, couleur=""):
             time.sleep(1)
         else: print(f"journal jamais apparu : {journal}"); return 1
         nom = nom_agent(journal)
+        try:  # le nom donné à l'agent, quand le fichier ne le porte pas
+            meta = json.load(open(journal[:-len(".jsonl")] + ".meta.json"))
+            if meta.get("name"): nom = meta["name"]
+        except Exception: pass
         if shutil.which("cmux") and os.environ.get("CMUX_SURFACE_ID"):
             subprocess.run(["cmux", "rename-tab", "--surface", os.environ["CMUX_SURFACE_ID"], nom],
                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -295,8 +299,8 @@ def suivre(projet, nom, depuis, journal=None, couleur=""):
             if not fichiers:
                 print(f"aucun agent « {nom} » en cours (journal bougé depuis {depuis} min)"); return 1
             f = fichiers[0]; lignes, fini = etapes(f)
+            if f not in vus: print(teinte(nom) + "\n", flush=True)
             deja = vus.get(f, 0)
-            if deja == 0: print(teinte(nom) + "\n")
             for t, x in lignes[deja:]: print(f"  {t.astimezone().strftime('%H:%M')}  {teinte(x)}", flush=True)
             vus[f] = len(lignes)
             # l'agent a rendu : son dernier événement est un texte sans appel d'outil, et rien depuis 60 s
