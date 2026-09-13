@@ -155,6 +155,34 @@ def transcripts(projet):
                 fichiers.append(f)
     return fichiers
 
+def livraison_de(nom):
+    """producteur-2-4-champs -> 2-4 ; testeur-25a -> 25a ; correcteur-2-6b -> 2-6b ; sinon None."""
+    m = re.match(r"^[a-z]+-((?:\d+-)?\d+[a-z]?)(?:-|$)", nom)
+    return m.group(1) if m else None
+
+def lead_de(chemin_agent, debut, fin):
+    """Le journal de la session qui a lancé cet agent, lu entre debut et fin : le coût du lead."""
+    sess = os.path.dirname(os.path.dirname(chemin_agent))  # .../<slug>/<session>
+    journal = sess + ".jsonl"
+    r = dict(requetes=0, ecrits=0, relus=0, sortis=0, actif=0.0)
+    if not os.path.exists(journal): return None
+    prev = None
+    for ligne in open(journal, errors="replace"):
+        try: d = json.loads(ligne)
+        except Exception: continue
+        t = ts(d.get("timestamp", ""))
+        if not t or t < debut or t > fin: continue
+        u = (d.get("message") or {}).get("usage") or {}
+        if u:
+            r["requetes"] += 1
+            r["ecrits"] += (u.get("input_tokens") or 0) + (u.get("cache_creation_input_tokens") or 0)
+            r["relus"] += u.get("cache_read_input_tokens") or 0
+            r["sortis"] += u.get("output_tokens") or 0
+        if prev and (t - prev).total_seconds() <= TROU: r["actif"] += (t - prev).total_seconds()
+        prev = t
+    r["actif"] /= 60
+    return r
+
 def nom_agent(chemin):
     """agent-aproducteur-2-5b-vues-0e36c710776937e4.jsonl -> producteur-2-5b-vues"""
     n = os.path.basename(chemin)[:-len(".jsonl")]
@@ -372,7 +400,7 @@ def main():
     par_agent = collections.defaultdict(list)
     for f in fichiers:
         agent = type_agent(f)
-        r = lire(f); r["fichier"] = os.path.basename(f); par_agent[agent].append(r)
+        r = lire(f); r["fichier"] = os.path.basename(f); r["chemin"] = f; par_agent[agent].append(r)
 
     print(f"\nCoût des sous-agents — {os.path.basename(projet)}  ({len(fichiers)} agents)\n")
     print(f"{'agent':10} {'n':>3} {'horloge':>8} {'actif':>6} {'attente':>8} {'échanges':>9} "
@@ -392,6 +420,45 @@ def main():
     print(f"\nTotal : {tot['actif']/60:.1f} h de travail d'agents, {bloque/60:.1f} h bloqué sur une commande, "
           f"{tot['veille']/60:.1f} h de veille après rapport, "
           f"{tot['requetes']} échanges, {tot['ecrits']/1e6:.1f} M jetons écrits, {tot['relus']/1e6:.0f} M relus.")
+
+    # --- par livraison : le chiffre qui compte, un résultat accepté et ce qu'il a coûté, reprises comprises
+    par_liv = collections.defaultdict(list)
+    for agent, L in par_agent.items():
+        for x in L:
+            code = livraison_de(nom_agent(x["chemin"]))
+            if code: par_liv[code].append((agent, x))
+    if par_liv:
+        print(f"\nPar livraison (tous les agents de la livraison, corrections et repasses comprises) :")
+        print(f"{'livraison':10} {'agents':>6} {'actif':>7} {'relus':>8} {'corrections':>12} {'passes test.':>13} {'horloge':>9}")
+        for code in sorted(par_liv, key=lambda c: min(x["premier"] for _, x in par_liv[c] if x["premier"]) or datetime.datetime.min.replace(tzinfo=datetime.timezone.utc)):
+            L = par_liv[code]
+            actif = sum(x["actif"] for _, x in L); relus = sum(x["relus"] for _, x in L)
+            corr = sum(1 for a, _ in L if a == "fix"); tests = sum(1 for a, _ in L if a == "test")
+            debuts = [x["premier"] for _, x in L if x["premier"]]; fins = [x["dernier"] for _, x in L if x["dernier"]]
+            horloge = (max(fins) - min(debuts)).total_seconds() / 60 if debuts and fins else 0
+            print(f"{code:10} {len(L):6} {duree(actif):>7} {relus/1e6:6.0f} M {corr:12} {tests:13} {duree(horloge):>9}")
+        print("  actif = minutes de travail d'agents ; corrections = tours de correcteur ; horloge = du premier agent au dernier rapport.")
+
+    # --- le lead : la taxe de coordination, par run (agents regroupés à moins de 30 min d'écart)
+    tous = sorted((x for L in par_agent.values() for x in L if x["premier"]), key=lambda x: x["premier"])
+    runs = []
+    for x in tous:
+        if runs and (x["premier"] - runs[-1]["fin"]).total_seconds() < 1800:
+            runs[-1]["fin"] = max(runs[-1]["fin"], x["dernier"]); runs[-1]["agents"].append(x)
+        else: runs.append({"debut": x["premier"], "fin": x["dernier"], "agents": [x]})
+    print(f"\nLe lead, par run (sa session, entre le premier agent lancé et le dernier rapport) :")
+    for r in runs[-6:]:
+        marge = datetime.timedelta(minutes=3)
+        lead = lead_de(r["agents"][0]["chemin"], r["debut"] - marge, r["fin"] + marge)
+        quand = r["debut"].astimezone().strftime("%d/%m %H:%M")
+        codes = sorted({livraison_de(nom_agent(x["chemin"])) or "?" for x in r["agents"]})
+        agents_relus = sum(x["relus"] for x in r["agents"]) / 1e6
+        if lead:
+            part = 100 * lead["relus"] / 1e6 / (lead["relus"] / 1e6 + agents_relus) if (lead["relus"] + agents_relus) else 0
+            print(f"  {quand}  livraisons {', '.join(codes):12} lead : {duree(lead['actif']):>7}, {lead['requetes']:3} échanges, "
+                  f"{lead['relus']/1e6:4.0f} M relus — {part:.0f} % des jetons du run")
+        else:
+            print(f"  {quand}  livraisons {', '.join(codes):12} lead : journal de session introuvable")
 
     attentes = [x for L in par_agent.values() for x in L if x["attente"] > ATTENTE_MIN]
     print(f"\nAttentes de plus de {ATTENTE_MIN} min :")
