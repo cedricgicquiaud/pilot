@@ -91,16 +91,47 @@
   arrêt en fin de round. Sur le sandbox, la garde « mauvais workspace » du chantier 3 a
   bien arrêté `feature Facturation` avant l'entretien (connexion `linear` sur GM5).
 
+## Chantier 4b — bons tests et odeurs de code (même jour, PR #49 mergée)
+
+- `reference/tests.md` (bon test par l'interface, valeur attendue indépendante ; les trois
+  mauvais : couplé à l'implémentation, tautologique, tranche horizontale ; simuler aux
+  frontières) et `reference/smells.md` (les douze odeurs de Fowler, ce que c'est → comment
+  corriger ; les idiomes du projet priment, toujours un jugement).
+- `tdd-writer` lit `tests.md` avant son premier test et a une règle de plus en phase rouge.
+  `verifier` cherche le test tautologique et lit `smells.md` après ses propres points.
+- Épreuve : verifier actuel et greffé sur la livraison étalon TST-B1 (Opus), deux clones au
+  même commit. Même preuve (370 tests verts, 11 paires test/feat, 10/10), mêmes points « à
+  considérer » ; le greffé relève en plus un Important réel (aucun test ne garantit
+  qu'« Enregistrer » conserve les étiquettes). Aucun bruit ajouté par les odeurs. Le
+  `tdd-writer` n'a pas été rejoué (deux lignes) : banc du chantier 5.
+
+## Chantier 4c — le domaine : `CONTEXT.md`, ADR, relecture des audits (même jour, PR #50)
+
+- `reference/domaine.md` : le glossaire du produit (`CONTEXT.md`, un mot par concept,
+  synonymes à éviter, mis à jour au moment où un terme se tranche) et les ADR (`docs/adr/`,
+  un paragraphe, trois conditions : dure à inverser, surprenante sans contexte, vrai
+  arbitrage). `init` crée `CONTEXT.md` avec les termes du PRD ; `feature` le lit et l'affûte ;
+  `sync` grave en ADR les décisions du merge qui remplissent les trois conditions et relit
+  les audits avec les sept questions de `retro`.
+- Épreuve : mini-PRD inventé (cave à vin), Sonnet : `CONTEXT.md` au format (sept termes),
+  ADR écrite pour « données dans le navigateur, sans serveur » avec les trois conditions
+  citées, refusée pour « le bouton est vert », `docs/adr/` créé avec la première ADR.
+- Conflit avec `main` sur `cadrer.md` (étapes 1 et 2 du temps 1, lignes voisines avec 4a) :
+  réglé par merge de `main` dans la branche, les deux textes gardés.
+- Leçon : deux fois, le script qui ajoutait la section de session cherchait une phrase
+  absente de la branche et n'écrivait rien, sans le dire. Toujours un `assert` sur un
+  remplacement.
+
 ## Reste
 
-- Cédric relit la PR 4a (entretien).
-- Cédric relit la PR du chantier 3 (SKILL.md, les trois fichiers, le journal).
-- Cédric merge la PR du chantier 2, puis les PR d'update du sandbox (#67) et de crm-workday (#27), puis `/pilot update` à nouveau pour les skills.
-- Chantier 3 : réécriture de `pilot/SKILL.md` avec la grille.
-- (chantier 1) Cédric relit et merge la PR du chantier 1, puis `/pilot update` sur le sandbox et
-  crm-workday.
-- Version globale du verrou (`~/.claude`) : proposer après l'avoir vu tourner sur un projet.
-- Chantier 2 : import tel quel de `diagnosing-bugs`, `resolving-merge-conflicts`,
-  `to-questionnaire`.
-- Sandbox : `.pi/liste-blanche.json` est modifié et non commité, à regarder avant le
-  prochain run.
+- Cédric relit la PR #50 (4c). Les PR #44, #45, #46, #47, #48, #49 sont mergées.
+- Sandbox (#67) et crm-workday (#27) : PR d'update du verrou à merger si ce n'est pas fait,
+  puis `/pilot update` sur les deux pour recevoir les skills importées et les références.
+- Chantier 5 : les six fiches d'agent, une par PR, banc TST-B1 (mission archivée dans
+  `sources/etalon-TST-B1-etiquettes-de-contact.md`), à partir de `main` après la #50. Y
+  ajouter la lecture de `CONTEXT.md` par les agents.
+- Version globale du verrou (`~/.claude`) : à intégrer au hook `command-validator` existant,
+  après l'avoir vu tourner sur un projet.
+- Connexion MCP `linear` de la machine sur GM5 : rejouer les evals Linear du sandbox après
+  `/mcp` sur weme-studio.
+- Sandbox : `.pi/liste-blanche.json` modifié et non commité, à regarder avant le prochain run.

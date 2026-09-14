@@ -56,7 +56,9 @@ sur ce workspace ; intégration GitHub activée dans ce workspace (Settings → 
 4. Créer `.pilot/` à la racine avec `calibration.md` (copie du barème global
    `~/.config/pilot/calibration.md` s'il existe, sinon un barème vide et une note
    « lancer `/pilot benchmark` »). Le dossier contient déjà `PRD.md` et `recherche.md`
-   depuis l'étape 0.
+   depuis l'étape 0. Créer aussi `CONTEXT.md` à la racine, au format de `domaine.md`, avec
+   les termes que le PRD vient de fixer (un mot par concept, les synonymes à éviter) ; pas
+   de `docs/adr/` avant la première ADR.
 4 bis. **Projet à plusieurs** (dès qu'un second membre est prévu) : écrire `.mcp.json` à la
    racine,
    `{"mcpServers": {"<connexion>": {"type": "http", "url": "https://mcp.linear.app/mcp"}}}`.
@@ -151,7 +153,10 @@ fabrique et dans quel fichier.
 
 **Temps 1 — cadrer.**
 1. Retrouver la feature dans Linear (titre proche, statut « À cadrer ») ou en créer une
-   nouvelle (après validation, comme `roadmap`). Lire sa fiche, le PRD, le code concerné.
+   nouvelle (après validation, comme `roadmap`). Lire sa fiche, le PRD, `CONTEXT.md`, le
+   code concerné. Pendant le cadrage, un mot de l'humain qui contredit le glossaire, un mot
+   flou qui recouvre deux choses, ou un code qui contredit ce qu'il affirme se tranchent
+   sur-le-champ et `CONTEXT.md` se met à jour aussitôt (`domaine.md`).
 2. Poser les questions qui restent, selon `entretien.md` (rounds numérotés, réponse
    recommandée, les faits cherchés dans le code avant de demander), puis proposer, sans rien
    créer :
