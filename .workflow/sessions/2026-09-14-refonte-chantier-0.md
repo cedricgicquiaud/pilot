@@ -48,9 +48,26 @@
   (c'est lui qui refuse `rm -rf`). La version globale du verrou pourrait s'y ajouter plutôt
   que doubler les hooks ; à décider avec Cédric.
 
+## Chantier 2 — trois skills importées telles quelles (même jour)
+
+- `implementation/skills/diagnosing-bugs/`, `resolving-merge-conflicts/`, `to-questionnaire/` :
+  copies de `sources/mattpocock-skills-1.2.3/`, corps en anglais, une ligne d'origine en tête,
+  description enrichie de déclencheurs français. `to-questionnaire` reste tapée par l'humain.
+- Branchées : `fix` (bug qui ne se reproduit pas → `diagnosing-bugs`), `produire.md` (conflit
+  au merge → `resolving-merge-conflicts`), `cadrer.md` temps 1 (décision du client →
+  `/to-questionnaire`), section Outils de `SKILL.md`, inventaires.
+- Épreuve en session réelle (`claude -p`, Sonnet) sur deux dépôts jetables après `install.sh` :
+  « les tests ne passent plus, diagnostique » → Skill tool `diagnosing-bugs` appelé, boucle
+  rouge nommée, cause exacte trouvée ; « le merge bloque sur un conflit, résous-le » → Skill
+  tool `resolving-merge-conflicts` appelé, merge terminé en gardant les deux intentions.
+- Sandbox (PR #67) et crm-workday (PR #27) mis à jour à `3f2e14f` (verrou git) sur branches
+  `chore/update-methode-3f2e14f` ; ils recevront les skills au prochain `update`.
+
 ## Reste
 
-- Cédric relit et merge la PR du chantier 1, puis `/pilot update` sur le sandbox et
+- Cédric merge la PR du chantier 2, puis les PR d'update du sandbox (#67) et de crm-workday (#27), puis `/pilot update` à nouveau pour les skills.
+- Chantier 3 : réécriture de `pilot/SKILL.md` avec la grille.
+- (chantier 1) Cédric relit et merge la PR du chantier 1, puis `/pilot update` sur le sandbox et
   crm-workday.
 - Version globale du verrou (`~/.claude`) : proposer après l'avoir vu tourner sur un projet.
 - Chantier 2 : import tel quel de `diagnosing-bugs`, `resolving-merge-conflicts`,

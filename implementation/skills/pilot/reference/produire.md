@@ -74,7 +74,10 @@ les suivantes. Moins de 200 caractères, ce qu'il doit faire en premier.
    découpage a peut-être laissé un point de contact : deux livraisons qui ajoutent chacune une
    ligne au même fichier partagé. Créer leurs deux worktrees d'avance les fait partir du même
    `main`, et les deux lignes se retrouvent au même endroit au merge. Le découpage indique ces
-   contacts ; en série, la livraison suivante part après le merge de la précédente. Y écrire
+   contacts ; en série, la livraison suivante part après le merge de la précédente. Si un
+   conflit apparaît quand même au merge, l'humain demande sa résolution : la skill
+   `resolving-merge-conflicts` la fait par intention (pourquoi chaque côté a changé), jamais
+   en choisissant des lignes. Y écrire
    `MISSION.md` depuis le gabarit. **Il ne porte que le variable** : tâches (codes), fichiers
    modifiables (ceux du jalon), décisions produit recopiées de la fiche feature, **le texte des
    phrases du contrat** affectées à cette livraison (le numéro seul ne dit pas ce qu'il faut
