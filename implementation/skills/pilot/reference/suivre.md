@@ -2,6 +2,7 @@
 
 _Détail des commandes de suivi : savoir où on en est, traiter une tâche isolée,_
 _réconcilier après un merge, produire le barème initial._
+_Règles communes : `fiches.md` (priorités, dates, vérification à l'échelle), `git.md` (la PR)._
 
 ---
 
@@ -39,7 +40,8 @@ suivante. On peut le taper à tout moment, y compris après une semaine d'absenc
    Bug qui ne se reproduit pas du premier essai, intermittent, ou lenteur : appelle la skill
    `diagnosing-bugs` (Skill tool) avant d'écrire quoi que ce soit ; sa phase 1 construit la
    boucle qui passe au rouge sur ce bug, et c'est elle qui devient le test.
-3. PR titrée `<CODE>-<n> <titre>`, description `Closes <CODE>-<n>`. S'arrêter.
+3. PR titrée `<CODE>-<n> <titre>`, description au gabarit de `git.md`, dernière ligne
+   `Closes <CODE>-<n>`. S'arrêter.
 4. Suite proposée : « merge, puis `next` ». **La tâche reste « À faire » jusqu'au merge** :
    c'est l'intégration GitHub qui la ferme, et `sync` qui contrôle qu'elle l'a fait.
 
