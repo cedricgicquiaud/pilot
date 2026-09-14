@@ -518,6 +518,8 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 |---|---|
 | Les six fiches d'agent | `agents/` : `tdd-writer.md`, `verifier.md`, `testeur.md`, `correcteur.md`, `decoupeur.md`, `contradicteur.md` |
 | Ce qu'est un bon test et les trois mauvais (lu par `tdd-writer` et `verifier`) ; les douze odeurs de code de Fowler (lu par `verifier`) | `skills/pilot/reference/tests.md`, `smells.md` (repris de `tdd` et `code-review`, 14/09) |
+| Ce qu'un agent fait d'un système de design (`.pilot/design/`), lu par `tdd-writer`, `verifier` et `testeur` quand il existe | `skills/pilot/reference/design-agents.md` |
+| Les relectures des fiches avec la grille, bloc par bloc, et leurs épreuves | `.workflow/relectures/2026-09-14-*.md` |
 | Les commandes de pilotage | `skills/pilot/SKILL.md` — règles communes et résumé des neuf commandes |
 | Le détail des commandes | `skills/pilot/reference/cadrer.md`, `produire.md`, `suivre.md` |
 | Les règles communes aux commandes : le moule des fiches, tailles, priorités, dates ; l'outil Linear (MCP, API, workspaces, initiatives, frise) ; git (branches, release, gabarit de PR, verrou) ; l'entretien de cadrage par rounds | `skills/pilot/reference/fiches.md`, `linear.md`, `git.md` (sortis de `SKILL.md` le 14/09 avec la grille), `entretien.md` (repris de `grilling`) |
