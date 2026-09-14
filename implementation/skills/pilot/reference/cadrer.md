@@ -2,6 +2,8 @@
 
 _Détail des trois commandes de cadrage. Chacune s'arrête sur une validation humaine :_
 _le PRD, la liste des features, le contrat de validation, le découpage._
+_Règles communes : `fiches.md` (le moule, tailles, priorités, dates), `linear.md` (l'outil),_
+_`git.md` (branches, PR)._
 
 ---
 
@@ -65,7 +67,7 @@ sur ce workspace ; intégration GitHub activée dans ce workspace (Settings → 
    l'utilisateur de confirmer que l'organisation du dépôt apparaît dans Linear → Settings →
    Integrations → GitHub → Connected organizations. Sinon lui indiquer le bouton « + ».
 6. Poser les gabarits GitHub du dépôt :
-   - `.github/PULL_REQUEST_TEMPLATE.md` au gabarit de PR (codes du projet), s'il manque ;
+   - `.github/PULL_REQUEST_TEMPLATE.md` au gabarit de PR de `git.md` (codes du projet), s'il manque ;
    - `.github/ISSUE_TEMPLATE/config.yml` qui neutralise les issues GitHub et renvoie vers
      Linear :
      `blank_issues_enabled: false` + `contact_links: [{name: "Les tâches se suivent dans
@@ -104,10 +106,10 @@ sur ce workspace ; intégration GitHub activée dans ce workspace (Settings → 
    capable le temps de la poser. Une roadmap est un dialogue : elle ne se délègue pas à un
    agent, mais le modèle qui la tient peut être choisi.
 4. Créer chaque feature (`save_project`) : team du projet, statut « À cadrer », description au
-   template Feature (avec la liste des livraisons), label `Taille`, priorité selon la règle,
+   template Feature (avec la liste des livraisons), label `Taille`, priorité selon `fiches.md`,
    dans l'ordre ; puis ses livraisons (`save_milestone`, ou API `projectMilestoneCreate`,
    `sortOrder` = rang). Initiatives seulement si le cadrage définit des versions. Icône et
-   couleur par initiative (règle « Icônes et couleurs »). **Aucune tâche.**
+   couleur par initiative (`linear.md` § Icônes et couleurs). **Aucune tâche.**
 5. Dates : `python3 .claude/skills/pilot/scripts/schedule.py --calibration
    .pilot/calibration.md --start <prochain jour actif> "Livraison:S" "Livraison:M" …`
    sur **les livraisons** dans l'ordre validé (non terminées seulement, feature en cours
@@ -190,5 +192,5 @@ fabrique et dans quel fichier.
    des tâches**, `sortOrder` = rang (API `issueUpdate`). Dans la description de chaque jalon :
    ses fichiers et ses numéros de contrat (c'est ce que `run` recopie dans les `MISSION.md`).
    Passer la feature « Planifiée ». Mettre le lien recette (`UAT.md#<slug>` ou Notion).
-7. Compter : annoncé / créé. Sonder une fiche au hasard contre le moule.
+7. Compter : annoncé / créé. Sonder une fiche au hasard contre le moule (`fiches.md`).
 8. Suite proposée : `run <feature>`.

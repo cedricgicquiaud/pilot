@@ -2,6 +2,7 @@
 
 _Détail de la boucle de production : worktrees, `MISSION.md`, `tdd-writer`, audit par_
 `verifier` et `testeur`, correction, PR. La seule commande qui tourne sans l'humain._
+_Règles communes : `git.md` (branches, PR, verrou), `fiches.md` (le moule)._
 
 ---
 
@@ -141,7 +142,7 @@ les suivantes. Moins de 200 caractères, ce qu'il doit faire en premier.
    session est un Claude ordinaire et n'a aucune des règles de la boucle.
    Chaque producteur : cycles test rouge → code → vert, un commit par transition, tâches
    → « Terminée » au fil de l'eau, `UAT.md` (sa section : une case par « Terminé quand »,
-   avec sa donnée et son refus, **non cochée**), push, PR au gabarit, stop.
+   avec sa donnée et son refus, **non cochée**), push, PR au gabarit de `git.md`, stop.
 4. **Audit et recette**, en parallèle sur chaque PR, par deux agents qui n'ont pas écrit le
    code :
    - `verifier` sur `git diff main...HEAD` : sécurité, idiomes, couverture des numéros de
