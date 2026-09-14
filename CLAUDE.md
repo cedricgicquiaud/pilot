@@ -29,7 +29,8 @@ humain, comme partout ailleurs.
 | `PILOTAGE-LINEAR-GITHUB-CLAUDE.md` | Document de référence complet. Partie A = tronc commun (suivi Linear/GitHub) ; Partie B = le circuit d'une feature, les commandes, `next`. |
 | `circuit-linear-github-claude.html` | Version visuelle résumée, page autonome (CSS inline, aucune dépendance). Support de présentation. |
 | `BOUCLE-AGENTS.md` | La boucle agents : pourquoi, les briques, les invariants, les leçons de chaque essai, le backlog des manques. Journal de bord autant que méthode. |
-| `sources/*.md` | Archives : analyses critiques des vidéos à l'origine de la boucle. **Ne pas réécrire.** |
+| `sources/*.md` | Archives : analyses critiques des vidéos à l'origine de la boucle, et du dépôt `mattpocock/skills` (14/09). **Ne pas réécrire.** `sources/mattpocock-skills-1.2.3/` est une copie figée de ses skills utiles (MIT) ; on la lit, on ne la modifie pas. |
+| `GRILLE-DE-RELECTURE.md` | Les huit questions à poser à chaque phrase d'une fiche avant de la garder, la déplacer ou la supprimer ; les règles de langue ; comment rejouer une fiche réécrite. À appliquer à toute modification d'une fiche dans `implementation/`. |
 | `.workflow/sessions/` | Compte rendu de chaque session : ce qui a été fait, décidé, et ce qui reste. |
 | `implementation/` | La méthode elle-même : fiches d'agent, skill `pilot`, outils. Son `README.md` dit comment elle s'installe. |
 | `install.sh` | Pose la méthode dans le `.claude/` d'un projet. Sert à la première installation comme aux mises à jour. |
