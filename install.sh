@@ -101,27 +101,38 @@ for d in "$SOURCE"/implementation/tools/*/; do
   aligner "tools/$(basename "$d")"
 done
 
-# --- Le hook de suivi -------------------------------------------------------------------
+# --- Les hooks --------------------------------------------------------------------------
 #
-# À chaque sous-agent lancé, Claude Code exécute panneau-agent.sh, qui ouvre un panneau cmux
-# suivant les grandes étapes de l'agent (rien sans cmux). Le hook est posé dans
-# .claude/settings.json du projet, à côté de l'allowlist, sans toucher au reste du fichier.
+# Deux hooks posés dans .claude/settings.json du projet, à côté de l'allowlist, sans toucher
+# au reste du fichier :
+#   - SubagentStart : à chaque sous-agent lancé, panneau-agent.sh ouvre un panneau cmux qui
+#     suit ses grandes étapes (rien sans cmux) ;
+#   - PreToolUse sur Bash : verrou-git.py refuse, avant exécution, tout push vers la branche
+#     principale ou `release`, tout push forcé et tout merge de PR. Le merge est humain ;
+#     ici, ce n'est plus une consigne, c'est un fait.
 
 python3 - "$PROJET/.claude/settings.json" <<'PY'
 import json, os, sys
 chemin = sys.argv[1]
-cmd = '"$CLAUDE_PROJECT_DIR"/.claude/tools/cout-agents/panneau-agent.sh'
 conf = {}
 if os.path.exists(chemin):
     with open(chemin) as f: conf = json.load(f)
 hooks = conf.setdefault("hooks", {})
-entrees = [e for e in hooks.get("SubagentStart", []) if not any("panneau-agent.sh" in h.get("command", "") for h in e.get("hooks", []))]
-entrees.append({"matcher": ".*", "hooks": [{"type": "command", "command": cmd}]})
-hooks["SubagentStart"] = entrees
+
+def poser(evenement, matcher, script):
+    cmd = '"$CLAUDE_PROJECT_DIR"/.claude/tools/' + script
+    entrees = [e for e in hooks.get(evenement, [])
+               if not any(script.split("/")[-1] in h.get("command", "") for h in e.get("hooks", []))]
+    entrees.append({"matcher": matcher, "hooks": [{"type": "command", "command": cmd}]})
+    hooks[evenement] = entrees
+
+poser("SubagentStart", ".*", "cout-agents/panneau-agent.sh")
+poser("PreToolUse", "Bash", "verrou-git/verrou-git.py")
 os.makedirs(os.path.dirname(chemin), exist_ok=True)
 with open(chemin, "w") as f: json.dump(conf, f, indent=2, ensure_ascii=False); f.write("\n")
 PY
-echo "  .claude/settings.json — hook SubagentStart (panneau de suivi)"
+chmod +x "$PROJET/.claude/tools/verrou-git/verrou-git.py" "$PROJET/.claude/tools/cout-agents/panneau-agent.sh"
+echo "  .claude/settings.json — hooks SubagentStart (panneau de suivi) et PreToolUse (verrou git)"
 
 # --- La trace ---------------------------------------------------------------------------
 
