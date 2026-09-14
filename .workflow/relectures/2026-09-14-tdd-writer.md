@@ -49,4 +49,23 @@ d'autre.
   renverront à leur tour.
 - Épreuve : banc TST-B1, même mission, même commit de départ que le 10/09, la fiche réécrite
   sur Opus, puis le `verifier`. Comparé à l'étalon (10/10, 0 bloquant, 4 mineurs, 23 commits,
-  11 tests, 11 min, 107 échanges, 11 M).
+  11 tests, 11 min, 107 échanges, 11 M). Résultat : 10/10, 0 bloquant, 1 important, 3 à
+  considérer, 26 commits, 12 tests, 12 min, 169 échanges, 15 M.
+
+## Contre-épreuve : le bloc commun réduit (soir)
+
+Même banc, sous la vraie liste blanche du sandbox, avec le bloc commun (aucune question, liste
+blanche, français, signature, phrase d'avancement) ramené de 166 à 117 mots : la règle de
+signature devenue « tes commits n'ont pas de signature », l'exemple de commande composée
+gardé.
+
+| | Bloc complet (5a) | Bloc réduit (5f) |
+|---|---|---|
+| Commits signés « Co-Authored-By » | 0 / 26 | **28 / 28** |
+| Verifier | 0 bloquant, 1 important (regex fragile) | 0 bloquant, 1 important : `maxlength="24"` rend le refus du contrat n° 3 impossible depuis l'écran |
+| Même commande refusée relancée à l'identique | — | 7 fois (`ls -la && ls src tests && wc -l …`) |
+| Questions à l'humain, phrases d'avancement | 0, 28 | 0, 33 |
+| Durée, échanges, jetons | 12 min, 169, 15 M | 15 min, 175, 15 M |
+
+Verdict : bloc complet conservé. La phrase qui nomme les deux signatures et l'outillage qui les
+propose est porteuse ; la réduction n'a rien rapporté en coût et a coûté deux règles.
