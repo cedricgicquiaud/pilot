@@ -517,9 +517,10 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | Quoi | Où |
 |---|---|
 | Les six fiches d'agent | `agents/` : `tdd-writer.md`, `verifier.md`, `testeur.md`, `correcteur.md`, `decoupeur.md`, `contradicteur.md` |
+| Ce qu'est un bon test et les trois mauvais (lu par `tdd-writer` et `verifier`) ; les douze odeurs de code de Fowler (lu par `verifier`) | `skills/pilot/reference/tests.md`, `smells.md` (repris de `tdd` et `code-review`, 14/09) |
 | Les commandes de pilotage | `skills/pilot/SKILL.md` — règles communes et résumé des neuf commandes |
 | Le détail des commandes | `skills/pilot/reference/cadrer.md`, `produire.md`, `suivre.md` |
-| Les règles communes aux commandes : le moule des fiches, tailles, priorités, dates ; l'outil Linear (MCP, API, workspaces, initiatives, frise) ; git (branches, release, gabarit de PR, verrou) | `skills/pilot/reference/fiches.md`, `linear.md`, `git.md` (sortis de `SKILL.md` le 14/09 avec la grille) |
+| Les règles communes aux commandes : le moule des fiches, tailles, priorités, dates ; l'outil Linear (MCP, API, workspaces, initiatives, frise) ; git (branches, release, gabarit de PR, verrou) ; l'entretien de cadrage par rounds | `skills/pilot/reference/fiches.md`, `linear.md`, `git.md` (sortis de `SKILL.md` le 14/09 avec la grille), `entretien.md` (repris de `grilling`) |
 | Comment s'écrit une fiche d'agent | `skills/pilot/reference/AGENT.template.md` |
 | Le moule d'ordre de mission | `skills/pilot/reference/MISSION.template.md` |
 | Les moules de fiche Linear | `skills/pilot/reference/template-feature.md`, `template-tache.md`, `template-bug.md` |

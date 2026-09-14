@@ -80,8 +80,20 @@
 - Environnement : la connexion MCP `linear` de la machine est authentifiée sur GM5 ; les
   evals qui lisent le sandbox (weme-studio) tournent en dégradé, à rejouer après `/mcp`.
 
+## Chantier 4a — l'entretien par rounds (même jour)
+
+- `reference/entretien.md` (361 mots) : la mécanique de `grilling` en français : arbre de
+  décisions, frontière, rounds numérotés avec réponse recommandée, les faits cherchés avant
+  de demander, fini quand la frontière est vide. `init` et `feature` y renvoient au lieu de
+  décrire l'entretien chacun de leur côté.
+- Épreuve : `init` sans Linear ni recherche sur un produit inventé (cave à vin), Sonnet :
+  trois rounds annoncés, Q1 à Q5 au format attendu, réponse recommandée à chaque question,
+  arrêt en fin de round. Sur le sandbox, la garde « mauvais workspace » du chantier 3 a
+  bien arrêté `feature Facturation` avant l'entretien (connexion `linear` sur GM5).
+
 ## Reste
 
+- Cédric relit la PR 4a (entretien).
 - Cédric relit la PR du chantier 3 (SKILL.md, les trois fichiers, le journal).
 - Cédric merge la PR du chantier 2, puis les PR d'update du sandbox (#67) et de crm-workday (#27), puis `/pilot update` à nouveau pour les skills.
 - Chantier 3 : réécriture de `pilot/SKILL.md` avec la grille.

@@ -2,8 +2,8 @@
 
 _Détail des trois commandes de cadrage. Chacune s'arrête sur une validation humaine :_
 _le PRD, la liste des features, le contrat de validation, le découpage._
-_Règles communes : `fiches.md` (le moule, tailles, priorités, dates), `linear.md` (l'outil),_
-_`git.md` (branches, PR)._
+_Règles communes : `entretien.md` (comment poser les questions), `fiches.md` (le moule,_
+_tailles, priorités, dates), `linear.md` (l'outil), `git.md` (branches, PR)._
 
 ---
 
@@ -23,12 +23,12 @@ sur ce workspace ; intégration GitHub activée dans ce workspace (Settings → 
    encore rien, et une supposition posée là se paie sur toute la roadmap.
    **Puis l'entretien**, informé par ce qu'on a trouvé : à qui ça sert, le problème, ce
    que l'utilisateur pourra faire, ce qui est hors périmètre, les contraintes (stack,
-   échéance, environnements), les versions ou thèmes s'il y en a. Poser les questions par
-   petits lots, pas un questionnaire. Écrire le résultat dans `.pilot/PRD.md` (une page :
+   échéance, environnements), les versions ou thèmes s'il y en a. Mener l'entretien selon
+   `entretien.md` : la frontière des questions par rounds numérotés, chacune avec une
+   réponse recommandée. Écrire le résultat dans `.pilot/PRD.md` (une page :
    utilisateurs, problème, périmètre V1, hors périmètre, contraintes, grandes fonctionnalités
-   pressenties). Annoncer d'emblée le nombre de lots (trois, en général : utilisateurs et
-   problème ; périmètre et hors périmètre ; contraintes et versions). **S'arrêter : l'humain
-   valide le PRD.** Si un cadrage existe déjà, le lire et passer à l'étape 1.
+   pressenties). Trois rounds, en général : utilisateurs et problème ; périmètre et hors
+   périmètre ; contraintes et versions. **S'arrêter : l'humain valide le PRD.** Si un cadrage existe déjà, le lire et passer à l'étape 1.
 
 0 bis. **La direction visuelle**, si le produit a des écrans. Sans elle, les agents rendront
    l'interface que le modèle produit par défaut — et personne ne pourra dire qu'elle est fausse,
@@ -157,7 +157,9 @@ fabrique et dans quel fichier.
    code concerné. Pendant le cadrage, un mot de l'humain qui contredit le glossaire, un mot
    flou qui recouvre deux choses, ou un code qui contredit ce qu'il affirme se tranchent
    sur-le-champ et `CONTEXT.md` se met à jour aussitôt (`domaine.md`).
-2. Poser les questions qui restent (par petits lots) et proposer, sans rien créer :
+2. Poser les questions qui restent, selon `entretien.md` (rounds numérotés, réponse
+   recommandée, les faits cherchés dans le code avant de demander), puis proposer, sans rien
+   créer :
    - les **décisions produit** (choix tranchés, avec l'option retenue) ;
    - le **contrat de validation** : 10 à 30 phrases « ce qui devra être vrai », observables
      par l'utilisateur, dont au moins un tiers de refus (ce qui doit être impossible ou
