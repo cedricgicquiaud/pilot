@@ -57,12 +57,32 @@ Trois invariants, jamais négociés :
 | [`PILOTAGE-LINEAR-GITHUB-CLAUDE.md`](PILOTAGE-LINEAR-GITHUB-CLAUDE.md) | La méthode complète. Partie A : le suivi Linear/GitHub. Partie B : le circuit d'une feature et les commandes. |
 | [`circuit-linear-github-claude.html`](circuit-linear-github-claude.html) | La même chose en cinq écrans, à ouvrir dans un navigateur. Support de présentation. |
 | [`BOUCLE-AGENTS.md`](BOUCLE-AGENTS.md) | La boucle d'agents : pourquoi, les briques, les leçons de chaque essai, ce qui manque encore. Journal de bord autant que méthode. |
-| [`implementation/`](implementation/) | Ce que Claude Code lit pour travailler : six fiches d'agent, la skill `pilot`, deux outils. |
-| `sources/` | Les analyses à l'origine de la boucle. Archives. |
-| `.workflow/sessions/` | Un compte rendu par session de travail. |
+| [`implementation/`](implementation/) | Ce que Claude Code lit pour travailler : six fiches d'agent, la skill `pilot`, trois skills importées, trois outils. |
+| [`GRILLE-DE-RELECTURE.md`](GRILLE-DE-RELECTURE.md) | Les huit questions à poser à chaque phrase d'une fiche avant de la modifier. |
+| `sources/` | Les analyses à l'origine de la boucle, et celle du dépôt `mattpocock/skills`. Archives. |
+| `.out-of-scope/` | Les idées essayées ou étudiées et écartées, avec la raison, pour ne pas rouvrir le débat sans élément nouveau. |
+| `.workflow/sessions/`, `.workflow/relectures/` | Un compte rendu par session de travail ; une relecture par fiche réécrite. |
 
 Pour comprendre la méthode, commence par le HTML — cinq minutes. Pour la mettre en œuvre, lis
 la Partie B du Markdown.
+
+## Quelle commande, dans quelle situation
+
+| Tu veux… | Tape | Claude s'arrête quand |
+|---|---|---|
+| Savoir où en est le projet et quoi faire ensuite | `/pilot next` | Il a proposé l'étape logique |
+| Démarrer un projet | `/pilot init` | Le PRD est à valider |
+| Poser toutes les features | `/pilot roadmap` | La liste est à valider |
+| Ouvrir une feature | `/pilot feature <nom>` | Le cadrage, puis le découpage, sont à valider |
+| Produire les livraisons | `/pilot run <feature>` | Les PR sont ouvertes et auditées ; tu merges |
+| Remettre Linear d'aplomb après un merge | `/pilot sync` | Il enchaîne sur `next` |
+| Corriger un bug ou faire une retouche hors feature | `/pilot fix <description>` | La PR est ouverte |
+| Comprendre un bug qui ne se reproduit pas | dis « diagnostique » | La cause est nommée |
+| Sortir d'un merge en conflit | dis « le merge bloque » | Le merge est terminé |
+| Faire trancher le client | `/to-questionnaire` | Le document à lui envoyer est écrit |
+| Mettre la méthode d'un projet à jour | `/pilot update` | Le commit est à valider |
+
+Dans l'usage courant, `next` suffit : chaque commande finit en proposant la suivante.
 
 ## Installer la méthode dans un projet
 

@@ -167,6 +167,18 @@ Une branche par fiche, un journal de relecture par fiche dans `.workflow/relectu
   qui a l'air d'un détail peut être la seule qui tienne ; le test du no-op se joue.
 - CI de crm-workday sur la PR 28 : un test e2e instable, relancé, vert.
 
+## Chantier 6 — la documentation (soir)
+
+- `PILOTAGE-LINEAR-GITHUB-CLAUDE.md` : § 8 (le verrou), B.1 (entretien par rounds, `CONTEXT.md`,
+  ADR), B.2 (les trois outils hors circuit), B.5 (origine, ce qu'on a pris et pas pris de
+  Matt Pocock). Rien ne change dans les statuts, le vocabulaire ni le nommage : le HTML reste
+  tel quel, par la règle du `CLAUDE.md` (il ne suit que les changements de fond).
+- `README.md` : table « quelle commande, dans quelle situation », fichiers ajoutés.
+- `.out-of-scope/` : cinq idées écartées avec leur raison et ce qui ferait rouvrir (bloc commun
+  réduit, merge automatique, traduction des skills importées, `SKILL.md` sous 1 000 mots,
+  modèles locaux). `CLAUDE.md` et `BOUCLE-AGENTS.md` § 5 (ligne 15) les référencent.
+- Sandbox (PR #69) et crm-workday (PR #29) mis à jour à `4670749`.
+
 ## Reste
 
 - Cédric relit la PR #50 (4c). Les PR #44, #45, #46, #47, #48, #49 sont mergées.
@@ -175,7 +187,6 @@ Une branche par fiche, un journal de relecture par fiche dans `.workflow/relectu
 - Cédric merge les PR d'update 68 (sandbox) et 28 (crm-workday, CI vert après relance) ;
   ensuite un nouvel `/pilot update` sur les deux pour les fiches du chantier 5. Le coût du
   `tdd-writer` réécrit se confirme ou s'infirme sur les prochaines livraisons réelles.
-- Chantier 6 : documentation (`PILOTAGE-…md`, HTML, page « quelle commande », `.out-of-scope/`).
 - Version globale du verrou (`~/.claude`) : à intégrer au hook `command-validator` existant,
   après l'avoir vu tourner sur un projet.
 - Connexion MCP `linear` de la machine sur GM5 : rejouer les evals Linear du sandbox après
