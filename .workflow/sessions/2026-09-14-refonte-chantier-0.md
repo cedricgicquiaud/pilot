@@ -122,14 +122,45 @@
   absente de la branche et n'écrivait rien, sans le dire. Toujours un `assert` sur un
   remplacement.
 
+## Chantier 5 — les six fiches d'agent (même jour, soir)
+
+Une branche par fiche, un journal de relecture par fiche dans `.workflow/relectures/`.
+
+- `tdd-writer` (5a) : 1 978 → 1 490 mots ; les règles du système de design sortent dans
+  `reference/design-agents.md` (lu seulement si `.pilot/design/` existe) ; lecture de
+  `CONTEXT.md` ; « fini quand » en phase 1 ; les règles du bon test renvoient à `tests.md`.
+  **Banc TST-B1** (Opus, même mission, même commit de départ que le 10/09) : contrat 10/10,
+  12 tests, 371 verts, 26 commits (12 test, 10 feat, 3 refactor, 1 docs), 250 lignes,
+  12 min, 169 échanges, 15 M relus ; verifier : 0 bloquant, 1 important réel (plage d'accents
+  en caractères combinants littéraux dans une regex), 3 à considérer. Étalon : 10/10, 0
+  bloquant, 4 mineurs, 23 commits, 11 tests, 11 min, 107 échanges, 11 M. Même qualité,
+  rapport plus riche (cinq décisions remontées, trois tests verts d'emblée signalés), coût
+  plus élevé sur cette seule mesure (+58 % d'échanges, +38 % de jetons) ; à confirmer sur les
+  prochaines livraisons de crm-workday avant d'en tirer une règle.
+- `verifier` (5b) : 1 544 → 1 382 mots ; lit `CONTEXT.md` ; les odeurs communes avec
+  `smells.md` sortent de la liste ; « décisions produit » dans le rapport. Épreuve sur le diff
+  étalon : même preuve, 6/6 décisions, trois « à considérer » dont un nouveau (longueur en
+  unités UTF-16) ; l'important trouvé par la fiche 4b n'est pas retrouvé (variance d'une
+  passe à l'autre, déjà vue).
+- `testeur` (5c) : 1 807 → 1 502 mots ; design par référence ; « fini quand » en phase 0.
+  Épreuve sur les écrans de la livraison du banc : voir la PR.
+- `correcteur` (5d) : 960 → 856 mots ; « traite la cause » en positif ; renvoi à `tests.md`.
+  Pas de banc propre.
+- `decoupeur` et `contradicteur` (5e) : déjà dans la forme voulue ; ajout du refactor large
+  (étendre, migrer, contracter) au découpeur, du mot qui contredit le glossaire au
+  contradicteur, de `CONTEXT.md` aux deux.
+- Environnement : les bancs tournent dans des clones jetables du sandbox (`scratchpad/`), le
+  sandbox lui-même n'est pas touché.
+
 ## Reste
 
 - Cédric relit la PR #50 (4c). Les PR #44, #45, #46, #47, #48, #49 sont mergées.
 - Sandbox (#67) et crm-workday (#27) : PR d'update du verrou à merger si ce n'est pas fait,
   puis `/pilot update` sur les deux pour recevoir les skills importées et les références.
-- Chantier 5 : les six fiches d'agent, une par PR, banc TST-B1 (mission archivée dans
-  `sources/etalon-TST-B1-etiquettes-de-contact.md`), à partir de `main` après la #50. Y
-  ajouter la lecture de `CONTEXT.md` par les agents.
+- Cédric relit les cinq PR du chantier 5 (5a à 5e) ; `/pilot update` ensuite sur le sandbox et
+  crm-workday ; le coût du `tdd-writer` réécrit se confirme ou s'infirme sur les prochaines
+  livraisons réelles.
+- Chantier 6 : documentation (`PILOTAGE-…md`, HTML, page « quelle commande », `.out-of-scope/`).
 - Version globale du verrou (`~/.claude`) : à intégrer au hook `command-validator` existant,
   après l'avoir vu tourner sur un projet.
 - Connexion MCP `linear` de la machine sur GM5 : rejouer les evals Linear du sandbox après
