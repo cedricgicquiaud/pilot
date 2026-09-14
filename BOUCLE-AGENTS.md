@@ -526,6 +526,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | Le moule de configuration d'un projet | `skills/pilot/reference/section-pilot.md` |
 | Les scripts | `skills/pilot/scripts/` : `init_team.py`, `linear_api.py`, `schedule.py`, `benchmark.py` |
 | La recherche préalable au PRD | `skills/research-assistant/SKILL.md` |
+| Le glossaire du produit (`CONTEXT.md`, posé par `init`, affûté au cadrage) et les ADR (gravées par `sync` au merge, trois conditions) ; les sept questions de relecture des audits | `skills/pilot/reference/domaine.md` (repris de `domain-modeling`), `suivre.md` § `sync` Apprendre (repris de `retro`) |
 | Trois skills importées telles quelles de `mattpocock/skills` 1.2.3 (corps en anglais, déclencheurs français) : le diagnostic d'un bug dur, la résolution d'un conflit de merge, le questionnaire au client | `skills/diagnosing-bugs/`, `skills/resolving-merge-conflicts/`, `skills/to-questionnaire/` ; appelées depuis `fix`, le merge, et le cadrage d'une feature |
 | La passe visuelle | `tools/passe-visuelle/passe-visuelle.mjs` (Playwright sur le Chrome du système) |
 | Le relevé de coût, le suivi des étapes d'un agent (`--suivre`), les alertes (`--direct --notifier`) | `tools/cout-agents/cout-agents.py` |

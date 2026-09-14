@@ -33,6 +33,7 @@ et le titre de la PR. C'est ce fil qui permet à GitHub de faire avancer Linear 
 | Initiative | Cap (facultatif) | Trimestre | Regroupement de features (une version, un thème), sur un gros projet seulement. |
 
 Comment une fiche s'écrit, se dimensionne, se date et se priorise : `reference/fiches.md`.
+Le vocabulaire du produit (`CONTEXT.md`) et ses décisions durables (ADR) : `reference/domaine.md`.
 
 ## Quand cette skill s'applique
 
