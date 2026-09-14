@@ -528,6 +528,7 @@ disjoncteur d'accès, propriété du dispositif). Ce qui manque relève de l'**�
 | La passe visuelle | `tools/passe-visuelle/passe-visuelle.mjs` (Playwright sur le Chrome du système) |
 | Le relevé de coût, le suivi des étapes d'un agent (`--suivre`), les alertes (`--direct --notifier`) | `tools/cout-agents/cout-agents.py` |
 | Le panneau cmux ouvert à chaque agent lancé (hook `SubagentStart`) | `tools/cout-agents/panneau-agent.sh`, posé dans `.claude/settings.json` par `install.sh` |
+| Le verrou git (hook `PreToolUse` sur Bash) : refuse le push vers `main`/`master`/`release`, le push forcé, `gh pr merge`, le merge depuis une branche protégée | `tools/verrou-git/verrou-git.py`, posé dans `.claude/settings.json` par `install.sh` ; épreuve `test_verrou.py` |
 | Ce qui reste personnel | `global/` : le `CLAUDE.md` de préférences et la skill `rendu-fonctionnel`, copiés à la main dans `~/.claude/` |
 | Mémoire de Claude, hors dépôt | `~/.claude/projects/-Users-cedricgicquiaud/memory/recette-deux-agents-paralleles.md` |
 

@@ -10,7 +10,7 @@ racine du dépôt décrivent la méthode ; ici, c'est la méthode elle-même.
 | `agents/` | Les six fiches d'agent : `tdd-writer`, `verifier`, `testeur`, `correcteur`, `decoupeur`, `contradicteur`. |
 | `skills/pilot/` | La skill : `SKILL.md`, ses fichiers de `reference/`, ses scripts Python. |
 | `skills/research-assistant/` | Lancée par `pilot init` avant l'entretien de cadrage. |
-| `tools/` | `cout-agents` (ce qu'a coûté une boucle, le suivi des étapes de chaque agent en direct, les alertes) et `passe-visuelle` (les captures du `testeur`). |
+| `tools/` | `cout-agents` (ce qu'a coûté une boucle, le suivi des étapes de chaque agent en direct, les alertes), `passe-visuelle` (les captures du `testeur`) et `verrou-git` (le hook qui refuse tout push vers la branche principale et tout merge : le merge est humain, par construction). |
 | `global/` | Ce qui ne s'installe pas par projet — voir plus bas. |
 
 ## Comment ça s'installe
