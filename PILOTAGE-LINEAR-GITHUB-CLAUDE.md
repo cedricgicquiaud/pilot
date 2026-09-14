@@ -387,6 +387,9 @@ existe déjà : les templates de team Linear (Feature / Tâche / Bug) posés par
 
 - **Le merge.** Claude ouvre la PR, avec le rapport d'audit d'un agent qui n'a
   pas écrit le code ; un humain décide de l'intégrer. Pas de merge automatique.
+  Depuis le 14/09, ce n'est plus seulement une consigne : un verrou technique
+  (`.claude/tools/verrou-git/`, posé par `install.sh`) refuse avant exécution
+  tout push vers `main` ou `release`, tout push forcé et tout `gh pr merge`.
 - **L'ordre de la roadmap.** Le placement initial est automatique (Claude pose
   la feature en fin de roadmap avec une priorité par défaut selon son type) ;
   l'arbitrage entre deux features reste un choix, pas un calcul. L'humain
@@ -530,11 +533,11 @@ deux, Claude travaille seul.
 
 | # | Étape | Qui | Ce qui se passe | Statut Linear |
 |---|---|---|---|---|
-| 1 | **Cadrer** | Vous + Claude | Décisions produit, et la liste « ce qui devra être vrai » à la fin (10 à 30 phrases, dont des refus). Gravé dans la fiche feature. **Vous validez.** | À cadrer |
+| 1 | **Cadrer** | Vous + Claude | Un entretien par rounds : les questions posables d'un coup, numérotées, chacune avec une réponse recommandée que vous acceptez ou corrigez. Il en sort les décisions produit et la liste « ce qui devra être vrai » à la fin (10 à 30 phrases, dont des refus), gravées dans la fiche feature ; les mots du produit se fixent dans `CONTEXT.md` au passage. Un agent relit le cadrage et dit ce qui manque. **Vous validez.** | À cadrer |
 | 2 | **Découper** | Claude, puis vous | N livraisons qui ne touchent pas les mêmes fichiers ; chaque phrase de l'étape 1 affectée à une livraison ; une fiche Tâche par tâche, avec un « Terminé quand » dont au moins un refus. **Vous validez la liste** avant toute création dans Linear. | Planifiée |
 | 3 | **Produire** | Agents, sans vous | Un agent par livraison, chacun dans sa copie isolée du dépôt — un seul à la fois par défaut, plusieurs quand le projet a prouvé sa boucle. Puis **deux agents qui n'ont pas écrit le code** : l'un relit le diff et relance les tests, l'autre regarde les écrans livrés. Un correcteur si l'un des deux trouve quelque chose. Une PR par livraison, avec le rapport d'audit. Détail : `BOUCLE-AGENTS.md`. | En développement → En revue |
 | 4 | **Merger** | Vous | Lire le rapport d'audit, merger. Trancher les décisions que les agents ont remontées sans les prendre. | Terminée |
-| 5 | **Apprendre** | Claude | Chaque défaut trouvé à l'audit devient une règle dans le `CLAUDE.md` du dépôt ; les décisions tranchées sont gravées dans Linear. | Rétro faite |
+| 5 | **Apprendre** | Claude | Chaque défaut trouvé à l'audit devient une règle dans le `CLAUDE.md` du dépôt ; les décisions tranchées sont gravées dans Linear, et celles qui sont dures à inverser, surprenantes sans contexte et issues d'un vrai arbitrage deviennent une ADR d'un paragraphe dans `docs/adr/`. | Rétro faite |
 
 Au niveau du projet, deux moments de plus, une seule fois : le cadrage du
 projet (PRD) et la roadmap (§ 4 bis). Même règle : Claude propose, vous validez.
@@ -554,6 +557,15 @@ avancer » ce qui peut avancer seul.
 | Tâche isolée | `/pilot fix` | La PR est ouverte |
 | N'importe quand | `/pilot next` | Voir B.3 |
 | Une fois, à l'installation | `/pilot benchmark` | Le barème de charge est proposé |
+
+Trois outils de plus, installés avec la méthode, pour les situations qui ne
+sont pas une étape du circuit :
+
+| Situation | Outil | Claude s'arrête quand |
+|---|---|---|
+| Un bug qui ne se reproduit pas du premier coup | `diagnosing-bugs`, se déclenche sur « diagnostique », « ça plante » | La cause est nommée, avec la commande qui la montre |
+| Un merge ou un rebase bloqué sur un conflit | `resolving-merge-conflicts`, sur « le merge bloque » | Le merge est terminé, les deux intentions gardées |
+| Une décision que seul le client peut prendre | `/to-questionnaire` | Le questionnaire à lui envoyer est écrit |
 
 ## B.3 `next` : l'étape logique, déduite de Linear
 
@@ -589,3 +601,12 @@ Ce circuit absorbe l'ancien workflow FORGE : ses étapes de tête (cadrage,
 découpage, pauses) sont B.1 étapes 1-2 ; ses étapes de production, vérification
 et livraison sont remplacées par `BOUCLE-AGENTS.md` ; sa rétro est l'étape 5.
 Le nom FORGE, ses fichiers de phase et son mode autonome disparaissent.
+
+Le 14 septembre 2026, la méthode a été relue à la lumière du dépôt
+`mattpocock/skills` (analyse dans `sources/`). Ce qu'elle en a pris : une façon
+d'écrire les fiches (`GRILLE-DE-RELECTURE.md` : un critère de fin par étape, la
+référence déportée, le test du no-op), trois skills importées telles quelles
+(diagnostic, conflits, questionnaire), l'entretien par rounds, les douze odeurs
+de code et les trois mauvais tests, le glossaire `CONTEXT.md` et les ADR, et le
+verrou git. Ce qu'elle n'en a pas pris : la chaîne manuelle où l'humain tape
+chaque étape, le suivi hors Linear, et le merge automatique.
