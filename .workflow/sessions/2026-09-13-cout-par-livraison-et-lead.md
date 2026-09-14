@@ -16,3 +16,19 @@
 - Merge, puis `/pilot update` sur les deux projets.
 - crm-workday : 2.6a rendue le 10/09, feature 2 complète à sa merge ; « run fini » à relever.
 - « Trois producteurs » se décide après le tour 2, sur la part du lead et la jauge.
+
+## Décidé — portage et modèles locaux (13/09, après-midi)
+
+- Question posée : porter `pilot` hors de Claude Code (Pi, pi.dev), avec des LLM locaux, sur
+  un Mac ou un VPS. Analyse faite, rien construit.
+- Pi : portage faisable (fiches d'agent au même format via l'extension `subagent`, skills au
+  même standard, événement `tool_call` pour la liste blanche, journal JSONL documenté). Coûte
+  environ une semaine, surtout Linear sans MCP et le lecteur de coûts. Point ouvert : accès
+  aux modèles par clé d'API, hors abonnement.
+- Local : le Mac actuel (M1 Pro, 16 Go) ne tient qu'un testeur. Le palier utile est 128 Go de
+  mémoire unifiée ; les rôles de relecture restent sur le meilleur modèle cloud quoi qu'il
+  arrive. Un VPS sans GPU ne sert qu'à héberger la boucle, pas le modèle.
+- **Décision : rester sur le cloud.** Rouvrir seulement si un client exige que le code ne
+  sorte pas (serveur GPU dédié, facturé au client), si la facture devient le frein (d'abord un
+  modèle ouvert par API pour le testeur, via Pi), ou à plusieurs runs par jour. Dans les trois
+  cas, l'épreuve TST-B1 sur le sandbox décide du modèle, comme pour les bancs précédents.
