@@ -210,6 +210,11 @@ Ne jamais dire « projet » pour un Project Linear : c'est une feature.
   vers `main`/`master`/`release`, tout push forcé et tout `gh pr merge`. Un refus n'est pas
   une panne : pousse ta branche par son nom et ouvre une PR.
 - **Benchmark** : `scripts/benchmark.py`.
+- **Skills voisines**, installées avec la méthode, à appeler par le Skill tool :
+  `diagnosing-bugs` (un bug qui ne se reproduit pas du premier coup : construire la boucle
+  rouge avant toute hypothèse), `resolving-merge-conflicts` (un merge ou un rebase bloqué
+  sur des conflits, résolu par intention), `to-questionnaire` (une décision que seul le
+  client peut trancher : le document à lui envoyer ; tapée par l'humain).
 
 ## Statuts
 

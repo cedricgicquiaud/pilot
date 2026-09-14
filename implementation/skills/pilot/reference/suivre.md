@@ -36,6 +36,9 @@ suivante. On peut le taper à tout moment, y compris après une semaine d'absenc
    « À faire », sans feature. Une seule phrase d'annonce, pas de squelette.
 2. Branche `fix/<CODE>-<n>-<slug>` (ou `chore/…`). Bug : d'abord le test qui reproduit
    (rouge), puis la correction (vert). Chore sans comportement : pas de test exigé.
+   Bug qui ne se reproduit pas du premier essai, intermittent, ou lenteur : appelle la skill
+   `diagnosing-bugs` (Skill tool) avant d'écrire quoi que ce soit ; sa phase 1 construit la
+   boucle qui passe au rouge sur ce bug, et c'est elle qui devient le test.
 3. PR titrée `<CODE>-<n> <titre>`, description `Closes <CODE>-<n>`. S'arrêter.
 4. Suite proposée : « merge, puis `next` ». **La tâche reste « À faire » jusqu'au merge** :
    c'est l'intégration GitHub qui la ferme, et `sync` qui contrôle qu'elle l'a fait.

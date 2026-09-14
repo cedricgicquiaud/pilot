@@ -155,6 +155,9 @@ fabrique et dans quel fichier.
    - le **contrat de validation** : 10 à 30 phrases « ce qui devra être vrai », observables
      par l'utilisateur, dont au moins un tiers de refus (ce qui doit être impossible ou
      rejeté). Pas de formule générique valable pour n'importe quelle feature.
+   Une question que seul le client (ou un tiers absent) peut trancher ne se devine pas :
+   `/to-questionnaire` écrit le document à lui envoyer, et la feature reste « À cadrer »
+   jusqu'à la réponse.
    Avant de présenter, lance l'agent `contradicteur` sur ce que tu viens d'écrire : il rend
    les cas non prévus, les phrases invérifiables, les règles qui se contredisent et le supposé
    connu. Présente ses questions à l'humain **avec** ta proposition, sans y répondre à sa
