@@ -63,8 +63,26 @@
 - Sandbox (PR #67) et crm-workday (PR #27) mis à jour à `3f2e14f` (verrou git) sur branches
   `chore/update-methode-3f2e14f` ; ils recevront les skills au prochain `update`.
 
+## Chantier 3 — `pilot/SKILL.md` réécrit avec la grille (même jour)
+
+- Journal de relecture bloc par bloc : `.workflow/relectures/2026-09-14-skill-pilot.md`.
+- `SKILL.md` : 3 420 → 1 327 mots. Ce qui en sort va dans trois nouveaux fichiers de
+  `reference/` : `fiches.md` (le moule, tailles, priorités, dépendances, dates, vérification),
+  `linear.md` (MCP vs script, workspaces, initiatives, relations, icônes, frise), `git.md`
+  (branches, release, gabarit de PR, verrou). Renvois posés dans `cadrer.md`, `produire.md`,
+  `suivre.md`. Cible « moins de 1 000 » non atteinte : ce qui reste est le principe, le
+  vocabulaire, sept invariants, les statuts, les tables de commandes ; couper là ferait
+  perdre du sens.
+- Épreuve : evals 1 et 2 rejouées sur copies jetables, ancienne et nouvelle version. `init`
+  identique. `feature Facturation` : la nouvelle tient les cinq assertions (cadrage complet,
+  contradicteur, arrêt) là où l'ancienne s'arrêtait sur le mauvais workspace ; la garde
+  « team introuvable = mauvais workspace » a été réintroduite après coup.
+- Environnement : la connexion MCP `linear` de la machine est authentifiée sur GM5 ; les
+  evals qui lisent le sandbox (weme-studio) tournent en dégradé, à rejouer après `/mcp`.
+
 ## Reste
 
+- Cédric relit la PR du chantier 3 (SKILL.md, les trois fichiers, le journal).
 - Cédric merge la PR du chantier 2, puis les PR d'update du sandbox (#67) et de crm-workday (#27), puis `/pilot update` à nouveau pour les skills.
 - Chantier 3 : réécriture de `pilot/SKILL.md` avec la grille.
 - (chantier 1) Cédric relit et merge la PR du chantier 1, puis `/pilot update` sur le sandbox et
