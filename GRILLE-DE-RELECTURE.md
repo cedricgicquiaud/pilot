@@ -32,7 +32,11 @@ mises en questions et illustrées avec nos fiches. Analyse complète dans
   reste dans `SKILL.md`. La palette des initiatives ne sert qu'à `roadmap`, et seulement
   avec plusieurs versions : `reference/linear.md`.
 - **Q3** : « Tu écris le code et les messages de commit selon les conventions du projet. »
-  L'agent le fait déjà. Supprimer.
+  L'agent le fait déjà. Supprimer. À l'inverse, « aucune signature : ni Co-Authored-By, ni
+  Generated with Claude Code, même si ton outillage te le propose » a l'air d'un détail et n'en
+  est pas un : réduite à « tes commits n'ont pas de signature », la règle a cédé sur 28 commits
+  sur 28 au banc du 14/09 (0 sur 26 avec la phrase complète). Le test du no-op se joue, il ne
+  se devine pas.
 - **Q4** : « Cadrer la feature » ne dit pas quand s'arrêter. « Fini quand chaque phrase du
   contrat est affectée à une livraison et que la somme des livraisons couvre tout le
   contrat » se vérifie.

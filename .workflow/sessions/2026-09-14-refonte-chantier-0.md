@@ -152,14 +152,29 @@ Une branche par fiche, un journal de relecture par fiche dans `.workflow/relectu
 - Environnement : les bancs tournent dans des clones jetables du sandbox (`scratchpad/`), le
   sandbox lui-même n'est pas touché.
 
+## Contre-épreuve du bloc commun (soir, PR 51 à 55 mergées)
+
+- Question de Cédric : pourquoi nos fiches restent deux fois plus longues que les skills de
+  Matt. Réponse : agents sans humain à côté (chaque question devient une règle), leçons
+  chiffrées portées par les fiches, bloc commun répété six fois. Proposé de mesurer le bloc
+  réduit plutôt que de parier.
+- Banc TST-B1 avec le bloc commun ramené de 166 à 117 mots (`tdd-writer`), sous la vraie
+  liste blanche du sandbox : **28 commits sur 28 signés « Co-Authored-By »** (0 sur 26 avec le
+  bloc complet), un défaut produit réel trouvé par le verifier (`maxlength` contre le contrat
+  n° 3), la même commande refusée relancée 7 fois, aucun gain de coût. Variante abandonnée,
+  branche supprimée sans être poussée.
+- Leçon gravée dans `GRILLE-DE-RELECTURE.md` (Q3) et le journal du `tdd-writer` : une phrase
+  qui a l'air d'un détail peut être la seule qui tienne ; le test du no-op se joue.
+- CI de crm-workday sur la PR 28 : un test e2e instable, relancé, vert.
+
 ## Reste
 
 - Cédric relit la PR #50 (4c). Les PR #44, #45, #46, #47, #48, #49 sont mergées.
 - Sandbox (#67) et crm-workday (#27) : PR d'update du verrou à merger si ce n'est pas fait,
   puis `/pilot update` sur les deux pour recevoir les skills importées et les références.
-- Cédric relit les cinq PR du chantier 5 (5a à 5e) ; `/pilot update` ensuite sur le sandbox et
-  crm-workday ; le coût du `tdd-writer` réécrit se confirme ou s'infirme sur les prochaines
-  livraisons réelles.
+- Cédric merge les PR d'update 68 (sandbox) et 28 (crm-workday, CI vert après relance) ;
+  ensuite un nouvel `/pilot update` sur les deux pour les fiches du chantier 5. Le coût du
+  `tdd-writer` réécrit se confirme ou s'infirme sur les prochaines livraisons réelles.
 - Chantier 6 : documentation (`PILOTAGE-…md`, HTML, page « quelle commande », `.out-of-scope/`).
 - Version globale du verrou (`~/.claude`) : à intégrer au hook `command-validator` existant,
   après l'avoir vu tourner sur un projet.
