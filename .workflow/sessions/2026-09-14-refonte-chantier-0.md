@@ -31,11 +31,29 @@
 - PILOT reste hors pilotage Linear pour ces chantiers (question posée, pas de réponse ;
   branches + sessions comme aujourd'hui).
 
+## Chantier 1 — le verrou git (même jour, après le merge de la PR #44)
+
+- `implementation/tools/verrou-git/verrou-git.py` : hook `PreToolUse` sur Bash. Refuse le
+  push vers `main`/`master`/`release` (nommé ou branche courante), le push forcé,
+  `--all`/`--mirror`, `gh pr merge`, l'API de merge, `merge`/`rebase` depuis une branche
+  protégée. Commandes composées examinées morceau par morceau. Une erreur du verrou laisse
+  passer. Écrit en Python plutôt qu'en bash + `jq` : `install.sh` exige déjà Python.
+- `test_verrou.py` : 40 commandes jouées sur `main` et sur `feature/x`, 80/80 conformes.
+- `install.sh` pose le hook dans `.claude/settings.json` à côté du panneau de suivi.
+- Épreuve en session réelle sur un dépôt jetable (`claude -p`, Sonnet) : `git push --all
+  origin --dry-run` refusé par le hook avant exécution, message lu par Claude ;
+  `git push -u origin feature/test --dry-run` passé. Le sandbox n'a pas été touché : il
+  recevra le verrou par `/pilot update` après le merge.
+- Découvert au passage : un hook global `~/.claude/scripts/command-validator` existe déjà
+  (c'est lui qui refuse `rm -rf`). La version globale du verrou pourrait s'y ajouter plutôt
+  que doubler les hooks ; à décider avec Cédric.
+
 ## Reste
 
-- Cédric relit et merge la PR du chantier 0 (la grille surtout).
-- Chantier 1 : le verrou git. Adapter `sources/mattpocock-skills-1.2.3/git-guardrails-claude-code/scripts/block-dangerous-git.sh`,
-  l'installer par `install.sh` (qui sait déjà fusionner un hook dans `settings.json`),
-  tester sur le sandbox, puis proposer la version globale `~/.claude`.
+- Cédric relit et merge la PR du chantier 1, puis `/pilot update` sur le sandbox et
+  crm-workday.
+- Version globale du verrou (`~/.claude`) : proposer après l'avoir vu tourner sur un projet.
+- Chantier 2 : import tel quel de `diagnosing-bugs`, `resolving-merge-conflicts`,
+  `to-questionnaire`.
 - Sandbox : `.pi/liste-blanche.json` est modifié et non commité, à regarder avant le
   prochain run.
