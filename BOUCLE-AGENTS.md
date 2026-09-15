@@ -271,6 +271,22 @@ touche plus à un processus. Le relevé de coût distingue désormais un agent *
 commande d'un agent **en veille** après son rapport, qui attend qu'on le relance : le second
 cas n'est pas une perte, sauf si le lead tarde.
 
+**La boucle de contrôle coûtait autant que la production (15/09).** Livraison 3.0 de
+crm-workday, la première avec les fiches réécrites : producteur 56 min, contrat couvert en une
+passe, coût dans la fourchette des livraisons L précédentes (le +58 % du banc du 14/09 ne
+s'est pas reproduit). Mais 1 h 48 d'horloge pour ces 56 min. Trois pertes, toutes dans le
+contrôle. **Deux serveurs sur un poste se tuent l'un l'autre** : l'outil de passe visuelle
+relance le serveur du poste (c'est la parade du 07/09), et le verifier jouait Playwright sur
+le même port au même moment ; deux suites rouges en `ECONNREFUSED`, 8 min bloquées, le
+verifier relancé à la main. **Le testeur a repassé trois écrans pour rien** : la liste du
+correcteur ne contenait aucun défaut d'écran. **La session a relancé le verifier sur le diff
+du correcteur** sans que la méthode le demande : sa boucle d'objectif l'a poussée à ajouter
+une étape en chemin. Quatre règles posées le soir même (PR #58) : le verifier ne joue que la
+suite courte et lit la suite d'écran dans la CI ; un poste, un serveur, le correcteur attend
+le rapport du testeur ; repasse seulement si la liste contient un défaut d'écran ; pas de
+second audit après correction (`.out-of-scope/second-audit-apres-correction.md`). Cible :
+ramener l'horloge d'une L vers 50 min. À mesurer sur 3.1a.
+
 **Tests verts ≠ sûr.** Deux producteurs consciencieux, 32 tests verts, et deux failles
 bloquantes (échappement HTML, contrôle de permissions) trouvées uniquement par le relecteur
 indépendant. Les deux producteurs avaient reproduit le même défaut d'idiome : seul un œil
