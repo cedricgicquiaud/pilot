@@ -189,6 +189,12 @@ PR ouverte → merge = temps d'attente humaine ; nombre d'allers-retours), puis
 humaine (délai médian de merge observé, corrigeable à la main quand le rythme
 va changer) complète le calcul.
 
+Le barème ne mesure que la production. À la fin de chaque feature, une ligne de plus dit
+où est passé le reste du calendrier : le cadrage, les runs, l'attente de merge, et le reste
+(jours sans session, travail sur la méthode, tâches isolées). Exemple : si une feature prend
+huit jours pour quatre heures de runs, c'est cette ligne qui dit si le cadrage ou l'attente a
+grossi.
+
 Ordre validé × barème × capacité = une date par livraison, donc une fenêtre de
 début et de fin par feature.
 La roadmap est plausible, pas promise ; elle se recale à chaque livraison.
