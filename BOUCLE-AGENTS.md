@@ -287,6 +287,22 @@ le rapport du testeur ; repasse seulement si la liste contient un défaut d'écr
 second audit après correction (`.out-of-scope/second-audit-apres-correction.md`). Cible :
 ramener l'horloge d'une L vers 50 min. À mesurer sur 3.1a.
 
+**La production ne ralentit pas, le calendrier si (16/09).** Impression de Cédric : « le pilote
+met de plus en plus de temps à développer ». Les chiffres de crm-workday disent autre chose :
+de 0,85 à 1,85 h d'agents par livraison depuis le 05/09, sans tendance, sur quinze livraisons.
+Ce qui s'allonge est hors des runs : la feature 1 a pris une nuit et un jour, la feature 2
+quatre jours de production étalés sur huit, et cinq jours ont séparé la dernière livraison de
+la feature 2 de la première de la feature 3 (rétro, refonte de la méthode, jours sans
+session). Le cadrage de la feature 3 a pris un après-midi, 41 questions, et n'est mesuré
+nulle part. D'où une ligne par feature dans la calibration : calendrier, cadrage, runs,
+attente de merge, le reste. Deux autres règles sortent de la même nuit. **Une livraison
+fusionnée n'est pas une XL** : 3.1 (deux L produites en une) a coûté 2,92 h, deux fois les
+XL d'avant ; elle sort de la médiane, et son producteur se compare au seuil multiplié par
+deux. Elle a tenu : une passe, neuf phrases sur neuf, une boucle de contrôle de 49 min au
+lieu de deux. **La session du lead s'use** : le 15/09, une seule session a enchaîné sept heures
+de commandes, cadrage et deux runs compris, jusqu'à sa fin ; `next` propose désormais une
+session neuve avant `run` et `feature`.
+
 **Tests verts ≠ sûr.** Deux producteurs consciencieux, 32 tests verts, et deux failles
 bloquantes (échappement HTML, contrôle de permissions) trouvées uniquement par le relecteur
 indépendant. Les deux producteurs avaient reproduit le même défaut d'idiome : seul un œil
