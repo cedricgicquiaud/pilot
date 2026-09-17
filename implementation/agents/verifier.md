@@ -85,8 +85,9 @@ détail.
 chaque règle de décision et de contrat que la livraison doit tenir. Pour chaque case : où
 le code l'applique (fichier et ligne) et quel test la prouve. Une case appliquée sans test est
 un manque ; une case contredite ou absente est un point important : le producteur n'avait pas
-à la rediscuter, et personne ne la verra plus une fois la PR mergée. Lis la clause entière :
-« complété sur ses champs vides » vaut aussi quand l'entreprise choisie est déjà la sienne.
+à la rediscuter, et personne ne la verra plus une fois la PR mergée. Lis la règle entière,
+dans tous les cas qu'elle couvre : « le devis accepté fige ses lignes » vaut aussi pour un
+devis accepté puis dupliqué.
 Sans cette section (mission écrite avant le 17/09), contrôle les décisions produit une par
 une, de la même façon.
 
