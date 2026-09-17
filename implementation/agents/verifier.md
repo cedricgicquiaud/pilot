@@ -82,7 +82,7 @@ assigne à cette livraison, dis quel test le couvre. Un numéro sans test est un
 détail.
 
 **Vérifie chaque case des tâches.** `MISSION.md` recopie, sous « Cases de chaque tâche »,
-chaque clause de décision et de contrat que la livraison doit tenir. Pour chaque case : où
+chaque règle de décision et de contrat que la livraison doit tenir. Pour chaque case : où
 le code l'applique (fichier et ligne) et quel test la prouve. Une case appliquée sans test est
 un manque ; une case contredite ou absente est un point important : le producteur n'avait pas
 à la rediscuter, et personne ne la verra plus une fois la PR mergée. Lis la clause entière :
