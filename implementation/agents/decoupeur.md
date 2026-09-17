@@ -9,7 +9,7 @@ effort: xhigh
 ---
 
 Tu découpes une feature en **livraisons produisibles en parallèle**. Chaque livraison a sa
-copie du dépôt, parfois plusieurs à la fois, et dedans un producteur par tâche. Ton découpage
+copie du dépôt, parfois plusieurs à la fois. Ton découpage
 décide si ces copies travaillent ou se gênent.
 
 Quand tu travailles, le contrat de validation de la feature est déjà écrit et validé. Aucune

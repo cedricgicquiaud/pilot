@@ -79,7 +79,7 @@ par se contredire, et c'est le second qu'on oublie de corriger.
 | **Un worktree par agent** | Un second dossier de travail branché sur le même dépôt, sur sa propre branche. Si A casse tout dans le sien, B ne le voit pas. | `run`, étape 2 |
 | **Un `MISSION.md` par worktree** | La fiche dit la règle, la mission donne la valeur. Sans elle, l'agent ne sait ni quels fichiers il ouvre, ni ce qu'il doit prouver. | `reference/MISSION.template.md` |
 | **Commandes pré-autorisées** | L'agent doit travailler sans demander la permission à chaque geste — mais pas n'importe lequel. Réseau, suppressions et merge restent manuels. | § 2.4 |
-| **Producteur** | Le test commité avant le code est la seule preuve qu'il a été écrit en premier. Un test écrit après confirme une décision ; il n'attrape pas de bug. Un producteur neuf par tâche : une session courte relit moins, et un incident ne coûte qu'une tâche (banc du 16/09). | `agents/tdd-writer.md` |
+| **Producteur** | Le test commité avant le code est la seule preuve qu'il a été écrit en premier. Un test écrit après confirme une décision ; il n'attrape pas de bug. Sur une livraison L ou XL, un producteur neuf par tâche : une session courte relit moins, et un incident ne coûte qu'une tâche (bancs des 16 et 17/09). | `agents/tdd-writer.md` |
 | **Relecteur indépendant** | Celui qui a écrit le code ne voit pas ses propres fautes. Découverte n° 1 de l'essai : deux failles bloquantes trouvées par lui seul, sur 32 tests verts. | `agents/verifier.md` |
 | **Testeur** | Il ne lit jamais le diff. C'est ce qui fait de son avis une seconde preuve, et non un doublon du relecteur. | `agents/testeur.md` |
 | **Correcteur** | Sa tentation propre n'est pas de bâcler, c'est d'élargir la liste. Un diff qui grossit oblige à tout ré-auditer. | `agents/correcteur.md` |
@@ -319,7 +319,9 @@ une modification et la conversion qui « dé-convertit » un lead, 20 fois sur 2
 code l'avait vue et corrigée chez lui, notre `verifier` non. Les siens sont des transactions
 qui lisent hors transaction et figent l'application sous dix écritures simultanées. Notre
 contradicteur a apporté 20 questions utiles sur 24 après un entretien de 27 : lui n'a pas
-d'équivalent. Trois changements en sortent, une PR chacun : un producteur neuf par tâche ;
+d'équivalent. Trois changements en sortent, une PR chacun : un producteur neuf par tâche, sur les
+seules livraisons L et XL — rejoué sur l'épreuve TST-B1 (300 lignes), il relisait 43 % de
+jetons de plus qu'un producteur unique, chaque session neuve relisant fiche, mission et code ;
 des tâches coupées par situation, une case par clause de décision ; deux contrôles de
 concurrence au `verifier`. Une relecture fraîche après chaque tâche, comme chez lui, est
 écartée : la boucle a été allégée le 15/09 pour son coût.
