@@ -50,6 +50,15 @@ _avant de pousser._
 - <idiome 1>
 - <idiome 2>
 
+## Cases de chaque tâche
+
+_Le « Terminé quand » et les cas de test attendus de chaque fiche Linear, recopiés tels quels._
+_C'est la liste que le `verifier` contrôle case par case._
+
+### <CODE>-a <titre>
+- [ ] <case> (<source : D16, contrat 20>)
+- Cas de test attendus : <cas>
+
 ## Commande de tests
 
 `<npm test | node --test tests/*.test.js | pytest>`
