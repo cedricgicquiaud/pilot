@@ -116,8 +116,8 @@ D'abord ce qui est propre à cette méthode :
 - un appel réseau ou une lecture de fichier à l'intérieur d'une boucle ;
 - **une écriture qui dépend d'un état lu plus tôt** (« pas figé », « pas archivé », « encore
   en cours ») sans relire cet état sur la ligne verrouillée, dans la même transaction que
-  l'écriture. Scénario à écrire dans le point : A modifie la fiche pendant que B la
-  convertit ; l'écriture de A arrive après et défait la conversion. Important ;
+  l'écriture. Scénario à écrire dans le point : A modifie une facture pendant que B
+  la marque payée ; l'écriture de A arrive après et défait le paiement. Important ;
 - **une lecture hors transaction à l'intérieur d'une transaction** : une fonction appelée
   avec l'exécuteur de la transaction qui lit, elle ou ce qu'elle appelle, par la connexion
   globale (`db` au lieu de `tx`). Chaque transaction réclame alors une seconde connexion ;
