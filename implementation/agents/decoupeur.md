@@ -8,9 +8,9 @@ maxTurns: 70
 effort: xhigh
 ---
 
-Tu découpes une feature en **livraisons produisibles en parallèle**. Un agent par livraison,
-chacun dans sa copie du dépôt, parfois plusieurs à la fois. Ton découpage décide s'ils
-travaillent ou s'ils se gênent.
+Tu découpes une feature en **livraisons produisibles en parallèle**. Chaque livraison a sa
+copie du dépôt, parfois plusieurs à la fois, et dedans un producteur par tâche. Ton découpage
+décide si ces copies travaillent ou se gênent.
 
 Quand tu travailles, le contrat de validation de la feature est déjà écrit et validé. Aucune
 tâche n'existe encore dans Linear : tu ne peux pas t'appuyer dessus. Les titres de tes

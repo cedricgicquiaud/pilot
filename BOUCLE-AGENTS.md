@@ -79,7 +79,7 @@ par se contredire, et c'est le second qu'on oublie de corriger.
 | **Un worktree par agent** | Un second dossier de travail branché sur le même dépôt, sur sa propre branche. Si A casse tout dans le sien, B ne le voit pas. | `run`, étape 2 |
 | **Un `MISSION.md` par worktree** | La fiche dit la règle, la mission donne la valeur. Sans elle, l'agent ne sait ni quels fichiers il ouvre, ni ce qu'il doit prouver. | `reference/MISSION.template.md` |
 | **Commandes pré-autorisées** | L'agent doit travailler sans demander la permission à chaque geste — mais pas n'importe lequel. Réseau, suppressions et merge restent manuels. | § 2.4 |
-| **Producteur** | Le test commité avant le code est la seule preuve qu'il a été écrit en premier. Un test écrit après confirme une décision ; il n'attrape pas de bug. | `agents/tdd-writer.md` |
+| **Producteur** | Le test commité avant le code est la seule preuve qu'il a été écrit en premier. Un test écrit après confirme une décision ; il n'attrape pas de bug. Un producteur neuf par tâche : une session courte relit moins, et un incident ne coûte qu'une tâche (banc du 16/09). | `agents/tdd-writer.md` |
 | **Relecteur indépendant** | Celui qui a écrit le code ne voit pas ses propres fautes. Découverte n° 1 de l'essai : deux failles bloquantes trouvées par lui seul, sur 32 tests verts. | `agents/verifier.md` |
 | **Testeur** | Il ne lit jamais le diff. C'est ce qui fait de son avis une seconde preuve, et non un doublon du relecteur. | `agents/testeur.md` |
 | **Correcteur** | Sa tentation propre n'est pas de bâcler, c'est d'élargir la liste. Un diff qui grossit oblige à tout ré-auditer. | `agents/correcteur.md` |
@@ -90,7 +90,7 @@ par se contredire, et c'est le second qu'on oublie de corriger.
 
 Un fichier par livraison, écrit par `run` depuis `reference/MISSION.template.md`, exclu de git.
 
-**Il porte ce qui change d'une livraison à l'autre** : les tâches, les fichiers modifiables, les
+**Il porte ce qui change d'une livraison à l'autre** : les tâches dans l'ordre de production, les fichiers modifiables, les
 décisions produit déjà tranchées, le texte des phrases du contrat à rendre vraies, les idiomes
 du projet, la commande de tests, le titre de la PR.
 
@@ -302,6 +302,27 @@ deux. Elle a tenu : une passe, neuf phrases sur neuf, une boucle de contrôle de
 lieu de deux. **La session du lead s'use** : le 15/09, une seule session a enchaîné sept heures
 de commandes, cadrage et deux runs compris, jusqu'à sa fin ; `next` propose désormais une
 session neuve avant `run` et `feature`.
+
+**Contre la méthode de Matt Pocock, match nul sur la qualité, défaite sur la dépense (16-17/09).**
+Même livraison des deux côtés (4.1 « Leads » de crm-workday, XL avec écrans), même commit de
+départ, même entretien de cadrage, même modèle, même juge ; d'un côté `run`, de l'autre ses
+skills `to-spec`, `to-tickets` et `implement`, une session neuve par ticket. Les deux tiennent
+les 30 phrases du contrat et ont leurs suites vertes ; coût égal, environ 90 $ chacun. Pocock
+a relu un quart de jetons en moins et fini 30 minutes plus tôt, sans incident ; notre
+producteur a atteint sa limite de 150 tours, et une livraison a été tuée faute de mémoire.
+Deux relectures à l'aveugle par version, puis chaque défaut rejoué par un test jetable :
+quatre importants chez nous, deux chez lui. Les nôtres sont des règles de décision mal
+appliquées — un poste de contact jamais complété, une différence non affichée — que
+`MISSION.md` recopiait pourtant, noyées dans un paragraphe de 23 décisions ; ses tickets les
+portaient en cases à cocher, une par clause, avec leurs tests. S'y ajoute une course entre
+une modification et la conversion qui « dé-convertit » un lead, 20 fois sur 20 : sa revue de
+code l'avait vue et corrigée chez lui, notre `verifier` non. Les siens sont des transactions
+qui lisent hors transaction et figent l'application sous dix écritures simultanées. Notre
+contradicteur a apporté 20 questions utiles sur 24 après un entretien de 27 : lui n'a pas
+d'équivalent. Trois changements en sortent, une PR chacun : un producteur neuf par tâche ;
+des tâches coupées par situation, une case par clause de décision ; deux contrôles de
+concurrence au `verifier`. Une relecture fraîche après chaque tâche, comme chez lui, est
+écartée : la boucle a été allégée le 15/09 pour son coût.
 
 **Tests verts ≠ sûr.** Deux producteurs consciencieux, 32 tests verts, et deux failles
 bloquantes (échappement HTML, contrôle de permissions) trouvées uniquement par le relecteur
