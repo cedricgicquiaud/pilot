@@ -317,7 +317,9 @@ appliquées — un poste de contact jamais complété, une différence non affic
 portaient en cases à cocher, une par clause, avec leurs tests. S'y ajoute une course entre
 une modification et la conversion qui « dé-convertit » un lead, 20 fois sur 20 : sa revue de
 code l'avait vue et corrigée chez lui, notre `verifier` non. Les siens sont des transactions
-qui lisent hors transaction et figent l'application sous dix écritures simultanées. Notre
+qui lisent hors transaction et figent l'application sous dix écritures simultanées ; le
+même défaut, trouvé ensuite chez nous par le `verifier` réécrit, fige aussi notre conversion
+au-delà de dix. Notre
 contradicteur a apporté 20 questions utiles sur 24 après un entretien de 27 : lui n'a pas
 d'équivalent. Trois changements en sortent, une PR chacun : un producteur neuf par tâche, sur les
 seules livraisons L et XL — rejoué sur l'épreuve TST-B1 (300 lignes), il relisait 43 % de
