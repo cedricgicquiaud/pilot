@@ -141,7 +141,7 @@ les suivantes. Moins de 200 caractères, ce qu'il doit faire en premier.
    la fois (une livraison finie libère une place pour la suivante ; le plafond reste le nombre
    de livraisons disjointes). Consigne de lancement : « Tâche <CODE>-b, 2/3 de la livraison
    <n>. Dernière : non. » Nom de l'agent : `producteur-<livraison>-t<rang>`
-   (`producteur-4-1b-t2`), pour que le relevé de coût les additionne par livraison.
+   (`producteur-4-1b-t2`).
    **Pourquoi une session par tâche** : une session qui enchaîne toutes les tâches relit à
    chaque échange tout ce qu'elle a accumulé. Au banc du 16/09 (feature Leads, PILOT contre
    la méthode de Matt Pocock), le producteur d'une livraison XL a atteint sa limite de 150
