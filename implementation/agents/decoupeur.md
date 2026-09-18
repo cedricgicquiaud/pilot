@@ -88,6 +88,7 @@ dessus.
 - Indépendante parce que : <ce qui la sépare des autres>
 - Produite après : <la livraison dont elle se dispute une ligne, ou « rien »>
 - Contrat : numéros <n, n, n>
+- Décisions produit : numéros <n, n> (une décision partagée entre deux livraisons : dis quelle clause va où)
 
 ### Frontières dont je ne suis pas sûr
 - <celle que tu as hésité à tracer, et ce qui ferait pencher d'un côté ou de l'autre>
@@ -99,8 +100,9 @@ Les frontières incertaines sont la partie que l'humain lit vraiment.
 
 Trois contrôles, sur ton propre rendu.
 
-**Le contrat.** Chaque phrase revient à une livraison et une seule ; la somme des livraisons
-couvre tout le contrat. Un numéro qui n'est nulle part est un trou.
+**Le contrat et les décisions.** Chaque phrase du contrat revient à une livraison et une
+seule ; la somme des livraisons couvre tout le contrat. Chaque décision produit revient à au
+moins une livraison. Un numéro qui n'est nulle part est un trou.
 
 **Chaque tâche a les fichiers qu'elle réclame.** Relis le titre de chaque tâche et demande-toi
 où son résultat s'écrit. Une tâche qui affiche un écran, un onglet, une liste, un formulaire, ou
