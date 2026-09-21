@@ -85,9 +85,13 @@ def lire(chemin):
         if not r["cwd"] and d.get("cwd"): r["cwd"] = d["cwd"]
         t = ts(d.get("timestamp", ""))
         if t:
-            if premier is None: premier = t
-            if prev:
-                dt = (t - prev).total_seconds()
+            if premier is None or t < premier: premier = t
+            dt = (t - prev).total_seconds() if prev else None
+            # Un journal n'est pas toujours dans l'ordre : une relance par message, ou deux flux
+            # écrits ensemble, y remettent des lignes plus anciennes. Un écart négatif n'est ni du
+            # travail ni de l'attente — sans ce garde-fou il se soustrayait au temps actif, jusqu'à
+            # le rendre négatif (verifier de la livraison 4.2c, 18/09 : −29 min).
+            if dt is not None and dt >= 0:
                 if dt <= TROU: r["actif"] += dt
                 else:
                     r["attente"] += dt
@@ -95,7 +99,7 @@ def lire(chemin):
                     if dt > r["trou"]:
                         r["trou"] = dt; r["trou_apres"] = derniere_commande; r["trou_a"] = prev
                         r["trou_veille"] = dernier_est_texte
-            prev = t
+            if prev is None or t > prev: prev = t
         m = d.get("message") or {}
         u = m.get("usage") or {}
         if u:
@@ -178,8 +182,10 @@ def lead_de(chemin_agent, debut, fin):
             r["ecrits"] += (u.get("input_tokens") or 0) + (u.get("cache_creation_input_tokens") or 0)
             r["relus"] += u.get("cache_read_input_tokens") or 0
             r["sortis"] += u.get("output_tokens") or 0
-        if prev and (t - prev).total_seconds() <= TROU: r["actif"] += (t - prev).total_seconds()
-        prev = t
+        if prev:
+            dt = (t - prev).total_seconds()          # même garde-fou que `lire` : un journal hors d'ordre
+            if 0 <= dt <= TROU: r["actif"] += dt     # ne compte ni en travail ni en attente
+        if prev is None or t > prev: prev = t
     r["actif"] /= 60
     return r
 
