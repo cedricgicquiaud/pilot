@@ -139,9 +139,9 @@ les suivantes. Moins de 200 caractères, ce qu'il doit faire en premier.
 3. **Lancer les producteurs.** Au plus `n` livraisons en production à la fois (une livraison
    finie libère une place pour la suivante ; le plafond reste le nombre de livraisons
    disjointes). Le nombre de producteurs par livraison dépend de sa taille :
-   - **S et M : un `tdd-writer` pour toute la livraison.** Consigne : « Produis la livraison
+   - **S, M et L : un `tdd-writer` pour toute la livraison.** Consigne : « Produis la livraison
      décrite dans `MISSION.md`. »
-   - **L et XL : un `tdd-writer` neuf par tâche**, dans l'ordre des tâches, l'un après l'autre
+   - **XL : un `tdd-writer` neuf par tâche**, dans l'ordre des tâches, l'un après l'autre
      dans le même worktree. Consigne : « Tâche <CODE>-b, 2/3 de la livraison <n>. Dernière :
      non. » Nom de l'agent : `producteur-<livraison>-t<rang>` (`producteur-4-1b-t2`).
    **Pourquoi la taille décide.** Une session relit à chaque échange tout ce qu'elle a
@@ -150,8 +150,10 @@ les suivantes. Moins de 200 caractères, ce qu'il doit faire en premier.
    trois tâches), trois producteurs ont relu 43 % de jetons de plus qu'un seul, pour la même
    qualité. Sur une grosse, le premier : au banc du 16/09 (livraison XL de 2 000 lignes), le
    producteur unique a atteint sa limite de 150 tours puis a été tué faute de mémoire, quand
-   la méthode d'en face, une session par ticket, relisait un quart de jetons en moins. Le
-   seuil L est une hypothèse, à confirmer par la mesure du premier run L ou XL.
+   la méthode d'en face, une session par ticket, relisait un quart de jetons en moins.
+   **Le seuil est XL, mesuré** : le 18/09, une L de 850 lignes en quatre tâches (4.2c de
+   crm-workday) a été produite par un seul `tdd-writer` en 45 min, 71 M relus, sans incident
+   ni coupure. Une L tient donc dans une session ; ce n'est qu'au-delà qu'elle casse.
    **Entre deux tâches, lis le rapport** avant de lancer la suivante :
    - « Arrêt avant la fin » ou « Ce qui manque » : la livraison s'arrête là, sans PR ; dis-le
      à l'humain avec le rapport. Les tâches suivantes s'appuieraient sur un travail inachevé.
